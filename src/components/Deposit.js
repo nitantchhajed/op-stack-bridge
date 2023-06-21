@@ -7,6 +7,7 @@ import { IoMdWallet } from "react-icons/io"
 import { FaEthereum } from "react-icons/fa"
 import { useAccount, useConnect, useNetwork, useSwitchNetwork, useBalance } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
+
 const Deposit = () => {
     const [ethValue, setEthValue] = useState("")
     const { address, isConnected } = useAccount()
@@ -14,11 +15,14 @@ const Deposit = () => {
     const { chain } = useNetwork()
     const { switchNetwork } = useSwitchNetwork()
     const handleSwitch = () => {
-        switchNetwork(5)
+        switchNetwork(process.env.REACT_APP_L1_CHAIN_ID)
     }
+    useEffect(()=>{
+        console.log("process.env.REACT_APP_L1_CHAIN_ID", typeof process.env.REACT_APP_L1_CHAIN_ID);
+    },[])
     const handleDeposit = async () => {
         const web3 = new Web3(window.ethereum);
-        const contractAddress = '0x271583ba9e3D866E49A9736c626772e944dD9f2A';
+        const contractAddress = process.env.REACT_APP_OPTIMISM_PORTAL_PROXY;
         const amountToSendWei = web3.utils.toWei(ethValue.toString(), 'ether');
         console.log("amountToSendWei", amountToSendWei);
         const receipt = await web3.eth.sendTransaction({ to: contractAddress, from: address, value: amountToSendWei })
@@ -46,7 +50,7 @@ const Deposit = () => {
                             </div>
                         </Form>
                     </div>
-                    {address && <p className='wallet_bal mt-2'>Balance: {Number(data.formatted).toFixed(5)} ETH</p>}
+                    {address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p>}
                 </div>
                 <div className='deposit_details_wrap'>
                     <div className="deposit_details">
@@ -58,7 +62,7 @@ const Deposit = () => {
                     </div>
                 </div>
                 <div className="deposit_btn_wrap">
-                    {!isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== 5 ? <button className='btn deposit_btn' onClick={handleSwitch}><IoMdWallet />Switch to goerli</button> : <button className='btn deposit_btn' onClick={handleDeposit}><IoMdWallet />Deposit</button>}
+                    {!isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L1_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><IoMdWallet />Switch to goerli</button> : <button className='btn deposit_btn' onClick={handleDeposit}><IoMdWallet />Deposit</button>}
                 </div>
             </section >
         </>
