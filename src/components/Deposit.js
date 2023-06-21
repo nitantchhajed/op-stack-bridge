@@ -15,6 +15,7 @@ const Deposit = () => {
     const { connect } = useConnect({ connector: new InjectedConnector() })
     const { chain } = useNetwork()
     const { switchNetwork } = useSwitchNetwork()
+    const { data, isError, isLoading } = useBalance({ address: address })
     const handleSwitch = () => {
         switchNetwork(process.env.REACT_APP_L1_CHAIN_ID)
     }
@@ -46,7 +47,6 @@ const Deposit = () => {
         }
         setEthValue(e.target.value)
     }
-    const { data, isError, isLoading } = useBalance({ address: address })
     return (
         <>
             <section className='deposit_wrap'>

@@ -5,6 +5,7 @@ import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import Main from "./components/Main";
 import Wagmi from './components/Wagmi';
+import Account from './components/account/Account';
 function App() {
   return (
     <>
@@ -13,7 +14,8 @@ function App() {
         <div className="main_wrap">
           <Routes>
             <Route path="/" element={<Main />} />
-            {/* <Route path="/" element={<Wagmi />} /> */}
+            <Route path="/account" element={<Account />} />
+
           </Routes>
         </div>
         <Footer />

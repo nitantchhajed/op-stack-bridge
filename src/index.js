@@ -10,10 +10,40 @@ import { WagmiConfig, createConfig } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
 import { configureChains } from '@wagmi/core'
 import { goerli } from '@wagmi/core/chains'
- 
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+export const RACE ={
+  id:Number(process.env.REACT_APP_L2_CHAIN_ID),
+  name:"RACE Testnet",
+  network:"RACE",
+  iconUrl:"https://i.imgur.com/Q3oIdip.png",
+  iconBackground:"#000000",
+  nativeCurrency:  {
+    decimals:18,
+    name:'ETHEREUM',
+    symbol:'ETH'
+  },
+  rpcUrls:{
+    default:{
+      http:["https://racetestnet.io"]
+// public rpc url
+    },
+  },
+  blockExplorers:{
+    default:{name:"RACE Testnet Explorer", url:"https://testnet.racetestnet.io"}
+  },
+  testnet:true
+
+}
+
 const { chains, publicClient } = configureChains(
-  [goerli],
-  [publicProvider()]
+  [goerli,RACE],
+  // [publicProvider()]
+  [
+    jsonRpcProvider({
+      rpc:chain=>({http:chain.rpcUrls.default.http[0]})
+
+    })
+  ]
 )
 const config = createConfig({
   autoConnect: true,
