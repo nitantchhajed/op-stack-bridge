@@ -11,6 +11,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected'
 const Deposit = () => {
     const [ethValue, setEthValue] = useState("")
     const { address, isConnected } = useAccount()
+    const [errorInput, setErrorInput] = useState("")
     const { connect } = useConnect({ connector: new InjectedConnector() })
     const { chain } = useNetwork()
     const { switchNetwork } = useSwitchNetwork()
@@ -57,7 +58,7 @@ const Deposit = () => {
                     <div className='deposit_input_wrap'>
                         <Form>
                             <div className='deposit_inner_input'>
-                                <Form.Control type='number' value={ethValue} onChange={(event) => setEthValue(event.target.value)} placeholder="0" step="any" />
+                                <Form.Control type='number' value={ethValue} onChange={handleChange} placeholder="0" step="any" />
                                 <Form.Select aria-label="Default select example" className='select_wrap'>
                                     <option>ETH</option>
                                 </Form.Select>
