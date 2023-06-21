@@ -1,0 +1,41 @@
+.account_withdraw_table {
+    table {
+
+        tbody,
+        td,
+        tfoot,
+        th,
+        thead,
+        tr {
+            border-style: none;
+        }
+
+        tbody {
+            tr {
+                td {
+                    font-size: 12px;
+                }
+                .withdraw_inner_btn{
+                    background-color: #ede4c7;
+                    font-size: 12px;
+                    padding: 1px 3px;
+                    font-weight: 600;
+                    border-radius: 3px;
+                    &:hover{
+                        color: #000;
+                    }
+                }
+            }
+
+            tr td {
+                background-color: #012941 !important;
+                box-shadow: none;
+            }
+        }
+
+        th {
+            background-color: #111827;
+        }
+    }
+
+}

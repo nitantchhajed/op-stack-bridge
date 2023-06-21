@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap');
+@import "./common/successModel";
+body {
+    margin: 0px;
+    padding: 0px;
+    line-height: 1.7;
+    font-weight: 400;
+    background-color: #111827 !important;
+    font-family: 'Rubik', sans-serif;
+}
+
+* {
+    letter-spacing: 0.5px;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Rubik', sans-serif;
+}
+
+ol,
+li,
+a,
+ul,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Rubik', sans-serif;
+}
+
+
+.main_wrap {
+    // display: flex;
+    // justify-content: center;
+    // width: 100%;
+    // height: calc(100vh - 150px);
+    // align-items: center;
+
+    .bridge_wrap {
+        width: 100%;
+        max-width: 550px;
+        margin: 0px auto;
+        background-color: #002942;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 8px -4px #14171a1f, 0 4px 16px -1px #14171a14;
+
+        .nav-tabs {
+            background-color: #111827;
+            // padding: 5px;
+            border: none;
+            border-radius: 10px;
+            width: 100%;
+
+            .nav-item {
+                width: 50%;
+
+                .nav-link {
+                    width: 100%;
+                    border: none;
+                    border-radius: 10px;
+                    color: #64748B;
+                    font-weight: 500;
+                    font-size: 14px;
+                    padding: 12px 15px;
+
+                    &:hover {
+
+                        background-color: #07487038;
+                    }
+
+                    &.active {
+                        color: #EDE4C5;
+                        border: none;
+                        border-radius: 12px;
+                        font-weight: 500;
+                        box-shadow: 0 0 8px #14171a14, 0 0 4px #14171a0a;
+                        background-color: #074870;
+                        font-size: 14px;
+                        position: relative;
+
+                        &::after {
+                            position: absolute;
+                            height: 3px;
+                            left: 50%;
+                            bottom: 0px;
+                            content: "";
+                            width: 20%;
+                            background: #EDE4C5;
+                            transform: translate(-50%);
+                            border-radius: 3px 3px 0px 0px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color: #94A3B8 !important;
+}
+
+:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #94A3B8 !important;
+    opacity: 1;
+}
+
+::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #94A3B8 !important;
+    opacity: 1;
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #94A3B8 !important;
+}
+
+::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #94A3B8 !important;
+}
+
+::placeholder {
+    /* Most modern browsers support this now. */
+    color: #94A3B8 !important;
+}
