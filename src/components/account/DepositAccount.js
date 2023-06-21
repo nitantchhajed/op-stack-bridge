@@ -1,10 +1,91 @@
 import React, { useEffect, useState } from 'react'
 import { Table } from "react-bootstrap"
 import { ethers } from "ethers"
-import Web3 from "web3"
+import { useAccount } from 'wagmi'
 const optimismSDK = require("@eth-optimism/sdk")
 
 const DepositAccount = () => {
+    const { address, isConnected } = useAccount()
+    const [depositDetails, setDepositDetails] = useState([])
+    const getDeposit = async () => {
+        const l1Provider = new ethers.providers.Web3Provider(window.ethereum);
+        const l2Provider = new ethers.providers.Web3Provider(window.ethereum);
+        const l1Signer = l1Provider.getSigner()
+        const l2Signer = l2Provider.getSigner()
+        const zeroAddr = "0x".padEnd(42, "0");
+        const l1Contracts = {
+            StateCommitmentChain: zeroAddr,
+            CanonicalTransactionChain: zeroAddr,
+            BondManager: zeroAddr,
+            AddressManager: process.env.REACT_APP_LIB_ADDRESSMANAGER,
+            L1CrossDomainMessenger: process.env.REACT_APP_PROXY_OVM_L1CROSSDOMAINMESSENGER,
+            L1StandardBridge: process.env.REACT_APP_PROXY_OVM_L1STANDARDBRIDGE,
+            OptimismPortal: process.env.REACT_APP_OPTIMISM_PORTAL_PROXY,
+            L2OutputOracle: process.env.REACT_APP_L2_OUTPUTORACLE_PROXY,
+        }
+        console.log(l1Contracts);
+        const bridges = {
+            Standard: {
+                l1Bridge: l1Contracts.L1StandardBridge,
+                l2Bridge: "0x4200000000000000000000000000000000000010",
+                Adapter: optimismSDK.StandardBridgeAdapter
+            },
+            ETH: {
+                l1Bridge: l1Contracts.L1StandardBridge,
+                l2Bridge: "0x4200000000000000000000000000000000000010",
+                Adapter: optimismSDK.ETHBridgeAdapter
+            }
+        }
+        const crossChainMessenger = new optimismSDK.CrossChainMessenger({
+            contracts: {
+                l1: l1Contracts,
+            },
+            bridges: bridges,
+            l1ChainId: Number(process.env.REACT_APP_L1_CHAIN_ID),
+            l2ChainId: Number(process.env.REACT_APP_L2_CHAIN_ID),
+            l1SignerOrProvider: l1Signer,
+            l2SignerOrProvider: l2Signer,
+            bedrock: true,
+        })
+        const data = await crossChainMessenger.getDepositsByAddress(address)
+        for (let index = 0; index < data.length; index++) {
+            let timestamp = (await l1Provider.getBlock(data[index].blockNumber)).timestamp;
+            // let getStatus = await crossChainMessenger.getMessageStatus(data[index].transactionHash)
+            // data[index].messageStatus = getStatus
+            data[index].timestamp = timestamp
+        }
+        setDepositDetails(data)
+        console.log("data", data);
+    }
+    function timeConverter(timestamp) {
+        var a = new Date(timestamp * 1000);
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var year = a.getFullYear();
+        var month = months[a.getMonth()];
+        var date = a.getDate();
+        var hour = a.getHours();
+        var min = a.getMinutes();
+        var sec = a.getSeconds();
+        var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+        return time;
+    }
+
+    function retrieveEthValue(amount){
+        // console.log(amount._hex);
+        const weiValue = parseInt(amount._hex,16);
+        console.log(weiValue/1000000000000000000);
+        // console.log(ethers.utils.formatEther(weiValue));
+        return weiValue/1000000000000000000;
+    }
+
+
+
+
+    useEffect(() => {
+        getDeposit()
+    }, [])
+
+
     return (
         <>
             <section className="account_withdraw_table">
@@ -19,7 +100,7 @@ const DepositAccount = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {/* {depositDetails.map((element, index) => {
+                        {depositDetails.map((element, index) => {
                             const { timestamp, transactionHash, amount } = element
                             console.log("amount", amount._hex);
                             return (
@@ -31,7 +112,7 @@ const DepositAccount = () => {
                                     <td>Completed</td>
                                 </tr>
                             )
-                            })} */}
+                            })}
                     </tbody>
                 </Table>
             </section>
