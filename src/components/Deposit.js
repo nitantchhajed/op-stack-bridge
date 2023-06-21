@@ -21,12 +21,29 @@ const Deposit = () => {
         console.log("process.env.REACT_APP_L1_CHAIN_ID", typeof process.env.REACT_APP_L1_CHAIN_ID);
     },[])
     const handleDeposit = async () => {
-        const web3 = new Web3(window.ethereum);
-        const contractAddress = process.env.REACT_APP_OPTIMISM_PORTAL_PROXY;
-        const amountToSendWei = web3.utils.toWei(ethValue.toString(), 'ether');
-        console.log("amountToSendWei", amountToSendWei);
-        const receipt = await web3.eth.sendTransaction({ to: contractAddress, from: address, value: amountToSendWei })
-        console.log("logs", receipt);
+        try {
+            if (ethValue) {
+                setErrorInput("")
+                const web3 = new Web3(window.ethereum);
+                const contractAddress = process.env.REACT_APP_OPTIMISM_PORTAL_PROXY;
+                const amountToSendWei = web3.utils.toWei(ethValue.toString(), 'ether');
+                console.log("amountToSendWei", amountToSendWei);
+                const receipt = await web3.eth.sendTransaction({ to: contractAddress, from: address, value: amountToSendWei })
+                console.log("logs", receipt);
+            } else {
+                setErrorInput("Please enter the amount")
+            }
+        } catch (error) {
+            // console.log(error);
+        }
+    }
+    const handleChange = (e) => {
+        if (data?.formatted < e.target.value) {
+            setErrorInput("Insufficient ETH balance.")
+        } else {
+            setErrorInput("")
+        }
+        setEthValue(e.target.value)
     }
     const { data, isError, isLoading } = useBalance({ address: address })
     return (
@@ -50,6 +67,7 @@ const Deposit = () => {
                             </div>
                         </Form>
                     </div>
+                    {errorInput && <small className='text-danger'>{errorInput}</small>}
                     {address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p>}
                 </div>
                 <div className='deposit_details_wrap'>
