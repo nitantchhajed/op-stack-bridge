@@ -5,7 +5,16 @@ import { Form, Image } from "react-bootstrap";
 import { MdOutlineSecurity } from "react-icons/md"
 import { FaEthereum } from "react-icons/fa"
 import toIcn from "../assets/images/logo.png"
+import { useAccount, useConnect, useNetwork, useSwitchNetwork, useBalance } from 'wagmi'
 const Withdraw = () => {
+  const { address, isConnected } = useAccount()
+  const { connect } = useConnect({ connector: new InjectedConnector() })
+  const { chain } = useNetwork()
+  const { switchNetwork } = useSwitchNetwork()
+
+  useEffect(()=>{
+    console.log({address},{isConnected});
+  },[])
   return (
     <>
       <section className='deposit_wrap'>
