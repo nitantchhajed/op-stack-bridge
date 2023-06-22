@@ -1,4 +1,4 @@
-# @op-stack/Bridge
+# @op-stack/bridge
 
 The `op-Bridge` is a simple service for op-stack chains which provides a UI for the Bridging.
 
