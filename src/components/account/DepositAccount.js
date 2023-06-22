@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Table } from "react-bootstrap"
 import { ethers } from "ethers"
 import { useAccount } from 'wagmi'
+import ReactPaginate from 'react-paginate'
 const optimismSDK = require("@eth-optimism/sdk")
 
 const DepositAccount = () => {
+
     const { address, isConnected } = useAccount()
     const [depositDetails, setDepositDetails] = useState([])
     const getDeposit = async () => {
@@ -53,7 +55,7 @@ const DepositAccount = () => {
             data[index].timestamp = timestamp
         }
         setDepositDetails(data)
-        console.log("data", data);
+        // console.log("data", data);
     }
     function timeConverter(timestamp) {
         var a = new Date(timestamp * 1000);
@@ -68,19 +70,39 @@ const DepositAccount = () => {
         return time;
     }
 
-    function retrieveEthValue(amount){
-        const weiValue = parseInt(amount._hex,16);
-        return weiValue/1000000000000000000;
+    function retrieveEthValue(amount) {
+        const weiValue = parseInt(amount._hex, 16);
+        return weiValue / 1000000000000000000;
     }
 
-
+    useEffect(() => {
+        if (isConnected) {
+            getDeposit()
+        }
+    }, [address])
+    // =============all Collections pagination start===============
+    const [currentItemsCollections, setCurrentItemsCollections] = useState([]);
+    const [pageCountCollections, setPageCountCollections] = useState(0);
+    const [itemOffsetCollections, setItemOffsetCollections] = useState(0);
+    const itemsPerPageCollections = 10;
 
 
     useEffect(() => {
-        getDeposit()
-    }, [])
+        if (depositDetails) {
+            const endOffsetCollections = itemOffsetCollections + itemsPerPageCollections;
+            setCurrentItemsCollections(depositDetails.slice(itemOffsetCollections, endOffsetCollections));
+            setPageCountCollections(Math.ceil(depositDetails.length / itemsPerPageCollections));
+        } else {
 
+        }
+    }, [depositDetails, itemOffsetCollections, itemsPerPageCollections]);
 
+    const handlePageClickCollections = (event) => {
+        const newOffsetCollections =
+            (event.selected * itemsPerPageCollections) % depositDetails.length;
+        setItemOffsetCollections(newOffsetCollections);
+    };
+    // =============all Collections pagination end===============
     return (
         <>
             <section className="account_withdraw_table">
@@ -95,7 +117,7 @@ const DepositAccount = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {depositDetails.map((element, index) => {
+                        {currentItemsCollections.map((element, index) => {
                             const { timestamp, transactionHash, amount } = element
                             // console.log("amount", amount._hex);
                             return (
@@ -107,9 +129,30 @@ const DepositAccount = () => {
                                     <td>Completed</td>
                                 </tr>
                             )
-                            })}
+                        })}
                     </tbody>
                 </Table>
+                {depositDetails?.length > 10 ? <div className='pagination_wrap'>
+                    <ReactPaginate
+                        breakLabel="..."
+                        nextLabel=" >>"
+                        onPageChange={handlePageClickCollections}
+                        pageRangeDisplayed={1}
+                        marginPagesDisplayed={1}
+                        pageCount={pageCountCollections}
+                        previousLabel="<< "
+                        containerClassName="pagination justify-content-end"
+                        pageClassName="page-item"
+                        pageLinkClassName="page-link"
+                        previousClassName="page-item"
+                        previousLinkClassName="page-link"
+                        nextClassName="page-item"
+                        nextLinkClassName="page-link"
+                        breakClassName="page-item"
+                        breakLinkClassName="page-link"
+                        activeClassName="active"
+                    />
+                </div> : ""}
             </section>
         </>
     )

@@ -104,7 +104,32 @@ p {
             }
         }
 
-       
+
+    }
+}
+
+.pagination_wrap {
+    .pagination {
+        margin: 0px;
+        justify-content: start !important;
+
+        .page-item {
+            &.active {
+                .page-link {
+                    border: 1px solid #EDE4C5;
+                    border-radius: 5px;
+                    padding: 0px 11px;
+                }
+            }
+
+            .page-link {
+                background: #111827;
+                color: #EDE4C5;
+                border-color: #111827;
+                padding: 1px 10px;
+                font-size: 12px;
+            }
+        }
     }
 }
 

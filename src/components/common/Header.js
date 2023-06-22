@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "../../assets/style/common/header.scss"
 import { Navbar, Container, Nav, Image } from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
@@ -7,8 +7,8 @@ import { useAccount, useConnect, useEnsName } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { disconnect } from '@wagmi/core'
 const HeaderNew = () => {
-    const { address } = useAccount()
-    const { connect } = useConnect({connector: new InjectedConnector()})
+    const { address, isConnected } = useAccount();
+    const { connect } = useConnect({ connector: new InjectedConnector() })
     const handleDisconnect = async () => {
         await disconnect()
     }
@@ -29,11 +29,8 @@ const HeaderNew = () => {
                                 style={{ maxHeight: '100px' }}
                                 navbarScroll
                             >
-                                <Nav.Link href="#">Superchain</Nav.Link>
-                                <Nav.Link href="#">Governance</Nav.Link>
-                                <Nav.Link href="#">Ecosystem</Nav.Link>
-                                <Nav.Link href="#">Bridge</Nav.Link>
-                                <Nav.Link href="#">Developers</Nav.Link>
+
+                                <Link to="/">Bridge</Link>
                                 <Link to="/account">Account</Link>
                             </Nav>
                             <div className='header_btn_wrap'>

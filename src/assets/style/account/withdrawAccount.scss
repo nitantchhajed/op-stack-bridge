@@ -15,13 +15,16 @@
                 td {
                     font-size: 12px;
                 }
-                .withdraw_inner_btn{
+
+                .withdraw_inner_btn {
                     background-color: #ede4c7;
                     font-size: 12px;
-                    padding: 1px 3px;
+                    padding: 1px 15px;
                     font-weight: 600;
                     border-radius: 3px;
-                    &:hover{
+                    float: right;
+
+                    &:hover {
                         color: #000;
                     }
                 }
