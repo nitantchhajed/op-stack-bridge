@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "../assets/style/deposit.scss";
 import "../assets/style/withdraw.scss";
-import { Form, Image } from "react-bootstrap";
+import { Container, Form, Image } from "react-bootstrap";
 import { MdOutlineSecurity } from "react-icons/md"
 import { FaEthereum } from "react-icons/fa"
 import toIcn from "../assets/images/logo.png"
@@ -9,20 +9,21 @@ import { useAccount, useConnect, useNetwork, useSwitchNetwork, useBalance } from
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { IoMdWallet } from "react-icons/io"
 import Web3 from "web3"
+import TabMenu from './TabMenu';
 const optimismSDK = require("@eth-optimism/sdk")
 const ethers = require("ethers")
 const Withdraw = () => {
   const [ethValue, setEthValue] = useState("")
   const [errorInput, setErrorInput] = useState("")
   const { address, isConnected } = useAccount()
-  const { data, isError, isLoading } = useBalance({ address: address ,chainId: 90001})
+  const { data, isError, isLoading } = useBalance({ address: address, chainId: 90001 })
   const { connect } = useConnect({ connector: new InjectedConnector() })
   const { chain } = useNetwork()
   const { switchNetwork } = useSwitchNetwork()
-  useEffect(()=>{
+  useEffect(() => {
     console.log("data", data);
 
-  },[data])
+  }, [data])
   const handleWithdraw = async () => {
     try {
       const l1Provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -87,61 +88,60 @@ const Withdraw = () => {
 
   return (
     <>
-      <section className='deposit_wrap'>
-        <div className='withdraw_title_wrap'>
-          <div className='withdraw_title_icn'>
-            <MdOutlineSecurity />
+      <div className='bridge_wrap'>
+        <TabMenu />
+        <section className='deposit_wrap'>
+          <div className='withdraw_title_wrap'>
+            <div className='withdraw_title_icn'>
+              <MdOutlineSecurity />
+            </div>
+            <div className='withdraw_title_content'>
+              <h3>Use the official bridge</h3>
+              <p>This usually takes 7 days</p>
+              <p>Bridge any token to Ethereum Mainnet</p>
+            </div>
           </div>
-          <div className='withdraw_title_content'>
-            <h3>Use the official bridge</h3>
-            <p>This usually takes 7 days</p>
-            <p>Bridge any token to Ethereum Mainnet</p>
-          </div>
-        </div>
-        <div className='deposit_price_wrap'>
-          <div className='deposit_price_title'>
-            <p>From</p>
-            <h5><Image src={toIcn} alt="To icn" fluid /> Race</h5>
-          </div>
-          <div className='deposit_input_wrap'>
-            <Form>
-              <div className='deposit_inner_input'>
-                <Form.Control type='number' name="eth_value" value={ethValue} onChange={handleChange} placeholder="0" />
-                <Form.Select aria-label="Default select example" className='select_wrap'>
-                  <option>ETH</option>
-                  {/* <option value="DAI">DAI</option>
+          <div className='deposit_price_wrap'>
+            <div className='deposit_price_title'>
+              <p>From</p>
+              <h5><Image src={toIcn} alt="To icn" fluid /> Race</h5>
+            </div>
+            <div className='deposit_input_wrap'>
+              <Form>
+                <div className='deposit_inner_input'>
+                  <Form.Control type='number' name="eth_value" value={ethValue} onChange={handleChange} placeholder="0" />
+                  <Form.Select aria-label="Default select example" className='select_wrap'>
+                    <option>ETH</option>
+                    {/* <option value="DAI">DAI</option>
                   <option value="USDT">USDC</option>
                   <option value="USDT">USDT</option> */}
-                </Form.Select>
-              </div>
-              <div className='input_icn_wrap'>
-                <span className='input_icn'><Image src={toIcn} alt="To icn" fluid /></span>
-              </div>
-            </Form>
+                  </Form.Select>
+                </div>
+                <div className='input_icn_wrap'>
+                  <span className='input_icn'><Image src={toIcn} alt="To icn" fluid /></span>
+                </div>
+              </Form>
+            </div>
+            {errorInput && <small className='text-danger'>{errorInput}</small>}
+            {address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p>}
           </div>
-          {errorInput && <small className='text-danger'>{errorInput}</small>}
-          {address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p>}
-        </div>
-        <div className='deposit_details_wrap'>
-          <div className="deposit_details">
-            <p>To:</p>
-            <h5><FaEthereum /> Goerli Testnet</h5>
+          <div className='deposit_details_wrap'>
+            <div className="deposit_details">
+              <p>To:</p>
+              <h5><FaEthereum /> Goerli Testnet</h5>
+            </div>
+            <div className='withdraw_bal_sum'>
+              <span className='input_icn'><FaEthereum /></span>
+              <p>You’ll receive: 0 ETH</p>
+              <div></div>
+              {/* <span className='input_title'>ETH</span> */}
+            </div>
           </div>
-          <div className='withdraw_bal_sum'>
-            <span className='input_icn'><FaEthereum /></span>
-            <p>You’ll receive: 0 ETH</p>
-            <div></div>
-            {/* <span className='input_title'>ETH</span> */}
+          <div className="deposit_btn_wrap">
+            {!isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L2_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><IoMdWallet />Switch to RACE Testnet</button> : <button className='btn deposit_btn' onClick={handleWithdraw}><IoMdWallet />Withdraw</button>}
           </div>
-        </div>
-        <div className="deposit_btn_wrap">
-          {!isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L2_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><IoMdWallet />Switch to RACE Testnet</button> : <button className='btn deposit_btn' onClick={handleWithdraw}><IoMdWallet />Withdraw</button>}
-        </div>
-
-
-
-      </section>
-
+        </section>
+      </div>
     </>
   )
 }

@@ -11,36 +11,36 @@ import { publicProvider } from 'wagmi/providers/public'
 import { configureChains } from '@wagmi/core'
 import { goerli } from '@wagmi/core/chains'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-export const RACE ={
-  id:Number(process.env.REACT_APP_L2_CHAIN_ID),
-  name:"RACE Testnet",
-  network:"RACE",
-  iconUrl:"https://i.imgur.com/Q3oIdip.png",
-  iconBackground:"#000000",
-  nativeCurrency:  {
-    decimals:18,
-    name:'ETHEREUM',
-    symbol:'ETH'
+export const RACE = {
+  id: Number(process.env.REACT_APP_L2_CHAIN_ID),
+  name: "RACE Testnet",
+  network: "RACE",
+  iconUrl: "https://i.imgur.com/Q3oIdip.png",
+  iconBackground: "#000000",
+  nativeCurrency: {
+    decimals: 18,
+    name: 'ETHEREUM',
+    symbol: 'ETH'
   },
-  rpcUrls:{
-    default:{
-      http:["https://racetestnet.io"]
-// public rpc url
+  rpcUrls: {
+    default: {
+      http: ["https://racetestnet.io"]
+      // public rpc url
     },
   },
-  blockExplorers:{
-    default:{name:"RACE Testnet Explorer", url:"https://testnet.racetestnet.io"}
+  blockExplorers: {
+    default: { name: "RACE Testnet Explorer", url: "https://testnet.racetestnet.io" }
   },
-  testnet:true
+  testnet: true
 
 }
 
 const { chains, publicClient } = configureChains(
-  [goerli,RACE],
+  [goerli, RACE],
   // [publicProvider()]
   [
     jsonRpcProvider({
-      rpc:chain=>({http:chain.rpcUrls.default.http[0]})
+      rpc: chain => ({ http: chain.rpcUrls.default.http[0] })
 
     })
   ]

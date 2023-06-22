@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap');
 @import "./common/successModel";
+
 body {
     margin: 0px;
     padding: 0px;
@@ -50,39 +51,41 @@ p {
         border-radius: 12px;
         box-shadow: 0 0 8px -4px #14171a1f, 0 4px 16px -1px #14171a14;
 
-        .nav-tabs {
-            background-color: #111827;
-            // padding: 5px;
-            border: none;
+        ul {
+            padding: 0px;
+            display: flex;
+            background: #000;
+            justify-content: space-between;
+            gap: 5px;
             border-radius: 10px;
-            width: 100%;
 
-            .nav-item {
-                width: 50%;
+            li {
+                list-style: none;
+                width: 100%;
+                text-align: center;
+                border-radius: 12px;
 
-                .nav-link {
+                a {
+                    text-align: center;
                     width: 100%;
-                    border: none;
-                    border-radius: 10px;
-                    color: #64748B;
+                    border-radius: 8px;
+                    padding: 8px;
+                    text-decoration: none;
+                    display: inline-block;
                     font-weight: 500;
                     font-size: 14px;
-                    padding: 12px 15px;
+                    color: #64748b;
+                    position: relative;
+                    transition: all 0.5s ease;
 
                     &:hover {
-
                         background-color: #07487038;
                     }
 
                     &.active {
+                        box-shadow: 0 0 8px rgba(20, 23, 26, 0.0784313725), 0 0 4px rgba(20, 23, 26, 0.0392156863);
                         color: #EDE4C5;
-                        border: none;
-                        border-radius: 12px;
-                        font-weight: 500;
-                        box-shadow: 0 0 8px #14171a14, 0 0 4px #14171a0a;
                         background-color: #074870;
-                        font-size: 14px;
-                        position: relative;
 
                         &::after {
                             position: absolute;
@@ -96,9 +99,12 @@ p {
                             border-radius: 3px 3px 0px 0px;
                         }
                     }
+
                 }
             }
         }
+
+       
     }
 }
 
