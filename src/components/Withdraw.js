@@ -26,10 +26,15 @@ const Withdraw = () => {
   }, [data])
   const handleWithdraw = async () => {
     try {
-      const l1Provider = new ethers.providers.Web3Provider(window.ethereum);
+      // const l1Provider = new ethers.providers.Web3Provider(window.ethereum);
+      // const l2Provider = new ethers.providers.Web3Provider(window.ethereum);
+      const l1Url = `https://eth-goerli.g.alchemy.com/v2/e0CsbXjGCT0xVVFc9MyaE7-olvSVAh4S`;
+      const l2Url = `https://racetestnet.io`;
+
+      const l1Provider = new ethers.providers.JsonRpcProvider(l1Url,"any");
       const l2Provider = new ethers.providers.Web3Provider(window.ethereum);
-      const l1Signer = l1Provider.getSigner()
-      const l2Signer = l2Provider.getSigner()
+      const l1Signer = l1Provider.getSigner(address)
+      const l2Signer = l2Provider.getSigner(address)
       const zeroAddr = "0x".padEnd(42, "0");
       const l1Contracts = {
         StateCommitmentChain: zeroAddr,
@@ -41,7 +46,7 @@ const Withdraw = () => {
         OptimismPortal: process.env.REACT_APP_OPTIMISM_PORTAL_PROXY,
         L2OutputOracle: process.env.REACT_APP_L2_OUTPUTORACLE_PROXY,
       }
-      console.log(l1Contracts);
+      // console.log(l1Contracts);
       const bridges = {
         Standard: {
           l1Bridge: l1Contracts.L1StandardBridge,
@@ -109,7 +114,7 @@ const Withdraw = () => {
             <div className='deposit_input_wrap'>
               <Form>
                 <div className='deposit_inner_input'>
-                  <Form.Control type='number' name="eth_value" value={ethValue} onChange={handleChange} placeholder="0" />
+                  <Form.Control type='number' name="eth_value" value={ethValue} onChange={handleChange} placeholder="0" min="0" step="any"  />
                   <Form.Select aria-label="Default select example" className='select_wrap'>
                     <option>ETH</option>
                     {/* <option value="DAI">DAI</option>
@@ -132,7 +137,7 @@ const Withdraw = () => {
             </div>
             <div className='withdraw_bal_sum'>
               <span className='input_icn'><FaEthereum /></span>
-              <p>You’ll receive: 0 ETH</p>
+              <p>You’ll receive: {ethValue ? ethValue : "0"} ETH</p>
               <div></div>
               {/* <span className='input_title'>ETH</span> */}
             </div>

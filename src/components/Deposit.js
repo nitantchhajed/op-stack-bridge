@@ -25,6 +25,7 @@ const Deposit = () => {
     }, [])
     const handleDeposit = async () => {
         try {
+            console.log(ethValue);
             if (ethValue) {
                 setErrorInput("")
                 const web3 = new Web3(window.ethereum);
@@ -53,7 +54,7 @@ const Deposit = () => {
             <div className='bridge_wrap'>
                 <TabMenu />
                 <section className='deposit_wrap'>
-                    <div className='deposit_price_wrap'>
+                    <div className='deposit_price_wrap'>​
                         <div className='deposit_price_title'>
                             <p>From</p>
                             <h5><FaEthereum /> Goerli Testnet</h5>
@@ -61,7 +62,7 @@ const Deposit = () => {
                         <div className='deposit_input_wrap'>
                             <Form>
                                 <div className='deposit_inner_input'>
-                                    <Form.Control type='number' value={ethValue} onChange={handleChange} placeholder="0" step="any" />
+                                    <Form.Control type='number' value={ethValue} onChange={handleChange} placeholder="0" min="0"  step="any" />
                                     <Form.Select aria-label="Default select example" className='select_wrap'>
                                         <option>ETH</option>
                                     </Form.Select>
@@ -80,7 +81,7 @@ const Deposit = () => {
                             <h5><Image src={toIcn} alt="To icn" fluid /> Race</h5>
                         </div>
                         <div className='deposit_inner_details'>
-                            <Image src={toIcn} alt="To icn" fluid />  <p>You’ll receive: 0 ETH</p>
+                            <Image src={toIcn} alt="To icn" fluid />  <p>You’ll receive: {ethValue ? ethValue : "0"} ETH</p>
                         </div>
                     </div>
                     <div className="deposit_btn_wrap">

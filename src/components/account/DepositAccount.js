@@ -8,8 +8,8 @@ const DepositAccount = () => {
     const { address, isConnected } = useAccount()
     const [depositDetails, setDepositDetails] = useState([])
     const getDeposit = async () => {
-        const l1Provider = new ethers.providers.Web3Provider(window.ethereum);
-        const l2Provider = new ethers.providers.Web3Provider(window.ethereum);
+        const l1Provider = new ethers.providers.JsonRpcProvider('https://eth-goerli.g.alchemy.com/v2/e0CsbXjGCT0xVVFc9MyaE7-olvSVAh4S');
+        const l2Provider = new ethers.providers.JsonRpcProvider('https://racetestnet.io');
         const l1Signer = l1Provider.getSigner()
         const l2Signer = l2Provider.getSigner()
         const zeroAddr = "0x".padEnd(42, "0");
@@ -23,7 +23,7 @@ const DepositAccount = () => {
             OptimismPortal: process.env.REACT_APP_OPTIMISM_PORTAL_PROXY,
             L2OutputOracle: process.env.REACT_APP_L2_OUTPUTORACLE_PROXY,
         }
-        console.log(l1Contracts);
+        // console.log(l1Contracts);
         const bridges = {
             Standard: {
                 l1Bridge: l1Contracts.L1StandardBridge,
@@ -50,8 +50,6 @@ const DepositAccount = () => {
         const data = await crossChainMessenger.getDepositsByAddress(address)
         for (let index = 0; index < data.length; index++) {
             let timestamp = (await l1Provider.getBlock(data[index].blockNumber)).timestamp;
-            // let getStatus = await crossChainMessenger.getMessageStatus(data[index].transactionHash)
-            // data[index].messageStatus = getStatus
             data[index].timestamp = timestamp
         }
         setDepositDetails(data)
@@ -71,10 +69,7 @@ const DepositAccount = () => {
     }
 
     function retrieveEthValue(amount){
-        // console.log(amount._hex);
         const weiValue = parseInt(amount._hex,16);
-        console.log(weiValue/1000000000000000000);
-        // console.log(ethers.utils.formatEther(weiValue));
         return weiValue/1000000000000000000;
     }
 
@@ -102,7 +97,7 @@ const DepositAccount = () => {
                     <tbody>
                         {depositDetails.map((element, index) => {
                             const { timestamp, transactionHash, amount } = element
-                            console.log("amount", amount._hex);
+                            // console.log("amount", amount._hex);
                             return (
                                 <tr key={index}>
                                     <td>{timeConverter(timestamp)}</td>
