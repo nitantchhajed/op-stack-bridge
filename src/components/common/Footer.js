@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import "../../assets/style/common/footer.scss";
-import { Container } from "react-bootstrap";
 import { BsDiscord } from "react-icons/bs";
 import { AiFillLinkedin, AiFillTwitterCircle } from "react-icons/ai";
 import { FaFacebook } from "react-icons/fa"
