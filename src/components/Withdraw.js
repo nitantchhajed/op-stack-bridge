@@ -20,6 +20,7 @@ const Withdraw = () => {
   const { data } = useBalance({ address: address, chainId: 90001 })
   const { connect } = useConnect({ connector: new InjectedConnector() })
   const { chain } = useNetwork()
+  const [metaMastError, setMetaMaskError] = useState("")
   const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork({
     // throwForSwitchChainNotSupported: true,
     chainId: 90001,
@@ -31,20 +32,31 @@ const Withdraw = () => {
     },
     onSettled(data, error) {
       console.log('Settled', { data, error })
-      window.ethereum.request({
-        method: "wallet_addEthereumChain",
-        params: [{
-          chainId: process.env.REACT_APP_L2_CHAIN_ID_WITH_HEX,
-          rpcUrls: [process.env.REACT_APP_L2_RPC_URL],
-          chainName: process.env.REACT_APP_L2_NETWORK_NAME,
-          nativeCurrency: {
-            name: "ETHEREUM",
-            symbol: "ETH",
-            decimals: 18
-          },
-          blockExplorerUrls: [process.env.REACT_APP_L2_EXPLORER_URL]
-        }]
-      });
+      try {
+        window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [{
+            chainId: process.env.REACT_APP_L2_CHAIN_ID_WITH_HEX,
+            rpcUrls: [process.env.REACT_APP_L2_RPC_URL],
+            chainName: process.env.REACT_APP_L2_NETWORK_NAME,
+            nativeCurrency: {
+              name: "ETHEREUM",
+              symbol: "ETH",
+              decimals: 18
+            },
+            blockExplorerUrls: [process.env.REACT_APP_L2_EXPLORER_URL]
+          }]
+        }).then((data) => {
+          setMetaMaskError("")
+        }).catch((err) => {
+          if (err.code === -32002) {
+            setMetaMaskError("Request stuck in pending state")
+          }
+        });
+      }
+      catch (error) {
+        console.log(error);
+      }
     },
     onSuccess(data) {
       console.log('Success', data)
@@ -135,11 +147,11 @@ const Withdraw = () => {
   }
 
   const handleSwitch = () => {
-    try{
+    try {
 
       switchNetwork(process.env.REACT_APP_L2_CHAIN_ID)
     }
-    catch(error){
+    catch (error) {
       console.log(error);
     }
   }
@@ -208,6 +220,7 @@ const Withdraw = () => {
               <span className="visually-hidden">Loading...</span>
             </Spinner> : "Withdraw"}</button>}
           </div>
+          {metaMastError && <small className="d-block text-danger text-center mt-2">{metaMastError}</small>}
         </section>
       </div>
     </>

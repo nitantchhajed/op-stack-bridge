@@ -37,7 +37,7 @@
             border-radius: 20px;
             font-weight: 500;
             font-size: 14px;
-            padding: 10px 15px;
+            padding: 6px 15px;
 
             span {
                 vertical-align: middle;
@@ -48,6 +48,94 @@
     button {
         &:focus {
             box-shadow: none;
+        }
+    }
+
+    .dropdown_wrap {
+        .dropdown {
+
+            .btn-success {
+                background-color: var(--primary-color);
+                color: var(--dark-color);
+                border-radius: 20px;
+                font-weight: 500;
+                font-size: 14px;
+                border-color: var(--primary-color);
+
+                &::after {
+                    display: none;
+                }
+            }
+
+            .dropdown-menu {
+                left: -220px;
+                background-color: var(--secondary-color);
+                border: 1px solid #39424c;
+                border-radius: 12px;
+                width: 320px;
+                box-shadow: 0px 4px 16px -1px rgba(0, 0, 0, .08), 0px 0px 8px -4px rgba(0, 0, 0, .12);
+                overflow: hidden;
+                padding: 10px 15px;
+
+                .user_profile_wrap {
+                    margin-bottom: 15px;
+
+                    .user_profile {
+                        text-align: center;
+
+                        img {
+                            width: 80px;
+                            border-radius: 50%;
+                            height: 80px;
+                        }
+                    }
+
+                    h4 {
+                        font-size: 18px;
+                        text-align: center;
+                        color: var(--light-color);
+
+                        .text_copied {
+                            font-size: 12px;
+                            background: var(--secondary-color);
+                            padding: 4px;
+                            border-radius: 5px;
+                            box-shadow: 0px 0px 10px 0px #3a3a3b;
+                            position: relative;
+                            top: -23px;
+                            left: -35px;
+                        }
+
+                        span {
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+                .dropdown-item {
+                    padding: 6px 8px;
+                    color: var(--text-color);
+
+                    &:hover {
+                        background-color: var(--button-color);
+                    }
+
+                    svg {
+                        font-size: 20px;
+                        margin-right: 5px;
+                        vertical-align: middle;
+                    }
+                }
+            }
+        }
+
+        .disconnect_btn {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 14px;
+            border-color: var(--primary-color);
         }
     }
 }
