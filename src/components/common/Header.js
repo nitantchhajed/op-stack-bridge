@@ -13,19 +13,23 @@ const HeaderNew = () => {
     const { address, isConnected } = useAccount();
     const [getNetwork, setNetwork] = useState();
     const { chain, chains } = useNetwork()
-    const { connect } = useConnect({ connector: new InjectedConnector({
-        chains
-    }) })
-    const handleDisconnect = async() => {
+    const { connect } = useConnect({
+        connector: new InjectedConnector({
+            chains
+        })
+    })
+    const handleDisconnect = async () => {
         await disconnect()
     }
     useEffect(() => {
+        console.log({ isConnected, address })
         if (chain?.id == 90001 || chain?.id == 5) {
             setNetwork(chain.name)
         }
         else {
             setNetwork("Unsupported Network")
         }
+        console.log(getNetwork, isConnected, address)
     }, [chain])
     return (
         <>
@@ -47,10 +51,13 @@ const HeaderNew = () => {
                                 <Link to="/account">Account</Link>
                             </Nav>
                             <div className='header_btn_wrap'>
-
                                 {
-                                    isConnected && getNetwork !== "Unsupported Network" ? <button className='btn disconnect_btn header_btn me-2'><FaEthereum /> {getNetwork}</button> : <button className='btn disconnect_btn header_btn me-2'><BiInfoCircle /> {getNetwork} </button>
+                                    isConnected ? <button className='btn disconnect_btn header_btn me-2'><FaEthereum /> {getNetwork}</button> : ""
                                 }
+
+                                {/* {
+                                    getNetwork !== "Unsupported Network" ? <button className='btn disconnect_btn header_btn me-2'><FaEthereum /> {getNetwork}</button> : <button className='btn disconnect_btn header_btn me-2'><BiInfoCircle /> {getNetwork} </button>
+                                } */}
                             </div>
                             <div className='header_btn_wrap'>
 

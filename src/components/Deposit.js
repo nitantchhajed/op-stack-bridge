@@ -14,7 +14,7 @@ const Deposit = () => {
     const { address, isConnected } = useAccount()
     const [errorInput, setErrorInput] = useState("")
     const [loader, setLoader] = useState(false)
-    const { connect } = useConnect({ connector: new InjectedConnector() })
+    const { connect } = useConnect()
     const { chain } = useNetwork()
     const { switchNetwork } = useSwitchNetwork({
         throwForSwitchChainNotSupported: true,
