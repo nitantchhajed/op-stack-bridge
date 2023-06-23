@@ -1,5 +1,6 @@
 .app_header {
     padding: 15px 0px;
+
     .app_logo {
         margin-right: 60px;
 
@@ -10,8 +11,10 @@
 
     .navbar-expand-lg {
         .navbar-nav {
-            .nav-link, a {
-                color: #fff;
+
+            .nav-link,
+            a {
+                color: var(--light-color);
                 font-weight: 500;
                 font-size: 14px;
                 text-decoration: none;
@@ -22,16 +25,17 @@
 
     .header_btn_wrap {
         .header_btn {
-            background-color: #EDE4C5;
-            color: #000;
+            background-color: var(--primary-color);
+            color: var(--dark-color);
             border-radius: 20px;
             font-weight: 500;
             font-size: 14px;
             padding: 10px 15px;
         }
     }
-    button{
-        &:focus{
+
+    button {
+        &:focus {
             box-shadow: none;
         }
     }

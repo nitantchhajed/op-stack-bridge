@@ -17,11 +17,9 @@ const HeaderNew = () => {
             <header className='app_header'>
                 <Navbar expand="lg" variant="dark">
                     <Container fluid>
-                        {/* <Navbar.Brand href="#"> */}
                         <Link to="/" className='app_logo'>
                             <Image src={logo} alt="logo" fluid />
                         </Link>
-                        {/* </Navbar.Brand> */}
                         <Navbar.Toggle aria-controls="navbarScroll" />
                         <Navbar.Collapse id="navbarScroll">
                             <Nav

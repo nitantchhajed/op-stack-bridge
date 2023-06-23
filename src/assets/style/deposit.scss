@@ -9,7 +9,7 @@
             p {
                 margin-bottom: 0px;
                 margin-right: 6px;
-                color: #fff;
+                color: var(--light-color);
                 font-weight: 500;
                 font-size: 16px;
             }
@@ -17,8 +17,8 @@
             h5 {
                 margin-bottom: 0px;
                 font-size: 14px;
-                background-color: #074870;
-                color: #fff;
+                background-color: var(--button-color);
+                color: var(--light-color);
                 padding: 10px 15px;
                 border-radius: 25px;
                 font-weight: 400;
@@ -42,15 +42,16 @@
             .form-control {
                 font-size: 20px;
                 border-radius: 8px 0px 0px 8px;
-                border: 1px solid #111827;
+                border: 1px solid var(--secondary-color);
                 height: 56px;
                 min-width: 100px;
-                background-color: #111827;
-                color: #fff;
+                background-color: var(--secondary-color);
+                color: var(--light-color);
                 font-weight: 600;
                 width: 100%;
                 padding: 10px 50px;
-                border: 1px solid #E9DEB9;
+                border: 1px solid var(--primary-color);
+
                 &:focus {
                     box-shadow: none;
                 }
@@ -77,9 +78,9 @@
                 position: absolute;
                 right: 0px;
                 top: 50%;
-                color: #000;
+                color: var(--dark-color);
                 transform: translate(-50%, -50%);
-                background: #E9DEB9;
+                background: var(--primary-color);
                 // padding: 2px 10px 0px;
                 border-radius: 20px;
                 font-weight: 500;
@@ -92,30 +93,32 @@
                 font-weight: 600;
                 margin-bottom: 0px;
             }
-            .deposit_inner_input{
+
+            .deposit_inner_input {
                 display: flex;
                 align-items: center;
-             
-                .select_wrap{
-                    color: #fff;
-                    border: 1px solid #E9DEB9;
+
+                .select_wrap {
+                    color: var(--light-color);
+                    border: 1px solid var(--primary-color);
                     padding: 15px 10px;
                     border-radius: 0px 8px 8px 0px;
                     width: 100px;
-                    background:  #111827;
-                    background: url("../images/down.svg") #111827 no-repeat center right 10px;
+                    background: var(--secondary-color);
+                    background: url("../images/down.svg") var(--secondary-color) no-repeat center right 10px;
                     background-size: 10px;
+
                     // background-position: center right 10px;
-                    &:focus{
+                    &:focus {
                         box-shadow: none;
                     }
                 }
-              
+
             }
         }
 
         .wallet_bal {
-            color: #83A4B8;
+            color: var(--text-color);
             font-size: 12px;
             font-weight: 600;
         }
@@ -131,7 +134,7 @@
             p {
                 margin-bottom: 0px;
                 margin-right: 6px;
-                color: #fff;
+                color: var(--light-color);
                 font-weight: 500;
                 font-size: 16px;
             }
@@ -139,8 +142,8 @@
             h5 {
                 margin-bottom: 0px;
                 font-size: 14px;
-                background-color: #074870;
-                color: #fff;
+                background-color: var(--button-color);
+                color: var(--light-color);
                 padding: 10px 20px;
                 border-radius: 25px;
                 font-weight: 400;
@@ -158,7 +161,7 @@
         }
 
         .deposit_inner_details {
-            background-color: #111827;
+            background-color: var(--secondary-color);
             padding: 15px;
             border-radius: 8px;
             margin-top: 20px;
@@ -172,7 +175,7 @@
 
             p {
                 margin: 0px;
-                color: #94A3B8;
+                color: var(--text-color);
                 font-weight: 500;
                 font-size: 16px;
             }
@@ -183,8 +186,8 @@
         margin-top: 10px;
 
         .deposit_btn {
-            background-color: #205A7E;
-            color: #fff;
+            background-color: var(--button-color);
+            color: var(--light-color);
             font-size: 14px;
             font-weight: 500;
             width: 100%;
@@ -200,40 +203,10 @@
             }
 
             &:focus {
-                border-color: #205A7E;
+                border-color: var(--button-color);
                 opacity: 0.9;
-                background-color: #205A7E;
-                color: #fff;
-            }
-        }
-    }
-
-    .gas_fee_wrap {
-        margin-top: 20px;
-
-        .gas_fee {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            h6 {
-                color: #fff;
-                font-weight: 500;
-                font-size: 14px;
-            }
-
-            p {
-                color: #83A4B8;
-                font-size: 14px;
-                font-weight: 500;
-            }
-
-            &:last-child {
-
-                h6,
-                p {
-                    margin-bottom: 0px;
-                }
+                background-color: var(--button-color);
+                color: var(--light-color);
             }
         }
     }
@@ -244,7 +217,7 @@
             font-size: 10px;
             text-align: center;
             word-wrap: break-word;
-            background: #111826;
+            background: var(--secondary-color);
             padding: 10px 0px;
             border-radius: 10px;
             display: block;

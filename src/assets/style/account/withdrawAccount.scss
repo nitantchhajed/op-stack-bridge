@@ -17,7 +17,7 @@
                 }
 
                 .withdraw_inner_btn {
-                    background-color: #ede4c7;
+                    background-color: var(--button-color);
                     font-size: 12px;
                     padding: 1px 15px;
                     font-weight: 600;
@@ -25,19 +25,19 @@
                     float: right;
 
                     &:hover {
-                        color: #000;
+                        color: var(--dark-color);
                     }
                 }
             }
 
             tr td {
-                background-color: #012941 !important;
+                background-color: var(--secondary-color) !important;
                 box-shadow: none;
             }
         }
 
         th {
-            background-color: #111827;
+            background-color: var(--secondary-color);
         }
     }
 

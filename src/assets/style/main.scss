@@ -1,12 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap');
-@import "./common/successModel";
-
+@import "./common/color_variable";
 body {
     margin: 0px;
     padding: 0px;
     line-height: 1.7;
     font-weight: 400;
-    background-color: #111827 !important;
+    background-color: var(--secondary-color) !important;
     font-family: 'Rubik', sans-serif;
 }
 
@@ -36,17 +35,11 @@ p {
 
 
 .main_wrap {
-    // display: flex;
-    // justify-content: center;
-    // width: 100%;
-    // height: calc(100vh - 150px);
-    // align-items: center;
-
     .bridge_wrap {
         width: 100%;
         max-width: 550px;
         margin: 0px auto;
-        background-color: #002942;
+        background-color: var(--card-color);
         padding: 20px;
         border-radius: 12px;
         box-shadow: 0 0 8px -4px #14171a1f, 0 4px 16px -1px #14171a14;
@@ -54,7 +47,7 @@ p {
         ul {
             padding: 0px;
             display: flex;
-            background: #000;
+            background: var(--secondary-color);
             justify-content: space-between;
             gap: 5px;
             border-radius: 10px;
@@ -74,7 +67,7 @@ p {
                     display: inline-block;
                     font-weight: 500;
                     font-size: 14px;
-                    color: #64748b;
+                    color: var(--text-color);
                     position: relative;
                     transition: all 0.5s ease;
 
@@ -84,8 +77,8 @@ p {
 
                     &.active {
                         box-shadow: 0 0 8px rgba(20, 23, 26, 0.0784313725), 0 0 4px rgba(20, 23, 26, 0.0392156863);
-                        color: #EDE4C5;
-                        background-color: #074870;
+                        color: var(--primary-color);
+                        background-color: var(--button-color);
 
                         &::after {
                             position: absolute;
@@ -94,7 +87,7 @@ p {
                             bottom: 0px;
                             content: "";
                             width: 20%;
-                            background: #EDE4C5;
+                            background: var(--primary-color);
                             transform: translate(-50%);
                             border-radius: 3px 3px 0px 0px;
                         }
@@ -116,16 +109,16 @@ p {
         .page-item {
             &.active {
                 .page-link {
-                    border: 1px solid #EDE4C5;
+                    border: 1px solid var(--primary-color);
                     border-radius: 5px;
                     padding: 0px 11px;
                 }
             }
 
             .page-link {
-                background: #111827;
-                color: #EDE4C5;
-                border-color: #111827;
+                background: var(--secondary-color);
+                color: var(--primary-color);
+                border-color: var(--secondary-color);
                 padding: 1px 10px;
                 font-size: 12px;
             }
@@ -147,32 +140,32 @@ input[type=number] {
 
 ::-webkit-input-placeholder {
     /* WebKit, Blink, Edge */
-    color: #94A3B8 !important;
+    color: var(--text-color) !important;
 }
 
 :-moz-placeholder {
     /* Mozilla Firefox 4 to 18 */
-    color: #94A3B8 !important;
+    color: var(--text-color) !important;
     opacity: 1;
 }
 
 ::-moz-placeholder {
     /* Mozilla Firefox 19+ */
-    color: #94A3B8 !important;
+    color: var(--text-color) !important;
     opacity: 1;
 }
 
 :-ms-input-placeholder {
     /* Internet Explorer 10-11 */
-    color: #94A3B8 !important;
+    color: var(--text-color) !important;
 }
 
 ::-ms-input-placeholder {
     /* Microsoft Edge */
-    color: #94A3B8 !important;
+    color: var(--text-color) !important;
 }
 
 ::placeholder {
     /* Most modern browsers support this now. */
-    color: #94A3B8 !important;
+    color: var(--text-color) !important;
 }

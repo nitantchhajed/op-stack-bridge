@@ -2,21 +2,21 @@
     margin-top: 30px;
     display: flex;
     align-items: center;
-    border: 1px solid #E9DEB9;
+    border: 1px solid var(--primary-color);
     border-radius: 8px;
     padding: 15px;
 
     h3 {
         margin: 0px;
         margin-bottom: 5px;
-        color: #fff;
+        color: var(--light-color);
         font-weight: 500;
         font-size: 16px;
     }
 
     p {
         margin: 0px;
-        color: #94A3B8;
+        color: var(--text-color);
         font-weight: 400;
         font-size: 12px;
     }
@@ -25,7 +25,7 @@
         margin-right: 30px;
 
         svg {
-            color: #E9DEB9;
+            color: var(--primary-color);
             font-size: 25px;
         }
     }
@@ -35,7 +35,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #111827;
+    background-color: var(--secondary-color);
     padding: 10px;
     border-radius: 8px;
     margin-top: 20px;
@@ -48,16 +48,15 @@
 
     p {
         margin-bottom: 0px;
-        color: #94A3B8;
+        color: var(--text-color);
     }
 
     .input_title {
-        color: #000;
-        background: #E9DEB9;
+        color: var(--dark-color);
+        background: var(--primary-color);
         border-radius: 20px;
         font-weight: 500;
         padding: 2px 6px 0px;
         font-size: 11px;
     }
 }
-
