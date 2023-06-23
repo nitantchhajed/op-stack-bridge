@@ -1,17 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "../../assets/style/common/header.scss"
 import { Navbar, Container, Nav, Image } from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import { Link } from 'react-router-dom';
-import { useAccount, useConnect } from 'wagmi'
+import { useAccount, useConnect, useNetwork } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { disconnect } from '@wagmi/core'
 const HeaderNew = () => {
     const { address } = useAccount();
+    const [getNetwork, setNetwork] = useState();
+    const { chain, chains } = useNetwork()
     const { connect } = useConnect({ connector: new InjectedConnector() })
     const handleDisconnect = async () => {
         await disconnect()
     }
+    useEffect(() => {
+        if (chain.id == 90001 || chain.id == 5) {
+            setNetwork(chain.name)
+        }
+        else{
+            setNetwork("Unsupported Network")
+        }
+    }, [chain])
     return (
         <>
             <header className='app_header'>
@@ -31,6 +41,9 @@ const HeaderNew = () => {
                                 <Link to="/">Bridge</Link>
                                 <Link to="/account">Account</Link>
                             </Nav>
+                            <div className='header_btn_wrap'>
+                                <button className='btn disconnect_btn header_btn'>{getNetwork}</button>
+                            </div>
                             <div className='header_btn_wrap'>
                                 {address ? <button className='btn disconnect_btn header_btn' onClick={handleDisconnect}>Disconnect {address.slice(0, 5)}...{address.slice(-5)}</button> : <button onClick={() => connect()} className='btn disconnect_btn header_btn'>Connect Wallet</button>}
                             </div>
