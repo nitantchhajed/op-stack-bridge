@@ -35,6 +35,7 @@ p {
 
 
 .main_wrap {
+    min-height: calc(100vh - 150px);
     .bridge_wrap {
         width: 100%;
         max-width: 550px;
@@ -96,9 +97,8 @@ p {
                 }
             }
         }
-
-
     }
+    
 }
 
 .pagination_wrap {

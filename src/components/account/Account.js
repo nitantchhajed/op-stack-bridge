@@ -1,4 +1,4 @@
-import React  from 'react'
+import React, { useState, useRef } from 'react'
 import "../../assets/style/account/account.scss"
 import WithdrawAccount from './WithdrawAccount'
 import { Container, Tabs, Tab } from 'react-bootstrap'

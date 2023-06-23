@@ -6,19 +6,39 @@ import { Link } from 'react-router-dom';
 import { useAccount, useConnect, useNetwork } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { disconnect } from '@wagmi/core'
+import { FaEthereum } from "react-icons/fa"
+import { BiInfoCircle } from "react-icons/bi"
+import { useDisconnect } from 'wagmi'
 const HeaderNew = () => {
-    const { address } = useAccount();
+    const { address, isConnected } = useAccount();
     const [getNetwork, setNetwork] = useState();
     const { chain, chains } = useNetwork()
-    const { connect } = useConnect({ connector: new InjectedConnector() })
-    const handleDisconnect = async () => {
+    const { connect } = useConnect({ connector: new InjectedConnector({
+        chains
+    }) })
+    // const { disconnect } = useDisconnect({
+    //     onError(error) {
+    //         console.log('Error', error)
+    //     },
+    //     onMutate(args) {
+    //         console.log('Mutate', args)
+    //     },
+    //     onSuccess(data) {
+    //         console.log('Success', data)
+    //     },
+    //     onSettled(data, error) {
+    //         console.log('Settled', { data, error })
+    //     },
+    // })
+    const handleDisconnect = async() => {
         await disconnect()
     }
     useEffect(() => {
-        if (chain.id == 90001 || chain.id == 5) {
+        // console.log(isConnected);
+        if (chain?.id == 90001 || chain?.id == 5) {
             setNetwork(chain.name)
         }
-        else{
+        else {
             setNetwork("Unsupported Network")
         }
     }, [chain])
@@ -42,10 +62,16 @@ const HeaderNew = () => {
                                 <Link to="/account">Account</Link>
                             </Nav>
                             <div className='header_btn_wrap'>
-                                <button className='btn disconnect_btn header_btn'>{getNetwork}</button>
+
+                                {
+                                    isConnected && getNetwork !== "Unsupported Network" ? <button className='btn disconnect_btn header_btn me-2'><FaEthereum /> {getNetwork}</button> : <button className='btn disconnect_btn header_btn me-2'><BiInfoCircle /> {getNetwork} </button>
+                                }
                             </div>
                             <div className='header_btn_wrap'>
-                                {address ? <button className='btn disconnect_btn header_btn' onClick={handleDisconnect}>Disconnect {address.slice(0, 5)}...{address.slice(-5)}</button> : <button onClick={() => connect()} className='btn disconnect_btn header_btn'>Connect Wallet</button>}
+
+                                {address ? <button className='btn disconnect_btn header_btn' onClick={() => handleDisconnect()}>
+                                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAsElEQVRYR2PslBX+z4AHHLiVgiLroDYHn3IGUtUzjjpg0IUAehyiRzipaYCQfow0MOoAuoeA5/dylHIAPY7RHWSt9Q5vOXD0mhDecgPdPMZRBwx4CJBaEOFNAFgkCZUbJNcFow4YDYHREBjwEKC0LkD3AMnlwKgDqB4CLYqpKO0BQvX5b5YgvOmQ9c86FHlC7QnGUQcMeAigN0jQIxg90aGnEUrVY7QJKTWQVAePOgAAXAoAZIiZ6M4AAAAASUVORK5CYII=" alt="Profile Icon" />
+                                    {address.slice(0, 5)}...{address.slice(-5)}</button> : <button onClick={() => connect()} className='btn disconnect_btn header_btn'>Connect Wallet</button>}
                             </div>
                         </Navbar.Collapse>
                     </Container>

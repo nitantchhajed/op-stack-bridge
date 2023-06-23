@@ -10,7 +10,8 @@ import { WagmiConfig, createConfig, createStorage } from 'wagmi'
 import { configureChains } from '@wagmi/core'
 import { goerli } from '@wagmi/core/chains'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { InjectedConnector } from 'wagmi/connectors/injected';
 export const RACE = {
     id: Number(process.env.REACT_APP_L2_CHAIN_ID),
     name: "RACE Testnet",
@@ -35,24 +36,37 @@ export const RACE = {
 }
 
 const { chains, publicClient } = configureChains(
-    [goerli, RACE],
+    [RACE, goerli],
     [
         jsonRpcProvider({
             rpc: chain => ({ http: chain.rpcUrls.default.http[0] })
 
         })
     ])
-
+// const web3AuthInstance = new Web3Auth({
+//     clientId: "YOUR_CLIENT_ID",
+//     chainConfig: {
+//         chainNamespace: CHAIN_NAMESPACES.EIP155,
+//         chainId: "0x" + chains[0].id.toString(16),
+//         rpcTarget: chains[0].rpcUrls.default, // This is the public RPC we have added, please pass on your own endpoint while creating an app
+//         displayName: chains[0].name,
+//         tickerName: chains[0].nativeCurrency?.name,
+//         ticker: chains[0].nativeCurrency?.symbol,
+//         blockExplorer: chains[0]?.blockExplorers.default?.url,
+//     },
+// });
 export const connectors = [
-    // new WalletConnectConnector({
-    //     chains,
-    //     options: {
-    //         projectId: "9ab3c65ab8829967bba6f99b37b2e868",
-    //     },
-    // }),
+    // new Web3AuthConnector(chains),
+    new InjectedConnector({
+        chains,
+        options: {
+            name: "Injected",
+            shimDisconnect: true,
+        },
+    }),
     new MetaMaskConnector({
         chains,
-        options : {
+        options: {
             shimDisconnect: false,
         }
     }),

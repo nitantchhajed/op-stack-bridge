@@ -25,12 +25,23 @@
 
     .header_btn_wrap {
         .header_btn {
+            img {
+                margin-right: 8px;
+                border-radius: 100px;
+                height: 24px;
+                width: 24px;
+            }
+
             background-color: var(--primary-color);
             color: var(--dark-color);
             border-radius: 20px;
             font-weight: 500;
             font-size: 14px;
             padding: 10px 15px;
+
+            span {
+                vertical-align: middle;
+            }
         }
     }
 

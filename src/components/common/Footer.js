@@ -12,7 +12,6 @@ const Footer = () => {
         <div className='footer_text_wrap'>
           <ul>
             <li><Link to="/">Help center</Link></li>
-            <li><Link to="/">Report A bug</Link></li>
           </ul>
         </div>
         <div className='footer_icn_wrap'>
