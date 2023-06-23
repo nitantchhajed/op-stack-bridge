@@ -20,19 +20,35 @@ const Withdraw = () => {
   const { data } = useBalance({ address: address, chainId: 90001 })
   const { connect } = useConnect({ connector: new InjectedConnector() })
   const { chain } = useNetwork()
-  const { switchNetwork } = useSwitchNetwork({
-    throwForSwitchChainNotSupported: true,
+  const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork({
+    // throwForSwitchChainNotSupported: true,
+    chainId: 90001,
     onError(error) {
-      // console.log('Error', error)
+      console.log('Error', error)
     },
     onMutate(args) {
-      // console.log('Mutate', args)
+      console.log('Mutate', args)
     },
     onSettled(data, error) {
-      // console.log('Settled', { data, error })
+      console.log('Settled', { data, error })
+      window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [{
+          chainId: process.env.REACT_APP_L2_CHAIN_ID_WITH_HEX,
+          rpcUrls: [process.env.REACT_APP_L2_RPC_URL],
+          chainName: process.env.REACT_APP_L2_NETWORK_NAME,
+          nativeCurrency: {
+            name: "ETHEREUM",
+            symbol: "ETH",
+            decimals: 18
+          },
+          blockExplorerUrls: [process.env.REACT_APP_L2_EXPLORER_URL]
+        }]
+      });
     },
     onSuccess(data) {
-      // console.log('Success', data)
+      console.log('Success', data)
+
     },
   })
   useEffect(() => {
@@ -119,7 +135,13 @@ const Withdraw = () => {
   }
 
   const handleSwitch = () => {
-    switchNetwork(process.env.REACT_APP_L2_CHAIN_ID)
+    try{
+
+      switchNetwork(process.env.REACT_APP_L2_CHAIN_ID)
+    }
+    catch(error){
+      console.log(error);
+    }
   }
   const handleChange = (e) => {
     if (data?.formatted < e.target.value) {

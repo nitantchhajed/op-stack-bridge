@@ -16,25 +16,10 @@ const HeaderNew = () => {
     const { connect } = useConnect({ connector: new InjectedConnector({
         chains
     }) })
-    // const { disconnect } = useDisconnect({
-    //     onError(error) {
-    //         console.log('Error', error)
-    //     },
-    //     onMutate(args) {
-    //         console.log('Mutate', args)
-    //     },
-    //     onSuccess(data) {
-    //         console.log('Success', data)
-    //     },
-    //     onSettled(data, error) {
-    //         console.log('Settled', { data, error })
-    //     },
-    // })
     const handleDisconnect = async() => {
         await disconnect()
     }
     useEffect(() => {
-        // console.log(isConnected);
         if (chain?.id == 90001 || chain?.id == 5) {
             setNetwork(chain.name)
         }
