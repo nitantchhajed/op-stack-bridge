@@ -7,15 +7,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { store } from './store'
 import { Provider } from 'react-redux'
 import { WagmiConfig, createConfig, createStorage } from 'wagmi'
-import { publicProvider } from 'wagmi/providers/public'
 import { configureChains } from '@wagmi/core'
 import { goerli } from '@wagmi/core/chains'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { createPublicClient, http } from 'viem'
 export const RACE = {
     id: Number(process.env.REACT_APP_L2_CHAIN_ID),
     name: "RACE Testnet",
@@ -39,7 +34,7 @@ export const RACE = {
 
 }
 
-const { chains, publicClient, webSocketPublicClient } = configureChains(
+const { chains, publicClient } = configureChains(
     [goerli, RACE],
     [
         jsonRpcProvider({

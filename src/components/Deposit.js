@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Web3 from "web3"
 import "../assets/style/deposit.scss";
-import { Form, Spinner, Image, Container } from "react-bootstrap"
+import { Form, Spinner, Image } from "react-bootstrap"
 import toIcn from "../assets/images/logo.png"
 import { IoMdWallet } from "react-icons/io"
 import { FaEthereum } from "react-icons/fa"

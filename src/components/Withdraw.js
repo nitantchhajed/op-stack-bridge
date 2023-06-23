@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import "../assets/style/deposit.scss";
 import "../assets/style/withdraw.scss";
-import { Container, Form, Image, Spinner } from "react-bootstrap";
+import { Form, Image, Spinner } from "react-bootstrap";
 import { MdOutlineSecurity } from "react-icons/md"
 import { FaEthereum } from "react-icons/fa"
 import toIcn from "../assets/images/logo.png"
-import { useAccount, useConnect, useNetwork, useSwitchNetwork, useBalance, useWaitForTransaction } from 'wagmi'
+import { useAccount, useConnect, useNetwork, useSwitchNetwork, useBalance } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { IoMdWallet } from "react-icons/io"
 import { HiSwitchHorizontal } from "react-icons/hi";
@@ -17,10 +17,9 @@ const Withdraw = () => {
   const [errorInput, setErrorInput] = useState("")
   const [loader, setLoader] = useState(false)
   const { address, isConnected } = useAccount()
-  const { data, isError, isLoading } = useBalance({ address: address, chainId: 90001 })
+  const { data } = useBalance({ address: address, chainId: 90001 })
   const { connect } = useConnect({ connector: new InjectedConnector() })
   const { chain } = useNetwork()
-  const waitForTransaction = useWaitForTransaction({})
   const { switchNetwork } = useSwitchNetwork({
     throwForSwitchChainNotSupported: true,
     onError(error) {
@@ -49,7 +48,7 @@ const Withdraw = () => {
         // const l1Provider = new ethers.providers.Web3Provider(window.ethereum);
         // const l2Provider = new ethers.providers.Web3Provider(window.ethereum);
         const l1Url = `https://eth-goerli.g.alchemy.com/v2/e0CsbXjGCT0xVVFc9MyaE7-olvSVAh4S`;
-        const l2Url = `https://racetestnet.io`;
+        // const l2Url = `https://racetestnet.io`;
         const l1Provider = new ethers.providers.JsonRpcProvider(l1Url, "any");
         const l2Provider = new ethers.providers.Web3Provider(window.ethereum);
         const l1Signer = l1Provider.getSigner(address)
@@ -65,7 +64,6 @@ const Withdraw = () => {
           OptimismPortal: process.env.REACT_APP_OPTIMISM_PORTAL_PROXY,
           L2OutputOracle: process.env.REACT_APP_L2_OUTPUTORACLE_PROXY,
         }
-        // console.log(l1Contracts);
         const bridges = {
           Standard: {
             l1Bridge: l1Contracts.L1StandardBridge,
@@ -91,19 +89,26 @@ const Withdraw = () => {
         })
         const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
         setLoader(true);
-        const response = await crossChainMessenger.withdrawETH(weiValue.toString());
-        const logs = await response.wait();
-        console.log({ response, logs });
-        if (logs) {
-          setLoader(false);
-          setEthValue("");
+        try {
+          const response = await crossChainMessenger.withdrawETH(weiValue.toString());
+          const logs = await response.wait();
+          console.log({ response });
+          console.log({ logs });
+          if (logs) {
+            setLoader(false);
+            setEthValue("");
+          }
         }
+        catch (error) {
+          setLoader(false);
+          console.log({error},98);
+        }
+        
+        
 
       }
     } catch (error) {
-      if(error === "user rejected transaction"){
-        console.log(true);
-      }
+      console.log(error);
     }
   }
 

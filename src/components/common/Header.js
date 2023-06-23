@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import "../../assets/style/common/header.scss"
 import { Navbar, Container, Nav, Image } from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import { Link } from 'react-router-dom';
-import { useAccount, useConnect, useEnsName } from 'wagmi'
+import { useAccount, useConnect } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { disconnect } from '@wagmi/core'
 const HeaderNew = () => {
-    const { address, isConnected } = useAccount();
+    const { address } = useAccount();
     const { connect } = useConnect({ connector: new InjectedConnector() })
     const handleDisconnect = async () => {
         await disconnect()
