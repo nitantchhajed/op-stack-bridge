@@ -5,6 +5,7 @@ import { ethers } from "ethers"
 import ReactPaginate from 'react-paginate';
 const optimismSDK = require("@eth-optimism/sdk")
 const WithdrawAccount = () => {
+    const [loader, setLoader] = useState(false)
     const { address, isConnected } = useAccount()
     const [withdrawDetails, setWithdrawDetails] = useState([])
     const { chain } = useNetwork()
@@ -167,10 +168,9 @@ const WithdrawAccount = () => {
                                 </tr>
                             )
                         })}
-
                     </tbody>
                 </Table>
-                {/* {!checkMetamaskTest && <MetamaskPopUp />} */}
+                {!loader ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> : ""}
                 {withdrawDetails?.length > 10 ? <div className='pagination_wrap'>
                     <ReactPaginate
                         breakLabel="..."
@@ -191,7 +191,7 @@ const WithdrawAccount = () => {
                         breakLinkClassName="page-link"
                         activeClassName="active"
                     />
-                </div>:""}
+                </div> : ""}
             </section>
         </>
     )
