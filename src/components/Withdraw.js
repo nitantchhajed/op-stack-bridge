@@ -190,9 +190,9 @@ const Withdraw = () => {
                   <Form.Control type='number' name="eth_value" value={ethValue} onChange={handleChange} placeholder="0" min="0" step="any" />
                   <Form.Select aria-label="Default select example" className='select_wrap'>
                     <option>ETH</option>
-                    {/* <option value="DAI">DAI</option>
-                  <option value="USDT">USDC</option>
-                  <option value="USDT">USDT</option> */}
+                    <option value="DAI">DAI</option>
+                  {/* <option value="USDT">USDC</option> */}
+                  <option value="USDT">USDT</option>
                   </Form.Select>
                 </div>
                 <div className='input_icn_wrap'>
