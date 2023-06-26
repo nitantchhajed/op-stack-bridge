@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Table } from "react-bootstrap";
+import { Table, Spinner } from "react-bootstrap";
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 import { ethers } from "ethers"
 import ReactPaginate from 'react-paginate';
 const optimismSDK = require("@eth-optimism/sdk")
 const WithdrawAccount = () => {
-    const [loader, setLoader] = useState(false)
+    const [loader, setLoader] = useState()
     const { address, isConnected } = useAccount()
     const [withdrawDetails, setWithdrawDetails] = useState([])
     const { chain } = useNetwork()
@@ -98,14 +98,45 @@ const WithdrawAccount = () => {
         return time;
     }
 
-    const handleProve = async (transactionHash) => {
-        const getCrossChainMessenger = await getCrossChain();
-        await getCrossChainMessenger.proveMessage(transactionHash)
+    const handleProve = async (event, transactionHash) => {
+        try {
+            const index = event.target.getAttribute('data-value')
+            setLoader(index)
+            const getCrossChainMessenger = await getCrossChain();
+            const response = await getCrossChainMessenger.proveMessage(transactionHash)
+            const logs = await response.wait()
+            if (logs.status === 1) {
+                getWithdraw()
+                setLoader(NaN)
+            }
+        } catch (error) {
+            if (error.code === "ACTION_REJECTED") {
+                setLoader(NaN)
+            }
+        }
+
     }
 
-    const handleClaim = async (transactionHash) => {
-        const getCrossChainMessenger = await getCrossChain();
-        await getCrossChainMessenger.finalizeMessage(transactionHash)
+    const handleClaim = async (event, transactionHash) => {
+        try {
+            const index = event.target.getAttribute('data-value')
+            setLoader(index)
+            const getCrossChainMessenger = await getCrossChain();
+            const response = await getCrossChainMessenger.finalizeMessage(transactionHash)
+            const logs = await response.wait()
+            if (logs.status === 1) {
+                getWithdraw()
+                setLoader(NaN)
+            }
+        } catch (error) {
+            // if(error.code === -32603){
+            //     console.log("Already claim");
+            // }
+            if (error.code === "ACTION_REJECTED") {
+                setLoader(NaN)
+            }
+        }
+
 
     }
 
@@ -145,32 +176,40 @@ const WithdrawAccount = () => {
     return (
         <>
             <section className="account_withdraw_table">
-                <Table responsive bordered hover variant="dark">
-                    <thead>
-                        <tr>
-                            <th>Time</th>
-                            <th>Type</th>
-                            <th>Amount</th>
-                            <th>Transaction</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentItemsCollections.map((element, index) => {
-                            const { timestamp, message, transactionHash, amount, messageStatus } = element
-                            return (
-                                <tr key={index}>
-                                    <td>{timeConverter(timestamp)}</td>
-                                    <td>Withdraw</td>
-                                    <td>{parseInt(amount._hex, 16) / 1000000000000000000} ETH</td>
-                                    <td>{`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</td>
-                                    <td>{message} {messageStatus === 3 ? <button type='button' className='btn withdraw_inner_btn' onClick={() => handleProve(transactionHash)}>Prove</button> : messageStatus === 5 ? <button type='button' className='btn withdraw_inner_btn' onClick={() => handleClaim(transactionHash)}>Claim</button> : ""} </td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </Table>
-                {!loader ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> : ""}
+                {withdrawDetails?.length <= 0 ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> :
+                    <Table responsive bordered hover variant="dark">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Transaction</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentItemsCollections.map((element, index) => {
+                                const { timestamp, message, transactionHash, amount, messageStatus } = element
+                                return (
+                                    <tr key={index}>
+                                        <td>{timeConverter(timestamp)}</td>
+                                        <td>Withdraw</td>
+                                        <td>{parseInt(amount._hex, 16) / 1000000000000000000} ETH</td>
+                                        <td>{`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</td>
+                                        <td>{message} {messageStatus === 3 ? index == loader ? <button type='button' className='btn withdraw_inner_btn' >
+                                            <Spinner animation="border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </Spinner> </button> : <button type='button' className='btn withdraw_inner_btn' data-value={index} onClick={(event) => handleProve(event, transactionHash)}>
+                                            Prove</button> : messageStatus === 5 ? index == loader ? <button type='button' className='btn withdraw_inner_btn' >
+                                                <Spinner animation="border" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </Spinner> </button> : <button type='button' className='btn withdraw_inner_btn' data-value={index} onClick={(event) => handleClaim(event, transactionHash)}>Claim</button> : ""} </td>
+                                    </tr>
+                                )
+                            })}
+
+                        </tbody>
+                    </Table>}
                 {withdrawDetails?.length > 10 ? <div className='pagination_wrap'>
                     <ReactPaginate
                         breakLabel="..."

@@ -106,32 +106,33 @@ const DepositAccount = () => {
     return (
         <>
             <section className="account_withdraw_table">
-                <Table responsive bordered hover variant="dark">
-                    <thead>
-                        <tr>
-                            <th>Time</th>
-                            <th>Type</th>
-                            <th>Amount</th>
-                            <th>Transaction</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentItemsCollections.map((element, index) => {
-                            const { timestamp, transactionHash, amount } = element
-                            // console.log("amount", amount._hex);
-                            return (
-                                <tr key={index}>
-                                    <td>{timeConverter(timestamp)}</td>
-                                    <td>Deposit</td>
-                                    <td>{retrieveEthValue(amount)} ETH</td>
-                                    <td>{`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</td>
-                                    <td>Completed</td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </Table>
+                {depositDetails?.length <= 0 ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> :
+                    <Table responsive bordered hover variant="dark">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Transaction</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentItemsCollections.map((element, index) => {
+                                const { timestamp, transactionHash, amount } = element
+                                // console.log("amount", amount._hex);
+                                return (
+                                    <tr key={index}>
+                                        <td>{timeConverter(timestamp)}</td>
+                                        <td>Deposit</td>
+                                        <td>{retrieveEthValue(amount)} ETH</td>
+                                        <td>{`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</td>
+                                        <td>Completed</td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </Table>}
                 {depositDetails?.length > 10 ? <div className='pagination_wrap'>
                     <ReactPaginate
                         breakLabel="..."
