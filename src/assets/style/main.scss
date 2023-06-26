@@ -123,6 +123,10 @@ p {
                 border-color: var(--secondary-color);
                 padding: 1px 10px;
                 font-size: 12px;
+
+                &:focus {
+                    box-shadow: none;
+                }
             }
         }
     }
