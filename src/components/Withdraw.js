@@ -30,9 +30,7 @@ const Withdraw = () => {
       console.log('Mutate', args)
       if (args.connector.ready === true) {
         setCheckMetaMask(false)
-        console.log("metamask install");
       } else {
-        console.log("Please install metamask");
         setCheckMetaMask(true)
       }
     },

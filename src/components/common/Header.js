@@ -10,6 +10,7 @@ import { FaEthereum } from "react-icons/fa"
 import { BiInfoCircle, BiPowerOff } from "react-icons/bi"
 import { MdContentCopy } from "react-icons/md"
 import { AiOutlineDownload, AiOutlineUpload } from "react-icons/ai"
+import metamask from "../../assets/images/metamask.svg"
 // import { BiPowerOff } from "react-icons/bi"
 import { useDisconnect } from 'wagmi'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -17,11 +18,24 @@ const HeaderNew = () => {
     const [copyTextSourceCode, setCopyTextSourceCode] = useState("Copy address to clipboard")
     const { address, isConnected } = useAccount();
     const [getNetwork, setNetwork] = useState();
+    const [checkMetaMask, setCheckMetaMask] = useState("");
     const { chain, chains } = useNetwork()
     const { connect } = useConnect({
-        connector: new InjectedConnector({
-            chains
-        })
+        connector: new InjectedConnector({ chains }),
+        onMutate(args) {
+            console.log('Mutate', args)
+            if (args.connector.ready === true) {
+                setCheckMetaMask(false)
+            } else {
+                setCheckMetaMask(true)
+            }
+        },
+        onSettled(data, error) {
+            console.log('Settled', { data, error })
+        },
+        onSuccess(data) {
+            console.log('Success', data)
+        },
     })
     const handleDisconnect = async () => {
         await disconnect()
@@ -82,7 +96,7 @@ const HeaderNew = () => {
                             </div> */}
 
                             <div className='dropdown_wrap'>
-                                {address ? <Dropdown>
+                                {checkMetaMask === true ? <a className='btn disconnect_btn header_btn' href='https://metamask.io/' target='_blank'><Image src={metamask} alt="metamask icn" fluid /> Please Install Metamask Wallet</a> : address ? <Dropdown>
                                     <Dropdown.Toggle variant="success" id="race_header_dropdown" >
                                         {address.slice(0, 5)}...{address.slice(-5)}
                                     </Dropdown.Toggle>

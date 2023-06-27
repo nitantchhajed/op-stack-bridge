@@ -1,6 +1,7 @@
 .app_header {
     padding: 15px 0px;
     border-bottom: 1px solid #2f2b2b;
+
     .app_logo {
         margin-right: 60px;
 
@@ -52,6 +53,14 @@
     }
 
     .dropdown_wrap {
+        .header_btn {
+            img {
+                width: 20px;
+                height: 20px;
+                margin-right: 5px;
+            }
+        }
+
         .dropdown {
 
             .btn-success {
