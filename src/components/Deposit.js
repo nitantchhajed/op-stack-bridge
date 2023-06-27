@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Web3 from "web3"
 import "../assets/style/deposit.scss";
 import { Form, Spinner, Image } from "react-bootstrap"
@@ -9,6 +9,7 @@ import { useAccount, useConnect, useNetwork, useSwitchNetwork, useBalance } from
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import TabMenu from './TabMenu';
 import { HiSwitchHorizontal } from "react-icons/hi"
+import metamask from "../assets/images/metamask.svg"
 const optimismSDK = require("@eth-optimism/sdk")
 const ethers = require("ethers")
 const Deposit = () => {
@@ -18,10 +19,27 @@ const Deposit = () => {
     const [errorInput, setErrorInput] = useState("")
     const [loader, setLoader] = useState(false)
     const { chain, chains } = useNetwork()
-    const { connect } = useConnect({
-        connector: new InjectedConnector({
-            chains
-        })
+    const [checkMetaMask,setCheckMetaMask] = useState("");
+    const { connect, connectors, error, isLoading, pendingConnector } = useConnect({
+        connector: new InjectedConnector({ chains }), onError(error) {
+            console.log('Error', error)
+        },
+        onMutate(args) {
+            console.log('Mutate', args)
+            if (args.connector.ready === true) {
+                setCheckMetaMask(false)
+                console.log("metamask install");
+            } else {
+                console.log("Please install metamask");
+                setCheckMetaMask(true)
+            }
+        },
+        onSettled(data, error) {
+            console.log('Settled', { data, error })
+        },
+        onSuccess(data) {
+            console.log('Success', data)
+        },
     })
     const { switchNetwork } = useSwitchNetwork({
         throwForSwitchChainNotSupported: true,
@@ -66,12 +84,12 @@ const Deposit = () => {
                 const bridges = {
                     Standard: {
                         l1Bridge: l1Contracts.L1StandardBridge,
-                        l2Bridge: "0x4200000000000000000000000000000000000010",
+                        l2Bridge: process.env.REACT_APP_L2_BRIDGE,
                         Adapter: optimismSDK.StandardBridgeAdapter
                     },
                     ETH: {
                         l1Bridge: l1Contracts.L1StandardBridge,
-                        l2Bridge: "0x4200000000000000000000000000000000000010",
+                        l2Bridge: process.env.REACT_APP_L2_BRIDGE,
                         Adapter: optimismSDK.ETHBridgeAdapter
                     }
                 }
@@ -89,9 +107,9 @@ const Deposit = () => {
                 const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
                 const depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
                 setLoader(true);
-                const receipt =  await depositETHEREUM.wait()
+                const receipt = await depositETHEREUM.wait()
                 console.log(receipt);
-                if(receipt){
+                if (receipt) {
                     setLoader(false);
                     setEthValue("")
                 }
@@ -151,7 +169,7 @@ const Deposit = () => {
                         </div>
                     </div>
                     <div className="deposit_btn_wrap">
-                        {!isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L1_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><HiSwitchHorizontal />Switch to goerli</button> :
+                        {checkMetaMask === true ? <a className='btn deposit_btn' href='https://metamask.io/' target='_blank'><Image src={metamask} alt="metamask icn" fluid/> Please Install Metamask Wallet</a> : !isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L1_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><HiSwitchHorizontal />Switch to goerli</button> :
                             <button className='btn deposit_btn' onClick={handleDeposit} disabled={loader ? true : false}> {loader ? <Spinner animation="border" role="status">
                                 <span className="visually-hidden">Loading...</span>
                             </Spinner> : "Deposit"} </button>}
