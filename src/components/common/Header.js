@@ -38,7 +38,15 @@ const HeaderNew = () => {
         // console.log(getNetwork, isConnected, address)
     }, [chain])
     const handleCopy = async () => {
-        await navigator.clipboard.writeText(address)
+        try {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(address);
+            }
+
+        } catch (error) {
+            console.log("error", error);
+        }
+        // await navigator.clipboard.writeText(address)
     }
     return (
         <>
