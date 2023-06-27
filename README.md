@@ -1,6 +1,6 @@
 # @op-stack/bridge
 
-The `op-Bridge` is a simple service for op-stack chains which provides a UI for the Bridging.
+The `op-Bridge` is a service for op-stack chains which provides a functional UI for the Bridging between L1 and L2.
 
 ## Installation
 
