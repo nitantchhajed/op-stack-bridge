@@ -37,8 +37,8 @@ const HeaderNew = () => {
         }
         // console.log(getNetwork, isConnected, address)
     }, [chain])
-    const handleCopy = () => {
-        navigator.clipboard.writeText(address)
+    const handleCopy = async () => {
+        await navigator.clipboard.writeText(address)
     }
     return (
         <>
@@ -78,7 +78,7 @@ const HeaderNew = () => {
                             <div className='dropdown_wrap'>
                                 {address ? <Dropdown>
                                     <Dropdown.Toggle variant="success" id="race_header_dropdown" >
-                                    {address.slice(0, 5)}...{address.slice(-5)}
+                                        {address.slice(0, 5)}...{address.slice(-5)}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <div className='user_profile_wrap'>
