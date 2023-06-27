@@ -78,10 +78,7 @@ const Withdraw = () => {
           setErrorInput("Amount Invalid!");
         } else {
           setErrorInput("");
-          // const l1Provider = new ethers.providers.Web3Provider(window.ethereum);
-          // const l2Provider = new ethers.providers.Web3Provider(window.ethereum);
-          const l1Url = `https://eth-goerli.g.alchemy.com/v2/e0CsbXjGCT0xVVFc9MyaE7-olvSVAh4S`;
-          // const l2Url = `https://racetestnet.io`;
+          const l1Url = process.env.REACT_APP_L1_RPC_URL ;
           const l1Provider = new ethers.providers.JsonRpcProvider(l1Url, "any");
           const l2Provider = new ethers.providers.Web3Provider(window.ethereum);
           const l1Signer = l1Provider.getSigner(address)

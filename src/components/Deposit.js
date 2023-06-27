@@ -9,6 +9,8 @@ import { useAccount, useConnect, useNetwork, useSwitchNetwork, useBalance } from
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import TabMenu from './TabMenu';
 import { HiSwitchHorizontal } from "react-icons/hi"
+const optimismSDK = require("@eth-optimism/sdk")
+const ethers = require("ethers")
 const Deposit = () => {
     const [ethValue, setEthValue] = useState("")
     const [sendToken, setSendToken] = useState("ETH")
@@ -43,29 +45,56 @@ const Deposit = () => {
 
     const handleDeposit = async () => {
         try {
-            console.log(ethValue);
             if (ethValue) {
                 setErrorInput("")
-                const web3 = new Web3(window.ethereum);
-                const contractAddress = process.env.REACT_APP_OPTIMISM_PORTAL_PROXY;
-                const amountToSendWei = web3.utils.toWei(ethValue.toString(), 'ether');
-                await web3.eth.sendTransaction({ to: contractAddress, from: address, value: amountToSendWei }).on('transactionHash', (hash) => {
-                    if (hash) setLoader(true)
-                    console.log('Transaction hash:', hash);
-                }).on('confirmation', (receipt) => {
-                    if (receipt) {
-                        setLoader(false)
-                        setEthValue("")
+                const l2Url = process.env.REACT_APP_L2_RPC_URL;
+                const l1Provider = new ethers.providers.Web3Provider(window.ethereum);
+                const l2Provider = new ethers.providers.JsonRpcProvider(l2Url, 'any')
+                const l1Signer = l1Provider.getSigner(address)
+                const l2Signer = l2Provider.getSigner(address)
+                const zeroAddr = "0x".padEnd(42, "0");
+                const l1Contracts = {
+                    StateCommitmentChain: zeroAddr,
+                    CanonicalTransactionChain: zeroAddr,
+                    BondManager: zeroAddr,
+                    AddressManager: process.env.REACT_APP_LIB_ADDRESSMANAGER,
+                    L1CrossDomainMessenger: process.env.REACT_APP_PROXY_OVM_L1CROSSDOMAINMESSENGER,
+                    L1StandardBridge: process.env.REACT_APP_PROXY_OVM_L1STANDARDBRIDGE,
+                    OptimismPortal: process.env.REACT_APP_OPTIMISM_PORTAL_PROXY,
+                    L2OutputOracle: process.env.REACT_APP_L2_OUTPUTORACLE_PROXY,
+                }
+                const bridges = {
+                    Standard: {
+                        l1Bridge: l1Contracts.L1StandardBridge,
+                        l2Bridge: "0x4200000000000000000000000000000000000010",
+                        Adapter: optimismSDK.StandardBridgeAdapter
+                    },
+                    ETH: {
+                        l1Bridge: l1Contracts.L1StandardBridge,
+                        l2Bridge: "0x4200000000000000000000000000000000000010",
+                        Adapter: optimismSDK.ETHBridgeAdapter
                     }
-                    console.log("receipt", receipt);
-                }).on('error', (error) => {
-                    console.log('Error sending funds:', error);
-                });
+                }
+                const crossChainMessenger = new optimismSDK.CrossChainMessenger({
+                    contracts: {
+                        l1: l1Contracts,
+                    },
+                    bridges: bridges,
+                    l1ChainId: Number(process.env.REACT_APP_L1_CHAIN_ID),
+                    l2ChainId: Number(process.env.REACT_APP_L2_CHAIN_ID),
+                    l1SignerOrProvider: l1Signer,
+                    l2SignerOrProvider: l2Signer,
+                    bedrock: true,
+                })
+                const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
+                const depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
+                const receipt = depositETHEREUM.wait()
+                console.log({receipt});
             } else {
                 setErrorInput("Please enter the amount")
             }
         } catch (error) {
-            // console.log(error);
+            console.log(error)
         }
     }
     const handleChange = ({ target }) => {
