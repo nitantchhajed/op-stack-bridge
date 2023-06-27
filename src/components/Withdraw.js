@@ -9,6 +9,7 @@ import { useAccount, useConnect, useNetwork, useSwitchNetwork, useBalance } from
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { IoMdWallet } from "react-icons/io"
 import { HiSwitchHorizontal } from "react-icons/hi";
+import metamask from "../assets/images/metamask.svg"
 import TabMenu from './TabMenu';
 const optimismSDK = require("@eth-optimism/sdk")
 const ethers = require("ethers")
@@ -16,14 +17,32 @@ const Withdraw = () => {
   const [ethValue, setEthValue] = useState("")
   const [sendToken, setSendToken] = useState("ETH")
   const [errorInput, setErrorInput] = useState("")
+  const [checkMetaMask,setCheckMetaMask] = useState("");
   const [loader, setLoader] = useState(false)
   const { address, isConnected } = useAccount()
   const { data } = useBalance({ address: address, chainId: 90001 })
   const { chain, chains } = useNetwork()
   const { connect } = useConnect({
-    connector: new InjectedConnector({
-        chains
-    })})
+    connector: new InjectedConnector({ chains }), onError(error) {
+      console.log('Error', error)
+    },
+    onMutate(args) {
+      console.log('Mutate', args)
+      if (args.connector.ready === true) {
+        setCheckMetaMask(false)
+        console.log("metamask install");
+      } else {
+        console.log("Please install metamask");
+        setCheckMetaMask(true)
+      }
+    },
+    onSettled(data, error) {
+      console.log('Settled', { data, error })
+    },
+    onSuccess(data) {
+      console.log('Success', data)
+    },
+  })
   const [metaMastError, setMetaMaskError] = useState("")
   const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork({
     // throwForSwitchChainNotSupported: true,
@@ -81,7 +100,7 @@ const Withdraw = () => {
           setErrorInput("Amount Invalid!");
         } else {
           setErrorInput("");
-          const l1Url = process.env.REACT_APP_L1_RPC_URL ;
+          const l1Url = process.env.REACT_APP_L1_RPC_URL;
           const l1Provider = new ethers.providers.JsonRpcProvider(l1Url, "any");
           const l2Provider = new ethers.providers.Web3Provider(window.ethereum);
           const l1Signer = l1Provider.getSigner(address)
@@ -217,7 +236,7 @@ const Withdraw = () => {
             </div>
           </div>
           <div className="deposit_btn_wrap">
-            {!isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L2_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><HiSwitchHorizontal />Switch to RACE Testnet</button> : <button className='btn deposit_btn' onClick={handleWithdraw} disabled={loader ? true : false}>{loader ? <Spinner animation="border" role="status">
+            {checkMetaMask === true ? <a className='btn deposit_btn' href='https://metamask.io/' target='_blank'><Image src={metamask} alt="metamask icn" fluid/> Please Install Metamask Wallet</a> : !isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L2_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><HiSwitchHorizontal />Switch to RACE Testnet</button> : <button className='btn deposit_btn' onClick={handleWithdraw} disabled={loader ? true : false}>{loader ? <Spinner animation="border" role="status">
               <span className="visually-hidden">Loading...</span>
             </Spinner> : "Withdraw"}</button>}
           </div>
