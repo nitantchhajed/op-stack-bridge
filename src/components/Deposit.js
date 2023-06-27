@@ -11,6 +11,7 @@ import TabMenu from './TabMenu';
 import { HiSwitchHorizontal } from "react-icons/hi"
 const Deposit = () => {
     const [ethValue, setEthValue] = useState("")
+    const [sendToken, setSendToken] = useState("ETH")
     const { address, isConnected } = useAccount()
     const [errorInput, setErrorInput] = useState("")
     const [loader, setLoader] = useState(false)
@@ -67,13 +68,13 @@ const Deposit = () => {
             // console.log(error);
         }
     }
-    const handleChange = (e) => {
-        if (data?.formatted < e.target.value) {
+    const handleChange = ({ target }) => {
+        if (data?.formatted < target.value) {
             setErrorInput("Insufficient ETH balance.")
         } else {
             setErrorInput("")
         }
-        setEthValue(e.target.value)
+        setEthValue(target.value)
     }
     return (
         <>
@@ -89,8 +90,11 @@ const Deposit = () => {
                             <Form>
                                 <div className='deposit_inner_input'>
                                     <Form.Control type='number' value={ethValue} onChange={handleChange} placeholder="0" min="0" step="any" />
-                                    <Form.Select aria-label="Default select example" className='select_wrap'>
+                                    <Form.Select aria-label="Default select example" className='select_wrap' onChange={({ target }) => setSendToken(target.value)}>
                                         <option>ETH</option>
+                                        <option value="DAI">DAI</option>
+                                        <option value="USDC">USDC</option>
+                                        <option value="USDT">USDT</option>
                                     </Form.Select>
                                 </div>
                                 <div className='input_icn_wrap'>
@@ -107,7 +111,7 @@ const Deposit = () => {
                             <h5><Image src={toIcn} alt="To icn" fluid /> Race</h5>
                         </div>
                         <div className='deposit_inner_details'>
-                            <Image src={toIcn} alt="To icn" fluid />  <p>You’ll receive: {ethValue ? ethValue : "0"} ETH</p>
+                            <Image src={toIcn} alt="To icn" fluid />  <p>You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
                         </div>
                     </div>
                     <div className="deposit_btn_wrap">

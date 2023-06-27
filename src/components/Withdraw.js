@@ -14,6 +14,7 @@ const optimismSDK = require("@eth-optimism/sdk")
 const ethers = require("ethers")
 const Withdraw = () => {
   const [ethValue, setEthValue] = useState("")
+  const [sendToken, setSendToken] = useState("ETH")
   const [errorInput, setErrorInput] = useState("")
   const [loader, setLoader] = useState(false)
   const { address, isConnected } = useAccount()
@@ -188,11 +189,11 @@ const Withdraw = () => {
               <Form>
                 <div className='deposit_inner_input'>
                   <Form.Control type='number' name="eth_value" value={ethValue} onChange={handleChange} placeholder="0" min="0" step="any" />
-                  <Form.Select aria-label="Default select example" className='select_wrap'>
+                  <Form.Select aria-label="Default select example" className='select_wrap' onChange={({ target }) => setSendToken(target.value)}>
                     <option>ETH</option>
                     <option value="DAI">DAI</option>
-                  {/* <option value="USDT">USDC</option> */}
-                  <option value="USDT">USDT</option>
+                    <option value="USDT">USDC</option>
+                    <option value="USDT">USDT</option>
                   </Form.Select>
                 </div>
                 <div className='input_icn_wrap'>
@@ -210,7 +211,7 @@ const Withdraw = () => {
             </div>
             <div className='withdraw_bal_sum'>
               <span className='input_icn'><FaEthereum /></span>
-              <p>You’ll receive: {ethValue ? ethValue : "0"} ETH</p>
+              <p>You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
               <div></div>
               {/* <span className='input_title'>ETH</span> */}
             </div>
