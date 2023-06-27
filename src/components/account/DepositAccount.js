@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Table } from "react-bootstrap"
+import { Container, Table } from "react-bootstrap"
 import { ethers } from "ethers"
 import { useAccount } from 'wagmi'
 import ReactPaginate from 'react-paginate'
+import Account from './Account'
 const optimismSDK = require("@eth-optimism/sdk")
 
 const DepositAccount = () => {
@@ -105,56 +106,63 @@ const DepositAccount = () => {
     // =============all Collections pagination end===============
     return (
         <>
-            <section className="account_withdraw_table">
-                {depositDetails?.length <= 0 ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> :
-                    <Table responsive bordered hover variant="dark">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Type</th>
-                                <th>Amount</th>
-                                <th>Transaction</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {currentItemsCollections.map((element, index) => {
-                                const { timestamp, transactionHash, amount } = element
-                                // console.log("amount", amount._hex);
-                                return (
-                                    <tr key={index}>
-                                        <td>{timeConverter(timestamp)}</td>
-                                        <td>Deposit</td>
-                                        <td>{retrieveEthValue(amount)} ETH</td>
-                                        <td>{`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</td>
-                                        <td>Completed</td>
-                                    </tr>
-                                )
-                            })}
-                        </tbody>
-                    </Table>}
-                {depositDetails?.length > 10 ? <div className='pagination_wrap'>
-                    <ReactPaginate
-                        breakLabel="..."
-                        nextLabel=" >>"
-                        onPageChange={handlePageClickCollections}
-                        pageRangeDisplayed={1}
-                        marginPagesDisplayed={1}
-                        pageCount={pageCountCollections}
-                        previousLabel="<< "
-                        containerClassName="pagination justify-content-end"
-                        pageClassName="page-item"
-                        pageLinkClassName="page-link"
-                        previousClassName="page-item"
-                        previousLinkClassName="page-link"
-                        nextClassName="page-item"
-                        nextLinkClassName="page-link"
-                        breakClassName="page-item"
-                        breakLinkClassName="page-link"
-                        activeClassName="active"
-                    />
-                </div> : ""}
-            </section>
+            <div className="account_wrap">
+                <Container>
+                    <div className='account_inner_wrap'>
+                        <Account />
+                        <section className="account_withdraw_table">
+                            {depositDetails?.length <= 0 ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> :
+                                <Table responsive bordered hover variant="dark">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>Type</th>
+                                            <th>Amount</th>
+                                            <th>Transaction</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {currentItemsCollections.map((element, index) => {
+                                            const { timestamp, transactionHash, amount } = element
+                                            // console.log("amount", amount._hex);
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{timeConverter(timestamp)}</td>
+                                                    <td>Deposit</td>
+                                                    <td>{retrieveEthValue(amount)} ETH</td>
+                                                    <td>{`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</td>
+                                                    <td>Completed</td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </Table>}
+                            {depositDetails?.length > 10 ? <div className='pagination_wrap'>
+                                <ReactPaginate
+                                    breakLabel="..."
+                                    nextLabel=" >>"
+                                    onPageChange={handlePageClickCollections}
+                                    pageRangeDisplayed={1}
+                                    marginPagesDisplayed={1}
+                                    pageCount={pageCountCollections}
+                                    previousLabel="<< "
+                                    containerClassName="pagination justify-content-end"
+                                    pageClassName="page-item"
+                                    pageLinkClassName="page-link"
+                                    previousClassName="page-item"
+                                    previousLinkClassName="page-link"
+                                    nextClassName="page-item"
+                                    nextLinkClassName="page-link"
+                                    breakClassName="page-item"
+                                    breakLinkClassName="page-link"
+                                    activeClassName="active"
+                                />
+                            </div> : ""}
+                        </section>
+                    </div>
+                </Container>
+            </div>
         </>
     )
 }

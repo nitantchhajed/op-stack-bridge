@@ -43,40 +43,41 @@
             }
 
             .account_tabs {
-                .nav-tabs {
+                ul {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0px;
+                    gap: 5px;
                     background-color: var(--secondary-color);
-                    // padding: 5px;
-                    border: none;
                     border-radius: 10px;
-                    width: 100%;
                     margin-bottom: 10px;
 
-                    .nav-item {
-                        width: 50%;
+                    li {
+                        list-style: none;
+                        width: 100%;
+                        text-align: center;
 
-                        .nav-link {
-                            width: 100%;
-                            border: none;
-                            border-radius: 10px;
-                            color: var(--text-color);
+                        a {
+                            padding: 8px;
+                            display: block;
+                            text-decoration: none;
+                            position: relative;
                             font-weight: 500;
                             font-size: 14px;
-                            padding: 12px 15px;
+                            color: var(--text-color);
+                            position: relative;
+                            transition: all 0.5s ease;
+                            border-radius: 10px;
 
                             &:hover {
-                                background-color: transparent;
-                                color: var(--primary-color);
+                                background-color: #07487038;
                             }
 
                             &.active {
+                                box-shadow: 0 0 8px rgba(20, 23, 26, 0.0784313725), 0 0 4px rgba(20, 23, 26, 0.0392156863);
                                 color: var(--primary-color);
-                                border: none;
-                                // border-radius: 12px;
-                                font-weight: 500;
-                                // box-shadow: 0 0 8px #14171a14, 0 0 4px #14171a0a;
-                                background-color: transparent;
-                                font-size: 14px;
-                                position: relative;
+                                background-color: var(--button-color);
 
                                 &::after {
                                     position: absolute;
@@ -90,9 +91,61 @@
                                     border-radius: 3px 3px 0px 0px;
                                 }
                             }
+
                         }
                     }
                 }
+
+                // .nav-tabs {
+                //     background-color: var(--secondary-color);
+                //     // padding: 5px;
+                //     border: none;
+                //     border-radius: 10px;
+                //     width: 100%;
+                //     margin-bottom: 10px;
+
+                //     .nav-item {
+                //         width: 50%;
+
+                //         .nav-link {
+                //             width: 100%;
+                //             border: none;
+                //             border-radius: 10px;
+                //             color: var(--text-color);
+                //             font-weight: 500;
+                //             font-size: 14px;
+                //             padding: 12px 15px;
+
+                //             &:hover {
+                //                 background-color: transparent;
+                //                 color: var(--primary-color);
+                //             }
+
+                //             &.active {
+                //                 color: var(--primary-color);
+                //                 border: none;
+                //                 // border-radius: 12px;
+                //                 font-weight: 500;
+                //                 // box-shadow: 0 0 8px #14171a14, 0 0 4px #14171a0a;
+                //                 background-color: transparent;
+                //                 font-size: 14px;
+                //                 position: relative;
+
+                //                 &::after {
+                //                     position: absolute;
+                //                     height: 3px;
+                //                     left: 50%;
+                //                     bottom: 0px;
+                //                     content: "";
+                //                     width: 20%;
+                //                     background: var(--primary-color);
+                //                     transform: translate(-50%);
+                //                     border-radius: 3px 3px 0px 0px;
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
             }
         }
     }

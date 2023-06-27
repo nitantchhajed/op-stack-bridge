@@ -1,43 +1,49 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import "../../assets/style/account/account.scss"
-import WithdrawAccount from './WithdrawAccount'
-import { Container, Tabs, Tab } from 'react-bootstrap'
+import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 import { MdContentCopy } from "react-icons/md"
 import { useAccount } from "wagmi"
-import DepositAccount from './DepositAccount'
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Link, useLocation } from 'react-router-dom'
 const Account = () => {
-    const [successCopy, setSuccessCopy] = useState("");
-    const ref = useRef(null);
+    const [copyTextSourceCode, setCopyTextSourceCode] = useState("Copy address to clipboard")
+    const location = useLocation()
     const { address, isConnected } = useAccount();
-    const handleCopy = () => {
-        navigator.clipboard.writeText(ref.current.innerText)
-        setSuccessCopy("Copied")
-        setTimeout(() => {
-            setSuccessCopy("")
-        }, 1000);
-    }
-
+    const handleSourceCopy = () => {
+        if (copyTextSourceCode === "Copy address to clipboard") {
+            setCopyTextSourceCode("Copied.")
+        }
+    };
+    const renderTooltip = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+            {copyTextSourceCode}
+        </Tooltip>
+    );
     return (
         <>
-            <div className='account_wrap'>
-                <Container>
-                    <div className='account_inner_wrap'>
-                        <div className='account_title'>
-                            <h3>Account</h3>
-                            {isConnected && <h6><span ref={ref}>{address}</span> <MdContentCopy onClick={handleCopy} />{successCopy && <span className='text_copied'>{successCopy}</span>}</h6>}
-                        </div>
-                        <div className='account_tabs'>
-                            <Tabs defaultActiveKey="withdraw" id="account-details">
-                                <Tab eventKey="deposit" title="Deposit">
-                                    <DepositAccount />
-                                </Tab>
-                                <Tab eventKey="withdraw" title="Withdraw">
-                                    <WithdrawAccount />
-                                </Tab>
-                            </Tabs>
-                        </div>
-                    </div>
-                </Container>
+            <div className='account_title'>
+                <h3>Account</h3>
+                {
+                    isConnected &&
+                    <h6>
+                        <span>{address}</span> <OverlayTrigger
+                            placement="top"
+                            delay={{ show: 250, hide: 250 }}
+                            overlay={renderTooltip}>
+
+                            <CopyToClipboard text={address}>
+                                <span className="d-inline-block"> <MdContentCopy onClick={handleSourceCopy} /> </span>
+                            </CopyToClipboard>
+
+                        </OverlayTrigger>
+                    </h6>
+                }
+            </div>
+            <div className='account_tabs'>
+                <ul>
+                    <li><Link to="/account/deposit" className={`${location.pathname == "/account/deposit" ? "active" : ""}`}>Deposit</Link></li>
+                    <li><Link to="/account/withdraw" className={`${location.pathname == "/account/withdraw" ? "active" : ""}`}>Withdraw</Link></li>
+                </ul>
             </div>
         </>
     )

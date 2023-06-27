@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
-import Account from './components/account/Account';
 import Deposit from './components/Deposit';
 import Withdraw from './components/Withdraw';
+import WithdrawAccount from "./components/account/WithdrawAccount";
+import DepositAccount from "./components/account/DepositAccount";
 function App() {
   return (
     <>
@@ -14,7 +15,8 @@ function App() {
             <Route path="/" element={<Deposit />} />
             <Route path="/deposit" element={<Deposit />} />
             <Route path="/withdraw" element={<Withdraw />} />
-            <Route path="/account" element={<Account />} />
+            <Route path="/account/deposit" element={<DepositAccount />} />
+            <Route path="/account/withdraw" element={<WithdrawAccount />} />
           </Routes>
         </div>
         <Footer />

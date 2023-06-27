@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "../../assets/style/common/header.scss"
-import { Navbar, Container, Nav, Image, Dropdown } from "react-bootstrap";
+import { Navbar, Container, Nav, Image, Dropdown, OverlayTrigger, Tooltip } from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import { Link } from 'react-router-dom';
 import { useAccount, useConnect, useNetwork } from 'wagmi'
@@ -12,10 +12,9 @@ import { MdContentCopy } from "react-icons/md"
 import { AiOutlineDownload, AiOutlineUpload } from "react-icons/ai"
 // import { BiPowerOff } from "react-icons/bi"
 import { useDisconnect } from 'wagmi'
-
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 const HeaderNew = () => {
-
-    // const [successCopy, setSuccessCopy] = useState("");
+    const [copyTextSourceCode, setCopyTextSourceCode] = useState("Copy address to clipboard")
     const { address, isConnected } = useAccount();
     const [getNetwork, setNetwork] = useState();
     const { chain, chains } = useNetwork()
@@ -37,17 +36,16 @@ const HeaderNew = () => {
         }
         // console.log(getNetwork, isConnected, address)
     }, [chain])
-    const handleCopy = async () => {
-        try {
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(address);
-            }
-
-        } catch (error) {
-            console.log("error", error);
+    const handleSourceCopy = () => {
+        if (copyTextSourceCode === "Copy address to clipboard") {
+            setCopyTextSourceCode("Copied.")
         }
-        // await navigator.clipboard.writeText(address)
     }
+    const renderTooltip = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+            {copyTextSourceCode}
+        </Tooltip>
+    );
     return (
         <>
             <header className='app_header'>
@@ -64,8 +62,8 @@ const HeaderNew = () => {
                                 navbarScroll
                             >
 
-                                <Link to="/">Bridge</Link>
-                                <Link to="/account">Account</Link>
+                                {/* <Link to="/">Bridge</Link>
+                                <Link to="/account">Account</Link> */}
                             </Nav>
                             <div className='header_btn_wrap'>
                                 {
@@ -93,15 +91,22 @@ const HeaderNew = () => {
                                             <figure className='user_profile'>
                                                 <Image src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAsElEQVRYR2PslBX+z4AHHLiVgiLroDYHn3IGUtUzjjpg0IUAehyiRzipaYCQfow0MOoAuoeA5/dylHIAPY7RHWSt9Q5vOXD0mhDecgPdPMZRBwx4CJBaEOFNAFgkCZUbJNcFow4YDYHREBjwEKC0LkD3AMnlwKgDqB4CLYqpKO0BQvX5b5YgvOmQ9c86FHlC7QnGUQcMeAigN0jQIxg90aGnEUrVY7QJKTWQVAePOgAAXAoAZIiZ6M4AAAAASUVORK5CYII=' alt="Profile Icon" />
                                             </figure>
-                                            <h4>{address.slice(0, 5)}...{address.slice(-5)} <span><MdContentCopy onClick={handleCopy} /></span></h4>
+                                            <h4>{address.slice(0, 5)}...{address.slice(-5)}
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    delay={{ show: 250, hide: 250 }}
+                                                    overlay={renderTooltip}>
+                                                    <CopyToClipboard text={address}>
+                                                        <span className="d-inline-block"><MdContentCopy onClick={handleSourceCopy} /> </span>
+                                                    </CopyToClipboard>
+                                                </OverlayTrigger>
+                                            </h4>
                                         </div>
-                                        <Dropdown.Item as={Link} to="/account"><AiOutlineDownload /> View Deposit</Dropdown.Item>
-                                        <Dropdown.Item as={Link} to="/account"><AiOutlineUpload /> View Withdrawals</Dropdown.Item>
+                                        <Dropdown.Item as={Link} to="/account/deposit"><AiOutlineDownload /> View Deposit</Dropdown.Item>
+                                        <Dropdown.Item as={Link} to="/account/withdraw"><AiOutlineUpload /> View Withdrawals</Dropdown.Item>
                                         <Dropdown.Item onClick={() => handleDisconnect()}><BiPowerOff /> Disconnect</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown> : <button onClick={() => connect()} className='btn disconnect_btn header_btn'>Connect Wallet</button>}
-
-
                             </div>
                         </Navbar.Collapse>
                     </Container>
