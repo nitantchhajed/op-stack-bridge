@@ -19,10 +19,13 @@ const Withdraw = () => {
   const [loader, setLoader] = useState(false)
   const { address, isConnected } = useAccount()
   const { data } = useBalance({ address: address, chainId: 90001 })
-  const { connect } = useConnect({ connector: new InjectedConnector() })
-  const { chain } = useNetwork()
+  const { chain, chains } = useNetwork()
+  const { connect } = useConnect({
+    connector: new InjectedConnector({
+        chains
+    })})
   const [metaMastError, setMetaMaskError] = useState("")
-  const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork({
+  const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork({
     // throwForSwitchChainNotSupported: true,
     chainId: 90001,
     onError(error) {

@@ -88,13 +88,20 @@ const Deposit = () => {
                 })
                 const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
                 const depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
-                const receipt = depositETHEREUM.wait()
-                console.log({receipt});
+                setLoader(true);
+                const receipt =  await depositETHEREUM.wait()
+                console.log(receipt);
+                if(receipt){
+                    setLoader(false);
+                    setEthValue("")
+                }
             } else {
                 setErrorInput("Please enter the amount")
+                setLoader(false);
             }
         } catch (error) {
             console.log(error)
+            setLoader(false);
         }
     }
     const handleChange = ({ target }) => {
