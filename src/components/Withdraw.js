@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../assets/style/deposit.scss";
 import "../assets/style/withdraw.scss";
 import { Form, Image, Spinner } from "react-bootstrap";
+import { Dai, Usdt } from 'react-web3-icons';
 import { MdOutlineSecurity } from "react-icons/md"
 import { FaEthereum } from "react-icons/fa"
 import toIcn from "../assets/images/logo.png"
@@ -207,17 +208,16 @@ const Withdraw = () => {
                   <Form.Select aria-label="Default select example" className='select_wrap' onChange={({ target }) => setSendToken(target.value)}>
                     <option>ETH</option>
                     <option value="DAI">DAI</option>
-                    <option value="USDT">USDC</option>
                     <option value="USDT">USDT</option>
                   </Form.Select>
                 </div>
                 <div className='input_icn_wrap'>
-                  <span className='input_icn'><Image src={toIcn} alt="To icn" fluid /></span>
+                {sendToken =="ETH" ? <span className='input_icn'><FaEthereum/></span> :sendToken =="DAI" ? <span className='input_icn'><Dai/></span> :<span className='input_icn'><Usdt/></span>}
                 </div>
               </Form>
             </div>
             {errorInput && <small className='text-danger'>{errorInput}</small>}
-            {sendToken == && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p>}
+            {sendToken === "ETH" ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p>:sendToken === "DAI" ? address && <p className='wallet_bal mt-2'>Balance: {Number(getDAI.data?.formatted).toFixed(5)} DAI</p>:<p className='wallet_bal mt-2'>Balance: {Number(getUSDT.data?.formatted).toFixed(5)} USDT</p>}
           </div>
           <div className='deposit_details_wrap'>
             <div className="deposit_details">
@@ -225,7 +225,7 @@ const Withdraw = () => {
               <h5><FaEthereum /> Goerli Testnet</h5>
             </div>
             <div className='withdraw_bal_sum'>
-              <span className='input_icn'><FaEthereum /></span>
+            {sendToken =="ETH" ? <span className='input_icn'><FaEthereum/></span> :sendToken =="DAI" ? <span className='input_icn'><Dai/></span> :<span className='input_icn'><Usdt/></span>}
               <p>You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
               <div></div>
               {/* <span className='input_title'>ETH</span> */}

@@ -196,7 +196,7 @@ const Deposit = () => {
                             <h5><Image src={toIcn} alt="To icn" fluid /> Race</h5>
                         </div>
                         <div className='deposit_inner_details'>
-                            <Image src={toIcn} alt="To icn" fluid />  <p>You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
+                        {sendToken =="ETH" ? <span className='input_icn'><FaEthereum/></span> :sendToken =="DAI" ? <span className='input_icn'><Dai/></span> :<span className='input_icn'><Usdt/></span>}  <p>You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
                         </div>
                     </div>
                     <div className="deposit_btn_wrap">
