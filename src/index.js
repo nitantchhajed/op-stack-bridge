@@ -24,11 +24,11 @@ export const RACE = {
     },
     rpcUrls: {
         default: {
-            http: ["https://racetestnet.io"]
+            http: [process.env.REACT_APP_L2_RPC_URL]
         },
     },
     blockExplorers: {
-        default: { name: "RACE Testnet Explorer", url: "https://testnet.racescan.io" }
+        default: { name: "RACE Testnet Explorer", url: process.env.REACT_APP_L2_EXPLORER_URL }
     },
     testnet: true
 
