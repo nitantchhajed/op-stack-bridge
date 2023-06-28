@@ -120,8 +120,8 @@ const Deposit = () => {
                 if (sendToken === "ETH") {
 
                     const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
-                    var depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
                     setLoader(true);
+                    var depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())                 
                     const receiptETH = await depositETHEREUM.wait()
                     console.log(receiptETH);
                     if (receiptETH) {
@@ -131,8 +131,8 @@ const Deposit = () => {
                 }
                 if (sendToken === "DAI") {
                     var daiValue = Web3.utils.toWei(ethValue, "ether")
-                    var depositTxn2 = await crossChainMessenger.approveERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
                     setLoader(true);
+                    var depositTxn2 = await crossChainMessenger.approveERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
                     await depositTxn2.wait()
                     var receiptDAI = await crossChainMessenger.depositERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
                     console.log(await receiptDAI.wait());
@@ -143,8 +143,8 @@ const Deposit = () => {
                 }
                 if (sendToken === "USDT") {
                     var usdtValue = parseInt(ethValue * 1000000)
-                    var depositTxn1 = await crossChainMessenger.approveERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
                     setLoader(true);
+                    var depositTxn1 = await crossChainMessenger.approveERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
                     await depositTxn1.wait()
                     var receiptUSDT = await crossChainMessenger.depositERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
                     console.log(await receiptUSDT.wait())
