@@ -22,7 +22,7 @@ const Withdraw = () => {
   const [checkMetaMask, setCheckMetaMask] = useState("");
   const [loader, setLoader] = useState(false)
   const { address, isConnected } = useAccount()
-  const { data } = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID) })
+  const { data } = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), watch: true })
   const { chain, chains } = useNetwork()
   const { connect } = useConnect({
     connector: new InjectedConnector({ chains }), onError(error) {
@@ -86,8 +86,8 @@ const Withdraw = () => {
 
     },
   })
-  const dataUSDT = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDT });
-  const dataDAI = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_DAI });
+  const dataUSDT = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDT, watch: true });
+  const dataDAI = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_DAI, watch: true });
   const handleWithdraw = async () => {
     try {
       if (!ethValue) {
@@ -251,7 +251,7 @@ const Withdraw = () => {
                   </Form.Select>
                 </div>
                 <div className='input_icn_wrap'>
-                  {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }}/></span> : <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }}/></span>}
+                  {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span>}
                 </div>
               </Form>
             </div>
@@ -264,7 +264,7 @@ const Withdraw = () => {
               <h5><FaEthereum /> Goerli Testnet</h5>
             </div>
             <div className='withdraw_bal_sum'>
-              {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }}/></span> : <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }}/></span>}
+              {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span>}
               <p>You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
               <div></div>
               {/* <span className='input_title'>ETH</span> */}
