@@ -10279,6 +10279,11 @@ react-transition-group@^4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
+react-web3-icons@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-web3-icons/-/react-web3-icons-1.7.0.tgz#335f68492a8a8cf47b545c30c7fbc71c46bc173d"
+  integrity sha512-j2ifdxPLy8IoZNZM6jYLKSS4svTfr+PNFHMBhXhoJkojfm1nIQ+DhlpzW2X9wURgo9BzkbHJUj/gVrgflZR6og==
+
 react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"

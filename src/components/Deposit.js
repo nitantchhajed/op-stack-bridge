@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../assets/style/deposit.scss";
 import { Form, Spinner, Image } from "react-bootstrap"
+import { Dai, Usdt } from 'react-web3-icons';
 import toIcn from "../assets/images/logo.png"
 import { IoMdWallet } from "react-icons/io"
 import { FaEthereum } from "react-icons/fa"
@@ -57,7 +58,16 @@ const Deposit = () => {
             console.log('Success', data)
         },
     })
-    const { data } = useBalance({ address: address })
+
+
+    const { data } = useBalance({ address: address ,watch: true })
+
+
+    const dataUSDT = useBalance({ address: address, token: process.env.REACT_APP_L1_USDT , watch: true})
+
+
+    const dataDAI = useBalance({ address: address, token: process.env.REACT_APP_L1_DAI , watch: true})
+
     const handleSwitch = () => {
         switchNetwork(process.env.REACT_APP_L1_CHAIN_ID)
     }
@@ -107,14 +117,15 @@ const Deposit = () => {
                     bedrock: true,
                 })
                 if (sendToken === "ETH") {
+
                     const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
                     var depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
                 }
                 if (sendToken === "DAI") {
                     var daiValue = Web3.utils.toWei(ethValue, "ether")
-                    var depositTxn2 = await crossChainMessenger.approveERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f","0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
+                    var depositTxn2 = await crossChainMessenger.approveERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
                     await depositTxn2.wait()
-                    var responseDAI = await crossChainMessenger.depositERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f","0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
+                    var responseDAI = await crossChainMessenger.depositERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
                     console.log(await responseDAI.wait());
                 }
                 if (sendToken === "USDT") {
@@ -165,17 +176,18 @@ const Deposit = () => {
                                     <Form.Select aria-label="Default select example" className='select_wrap' onChange={({ target }) => setSendToken(target.value)}>
                                         <option>ETH</option>
                                         <option value="DAI">DAI</option>
-                                        <option value="USDC">USDC</option>
+                                        {/* <option value="USDC">USDC</option> */}
                                         <option value="USDT">USDT</option>
                                     </Form.Select>
                                 </div>
                                 <div className='input_icn_wrap'>
-                                    <span className='input_icn'><FaEthereum /></span>
+                                    {sendToken =="ETH" ? <span className='input_icn'><FaEthereum/></span> :sendToken =="DAI" ? <span className='input_icn'><Dai/></span> :<span className='input_icn'><Usdt/></span>}
                                 </div>
                             </Form>
                         </div>
                         {errorInput && <small className='text-danger'>{errorInput}</small>}
-                        {address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p>}
+                        {sendToken == 'ETH' ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken == 'USDT' ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p>}
+                       
                     </div>
                     <div className='deposit_details_wrap'>
                         <div className="deposit_details">

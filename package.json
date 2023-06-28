@@ -24,6 +24,7 @@
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.13.0",
     "react-scripts": "5.0.1",
+    "react-web3-icons": "^1.7.0",
     "sass": "^1.63.5",
     "viem": "^1.1.0",
     "wagmi": "^1.2.0",
