@@ -41,14 +41,12 @@ const HeaderNew = () => {
         await disconnect()
     }
     useEffect(() => {
-        // console.log({ isConnected, address })
         if (chain?.id == 90001 || chain?.id == 5) {
             setNetwork(chain.name)
         }
         else {
             setNetwork("Unsupported Network")
         }
-        // console.log(getNetwork, isConnected, address)
     }, [chain])
     const handleSourceCopy = () => {
         if (copyTextSourceCode === "Copy address to clipboard") {

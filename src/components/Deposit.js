@@ -31,9 +31,7 @@ const Deposit = () => {
             console.log('Mutate', args)
             if (args.connector.ready === true) {
                 setCheckMetaMask(false)
-                console.log("metamask install");
             } else {
-                console.log("Please install metamask");
                 setCheckMetaMask(true)
             }
         },
@@ -61,13 +59,11 @@ const Deposit = () => {
     })
 
 
-    const { data } = useBalance({ address: address, watch: true })
+    const { data } = useBalance({ address: address, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)})
 
 
-    const dataUSDT = useBalance({ address: address, token: process.env.REACT_APP_L1_USDT, watch: true })
-
-
-    const dataDAI = useBalance({ address: address, token: process.env.REACT_APP_L1_DAI, watch: true })
+    const dataUSDT = useBalance({ address: address, token: process.env.REACT_APP_L1_USDT, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
+    const dataDAI = useBalance({ address: address, token: process.env.REACT_APP_L1_DAI, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)  })
 
     const handleSwitch = () => {
         switchNetwork(process.env.REACT_APP_L1_CHAIN_ID)
@@ -129,7 +125,6 @@ const Deposit = () => {
                         setLoader(true);
                         var depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
                         const receiptETH = await depositETHEREUM.wait()
-                        console.log(receiptETH);
                         if (receiptETH) {
                             setLoader(false);
                             setEthValue("")
@@ -141,7 +136,6 @@ const Deposit = () => {
                         var depositTxn2 = await crossChainMessenger.approveERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
                         await depositTxn2.wait()
                         var receiptDAI = await crossChainMessenger.depositERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
-                        console.log(await receiptDAI.wait());
                         if (receiptDAI) {
                             setLoader(false);
                             setEthValue("")
@@ -153,7 +147,6 @@ const Deposit = () => {
                         var depositTxn1 = await crossChainMessenger.approveERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
                         await depositTxn1.wait()
                         var receiptUSDT = await crossChainMessenger.depositERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
-                        console.log(await receiptUSDT.wait())
                         if (receiptDAI) {
                             setLoader(false);
                             setEthValue("")

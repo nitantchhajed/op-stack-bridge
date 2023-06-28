@@ -22,7 +22,7 @@ const Withdraw = () => {
   const [checkMetaMask, setCheckMetaMask] = useState("");
   const [loader, setLoader] = useState(false)
   const { address, isConnected } = useAccount()
-  const { data } = useBalance({ address: address, chainId: 90001 })
+  const { data } = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID)  })
   const { chain, chains } = useNetwork()
   const { connect } = useConnect({
     connector: new InjectedConnector({ chains }), onError(error) {
@@ -86,11 +86,8 @@ const Withdraw = () => {
 
     },
   })
-
   const dataUSDT = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDT });
   const dataDAI = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_DAI });
-  // console.log(dataUSDT, "usdt");
-  // console.log(dataDAI, "dai");
   const handleWithdraw = async () => {
     try {
       if (!ethValue) {
@@ -147,8 +144,6 @@ const Withdraw = () => {
               setLoader(true);
               const response = await crossChainMessenger.withdrawETH(weiValue.toString());
               const logs = await response.wait();
-              console.log({ response });
-              console.log({ logs });
               if (logs) {
                 setLoader(false);
                 setEthValue("");
@@ -160,7 +155,6 @@ const Withdraw = () => {
               setLoader(true);
               var depositTxn2 = await crossChainMessenger.withdrawERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue);;
               var receiptDAI = await depositTxn2.wait()
-              console.log(receiptDAI);
               if (receiptDAI) {
                 setLoader(false);
                 setEthValue("")
