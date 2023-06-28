@@ -136,7 +136,8 @@ const Deposit = () => {
                         var depositTxn2 = await crossChainMessenger.approveERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
                         await depositTxn2.wait()
                         var receiptDAI = await crossChainMessenger.depositERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
-                        if (receiptDAI) {
+                        var getReceiptDAI = await receiptDAI.wait()
+                        if (getReceiptDAI) {
                             setLoader(false);
                             setEthValue("")
                         }
@@ -147,7 +148,8 @@ const Deposit = () => {
                         var depositTxn1 = await crossChainMessenger.approveERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
                         await depositTxn1.wait()
                         var receiptUSDT = await crossChainMessenger.depositERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
-                        if (receiptDAI) {
+                        var getReceiptUSDT = await receiptUSDT.wait()
+                        if (getReceiptUSDT) {
                             setLoader(false);
                             setEthValue("")
                         }
