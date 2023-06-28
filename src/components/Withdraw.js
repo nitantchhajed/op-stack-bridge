@@ -217,7 +217,7 @@ const Withdraw = () => {
               </Form>
             </div>
             {errorInput && <small className='text-danger'>{errorInput}</small>}
-            {address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p>}
+            {sendToken == && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p>}
           </div>
           <div className='deposit_details_wrap'>
             <div className="deposit_details">
