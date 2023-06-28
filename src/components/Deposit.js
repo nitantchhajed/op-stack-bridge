@@ -76,118 +76,122 @@ const Deposit = () => {
 
     const handleDeposit = async () => {
         try {
-            if (ethValue) {
-                setErrorInput("")
-                const l2Url = process.env.REACT_APP_L2_RPC_URL;
-                const l1Provider = new ethers.providers.Web3Provider(window.ethereum);
-                const l2Provider = new ethers.providers.JsonRpcProvider(l2Url, 'any')
-                const l1Signer = l1Provider.getSigner(address)
-                const l2Signer = l2Provider.getSigner(address)
-                const zeroAddr = "0x".padEnd(42, "0");
-                const l1Contracts = {
-                    StateCommitmentChain: zeroAddr,
-                    CanonicalTransactionChain: zeroAddr,
-                    BondManager: zeroAddr,
-                    AddressManager: process.env.REACT_APP_LIB_ADDRESSMANAGER,
-                    L1CrossDomainMessenger: process.env.REACT_APP_PROXY_OVM_L1CROSSDOMAINMESSENGER,
-                    L1StandardBridge: process.env.REACT_APP_PROXY_OVM_L1STANDARDBRIDGE,
-                    OptimismPortal: process.env.REACT_APP_OPTIMISM_PORTAL_PROXY,
-                    L2OutputOracle: process.env.REACT_APP_L2_OUTPUTORACLE_PROXY,
-                }
-                const bridges = {
-                    Standard: {
-                        l1Bridge: l1Contracts.L1StandardBridge,
-                        l2Bridge: process.env.REACT_APP_L2_BRIDGE,
-                        Adapter: optimismSDK.StandardBridgeAdapter
-                    },
-                    ETH: {
-                        l1Bridge: l1Contracts.L1StandardBridge,
-                        l2Bridge: process.env.REACT_APP_L2_BRIDGE,
-                        Adapter: optimismSDK.ETHBridgeAdapter
-                    }
-                }
-                const crossChainMessenger = new optimismSDK.CrossChainMessenger({
-                    contracts: {
-                        l1: l1Contracts,
-                    },
-                    bridges: bridges,
-                    l1ChainId: Number(process.env.REACT_APP_L1_CHAIN_ID),
-                    l2ChainId: Number(process.env.REACT_APP_L2_CHAIN_ID),
-                    l1SignerOrProvider: l1Signer,
-                    l2SignerOrProvider: l2Signer,
-                    bedrock: true,
-                })
-                if (sendToken === "ETH") {
-
-                    const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
-                    setLoader(true);
-                    var depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
-                    const receiptETH = await depositETHEREUM.wait()
-                    console.log(receiptETH);
-                    if (receiptETH) {
-                        setLoader(false);
-                        setEthValue("")
-                    }
-                }
-                if (sendToken === "DAI") {
-                    var daiValue = Web3.utils.toWei(ethValue, "ether")
-                    setLoader(true);
-                    var depositTxn2 = await crossChainMessenger.approveERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
-                    await depositTxn2.wait()
-                    var receiptDAI = await crossChainMessenger.depositERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
-                    console.log(await receiptDAI.wait());
-                    if (receiptDAI) {
-                        setLoader(false);
-                        setEthValue("")
-                    }
-                }
-                if (sendToken === "USDT") {
-                    var usdtValue = parseInt(ethValue * 1000000)
-                    setLoader(true);
-                    var depositTxn1 = await crossChainMessenger.approveERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
-                    await depositTxn1.wait()
-                    var receiptUSDT = await crossChainMessenger.depositERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
-                    console.log(await receiptUSDT.wait())
-                    if (receiptDAI) {
-                        setLoader(false);
-                        setEthValue("")
-                    }
-                }
-
+            if (!ethValue) {
+                setErrorInput("Please enter the amount");
             }
             else {
-                setErrorInput("Please enter the amount")
-                setLoader(false);
+                if (!parseFloat(ethValue) > 0) {
+                    setErrorInput("Amount Invalid!");
+                } else {
+
+                    const l2Url = process.env.REACT_APP_L2_RPC_URL;
+                    const l1Provider = new ethers.providers.Web3Provider(window.ethereum);
+                    const l2Provider = new ethers.providers.JsonRpcProvider(l2Url, 'any')
+                    const l1Signer = l1Provider.getSigner(address)
+                    const l2Signer = l2Provider.getSigner(address)
+                    const zeroAddr = "0x".padEnd(42, "0");
+                    const l1Contracts = {
+                        StateCommitmentChain: zeroAddr,
+                        CanonicalTransactionChain: zeroAddr,
+                        BondManager: zeroAddr,
+                        AddressManager: process.env.REACT_APP_LIB_ADDRESSMANAGER,
+                        L1CrossDomainMessenger: process.env.REACT_APP_PROXY_OVM_L1CROSSDOMAINMESSENGER,
+                        L1StandardBridge: process.env.REACT_APP_PROXY_OVM_L1STANDARDBRIDGE,
+                        OptimismPortal: process.env.REACT_APP_OPTIMISM_PORTAL_PROXY,
+                        L2OutputOracle: process.env.REACT_APP_L2_OUTPUTORACLE_PROXY,
+                    }
+                    const bridges = {
+                        Standard: {
+                            l1Bridge: l1Contracts.L1StandardBridge,
+                            l2Bridge: process.env.REACT_APP_L2_BRIDGE,
+                            Adapter: optimismSDK.StandardBridgeAdapter
+                        },
+                        ETH: {
+                            l1Bridge: l1Contracts.L1StandardBridge,
+                            l2Bridge: process.env.REACT_APP_L2_BRIDGE,
+                            Adapter: optimismSDK.ETHBridgeAdapter
+                        }
+                    }
+                    const crossChainMessenger = new optimismSDK.CrossChainMessenger({
+                        contracts: {
+                            l1: l1Contracts,
+                        },
+                        bridges: bridges,
+                        l1ChainId: Number(process.env.REACT_APP_L1_CHAIN_ID),
+                        l2ChainId: Number(process.env.REACT_APP_L2_CHAIN_ID),
+                        l1SignerOrProvider: l1Signer,
+                        l2SignerOrProvider: l2Signer,
+                        bedrock: true,
+                    })
+                    if (sendToken === "ETH") {
+
+                        const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
+                        setLoader(true);
+                        var depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
+                        const receiptETH = await depositETHEREUM.wait()
+                        console.log(receiptETH);
+                        if (receiptETH) {
+                            setLoader(false);
+                            setEthValue("")
+                        }
+                    }
+                    if (sendToken === "DAI") {
+                        var daiValue = Web3.utils.toWei(ethValue, "ether")
+                        setLoader(true);
+                        var depositTxn2 = await crossChainMessenger.approveERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
+                        await depositTxn2.wait()
+                        var receiptDAI = await crossChainMessenger.depositERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
+                        console.log(await receiptDAI.wait());
+                        if (receiptDAI) {
+                            setLoader(false);
+                            setEthValue("")
+                        }
+                    }
+                    if (sendToken === "USDT") {
+                        var usdtValue = parseInt(ethValue * 1000000)
+                        setLoader(true);
+                        var depositTxn1 = await crossChainMessenger.approveERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
+                        await depositTxn1.wait()
+                        var receiptUSDT = await crossChainMessenger.depositERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
+                        console.log(await receiptUSDT.wait())
+                        if (receiptDAI) {
+                            setLoader(false);
+                            setEthValue("")
+                        }
+                    }
+
+
+                }
             }
         } catch (error) {
             console.log(error)
             setLoader(false);
         }
     }
-    const handleChange = ({ target }) => {
+    const handleChange = (e) => {
         if (sendToken == 'ETH') {
-            if (data?.formatted < target.value) {
+            if (data?.formatted < e.target.value) {
                 setErrorInput("Insufficient ETH balance.")
             } else {
                 setErrorInput("")
             }
-            setEthValue(target.value)
+            setEthValue(e.target.value)
         }
         if (sendToken == 'DAI') {
-            if (dataDAI.data?.formatted < target.value) {
+            if (dataDAI.data?.formatted < e.target.value) {
                 setErrorInput("Insufficient DAI balance.")
             } else {
                 setErrorInput("")
             }
-            setEthValue(target.value)
+            setEthValue(e.target.value)
         }
         if (sendToken == 'USDT') {
-            if (dataUSDT.data?.formatted < target.value) {
+            if (dataUSDT.data?.formatted < e.target.value) {
                 setErrorInput("Insufficient USDT balance.")
             } else {
                 setErrorInput("")
             }
-            setEthValue(target.value)
+            setEthValue(e.target.value)
         }
 
     }
