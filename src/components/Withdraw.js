@@ -5,6 +5,7 @@ import { Form, Image, Spinner } from "react-bootstrap";
 import { Dai, Usdt } from 'react-web3-icons';
 import { MdOutlineSecurity } from "react-icons/md"
 import { FaEthereum } from "react-icons/fa"
+import Web3 from 'web3';
 import toIcn from "../assets/images/logo.png"
 import { useAccount, useConnect, useNetwork, useSwitchNetwork, useBalance } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected';
@@ -18,7 +19,7 @@ const Withdraw = () => {
   const [ethValue, setEthValue] = useState("")
   const [sendToken, setSendToken] = useState("ETH")
   const [errorInput, setErrorInput] = useState("")
-  const [checkMetaMask,setCheckMetaMask] = useState("");
+  const [checkMetaMask, setCheckMetaMask] = useState("");
   const [loader, setLoader] = useState(false)
   const { address, isConnected } = useAccount()
   const { data } = useBalance({ address: address, chainId: 90001 })
@@ -85,11 +86,11 @@ const Withdraw = () => {
 
     },
   })
-  
-  const getUSDT = useBalance({address:address,chainId: 90001,token:process.env.REACT_APP_L2_USDT});
-  const getDAI = useBalance({address:address,chainId: 90001,token:process.env.REACT_APP_L2_DAI});
-  console.log(getUSDT,"usdt");
-  console.log(getDAI,"dai");
+
+  const dataUSDT = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDT });
+  const dataDAI = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_DAI });
+  console.log(dataUSDT, "usdt");
+  console.log(dataDAI, "dai");
   const handleWithdraw = async () => {
     try {
       if (!ethValue) {
@@ -139,17 +140,44 @@ const Withdraw = () => {
             l2SignerOrProvider: l2Signer,
             bedrock: true,
           })
-          const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
-          setLoader(true);
+
           try {
-            const response = await crossChainMessenger.withdrawETH(weiValue.toString());
-            const logs = await response.wait();
-            console.log({ response });
-            console.log({ logs });
-            if (logs) {
-              setLoader(false);
-              setEthValue("");
+            if (sendToken == "ETH") {
+              const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
+              setLoader(true);
+              const response = await crossChainMessenger.withdrawETH(weiValue.toString());
+              const logs = await response.wait();
+              console.log({ response });
+              console.log({ logs });
+              if (logs) {
+                setLoader(false);
+                setEthValue("");
+              }
+
             }
+            if (sendToken == "DAI") {
+              var daiValue = Web3.utils.toWei(ethValue, "ether")
+              setLoader(true);
+              var depositTxn2 = await crossChainMessenger.withdrawERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue);;
+              var receiptDAI = await depositTxn2.wait()
+              console.log(receiptDAI);
+              if (receiptDAI) {
+                setLoader(false);
+                setEthValue("")
+              }
+            }
+
+            if (sendToken == "USDT") {
+              var usdtValue = parseInt(ethValue * 1000000)
+              setLoader(true);
+              var receiptUSDT = await crossChainMessenger.withdrawERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
+              console.log(await receiptUSDT.wait())
+              if (receiptDAI) {
+                setLoader(false);
+                setEthValue("")
+              }
+            }
+
           }
           catch (error) {
             setLoader(false);
@@ -173,6 +201,7 @@ const Withdraw = () => {
     }
   }
   const handleChange = (e) => {
+    if (sendToken == "ETH"){
     if (data?.formatted < e.target.value) {
       setErrorInput("Insufficient ETH balance.")
     } else {
@@ -180,7 +209,23 @@ const Withdraw = () => {
     }
     setEthValue(e.target.value)
   }
-
+  if (sendToken == "DAI"){
+    if (dataDAI.data?.formatted < e.target.value) {
+      setErrorInput("Insufficient DAI balance.")
+    } else {
+      setErrorInput("")
+    }
+    setEthValue(e.target.value)
+  }
+  if (sendToken == "USDT"){
+    if (dataUSDT.data?.formatted < e.target.value) {
+      setErrorInput("Insufficient DAI balance.")
+    } else {
+      setErrorInput("")
+    }
+    setEthValue(e.target.value)
+  }
+}
   return (
     <>
       <div className='bridge_wrap'>
@@ -212,12 +257,12 @@ const Withdraw = () => {
                   </Form.Select>
                 </div>
                 <div className='input_icn_wrap'>
-                {sendToken =="ETH" ? <span className='input_icn'><FaEthereum/></span> :sendToken =="DAI" ? <span className='input_icn'><Dai/></span> :<span className='input_icn'><Usdt/></span>}
+                  {sendToken == "ETH" ? <span className='input_icn'><FaEthereum /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai /></span> : <span className='input_icn'><Usdt /></span>}
                 </div>
               </Form>
             </div>
             {errorInput && <small className='text-danger'>{errorInput}</small>}
-            {sendToken === "ETH" ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p>:sendToken === "DAI" ? address && <p className='wallet_bal mt-2'>Balance: {Number(getDAI.data?.formatted).toFixed(5)} DAI</p>:<p className='wallet_bal mt-2'>Balance: {Number(getUSDT.data?.formatted).toFixed(5)} USDT</p>}
+            {sendToken === "ETH" ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken === "DAI" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p>}
           </div>
           <div className='deposit_details_wrap'>
             <div className="deposit_details">
@@ -225,14 +270,14 @@ const Withdraw = () => {
               <h5><FaEthereum /> Goerli Testnet</h5>
             </div>
             <div className='withdraw_bal_sum'>
-            {sendToken =="ETH" ? <span className='input_icn'><FaEthereum/></span> :sendToken =="DAI" ? <span className='input_icn'><Dai/></span> :<span className='input_icn'><Usdt/></span>}
+              {sendToken == "ETH" ? <span className='input_icn'><FaEthereum /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai /></span> : <span className='input_icn'><Usdt /></span>}
               <p>You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
               <div></div>
               {/* <span className='input_title'>ETH</span> */}
             </div>
           </div>
           <div className="deposit_btn_wrap">
-            {checkMetaMask === true ? <a className='btn deposit_btn' href='https://metamask.io/' target='_blank'><Image src={metamask} alt="metamask icn" fluid/> Please Install Metamask Wallet</a> : !isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L2_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><HiSwitchHorizontal />Switch to RACE Testnet</button> : <button className='btn deposit_btn' onClick={handleWithdraw} disabled={loader ? true : false}>{loader ? <Spinner animation="border" role="status">
+            {checkMetaMask === true ? <a className='btn deposit_btn' href='https://metamask.io/' target='_blank'><Image src={metamask} alt="metamask icn" fluid /> Please Install Metamask Wallet</a> : !isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L2_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><HiSwitchHorizontal />Switch to RACE Testnet</button> : <button className='btn deposit_btn' onClick={handleWithdraw} disabled={loader ? true : false}>{loader ? <Spinner animation="border" role="status">
               <span className="visually-hidden">Loading...</span>
             </Spinner> : "Withdraw"}</button>}
           </div>

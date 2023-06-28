@@ -121,7 +121,7 @@ const Deposit = () => {
 
                     const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
                     setLoader(true);
-                    var depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())                 
+                    var depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
                     const receiptETH = await depositETHEREUM.wait()
                     console.log(receiptETH);
                     if (receiptETH) {
@@ -165,13 +165,33 @@ const Deposit = () => {
         }
     }
     const handleChange = ({ target }) => {
-        if (data?.formatted < target.value) {
-            setErrorInput("Insufficient ETH balance.")
-        } else {
-            setErrorInput("")
+        if (sendToken == 'ETH') {
+            if (data?.formatted < target.value) {
+                setErrorInput("Insufficient ETH balance.")
+            } else {
+                setErrorInput("")
+            }
+            setEthValue(target.value)
         }
-        setEthValue(target.value)
+        if (sendToken == 'DAI') {
+            if (dataDAI.data?.formatted < target.value) {
+                setErrorInput("Insufficient DAI balance.")
+            } else {
+                setErrorInput("")
+            }
+            setEthValue(target.value)
+        }
+        if (sendToken == 'USDT') {
+            if (dataUSDT.data?.formatted < target.value) {
+                setErrorInput("Insufficient USDT balance.")
+            } else {
+                setErrorInput("")
+            }
+            setEthValue(target.value)
+        }
+
     }
+
     return (
         <>
             <div className='bridge_wrap'>
