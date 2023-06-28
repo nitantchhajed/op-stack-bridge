@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../assets/style/deposit.scss";
 import { Form, Spinner, Image } from "react-bootstrap"
-import { Dai, Usdt } from 'react-web3-icons';
+import { Dai, Usdt, Ethereum } from 'react-web3-icons';
 import toIcn from "../assets/images/logo.png"
 import { IoMdWallet } from "react-icons/io"
 import { FaEthereum } from "react-icons/fa"
@@ -211,7 +211,7 @@ const Deposit = () => {
                                     </Form.Select>
                                 </div>
                                 <div className='input_icn_wrap'>
-                                    {sendToken == "ETH" ? <span className='input_icn'><FaEthereum /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai /></span> : <span className='input_icn'><Usdt /></span>}
+                                    {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }}/></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }}/></span> : <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }}/></span>}
                                 </div>
                             </Form>
                         </div>
@@ -225,7 +225,7 @@ const Deposit = () => {
                             <h5><Image src={toIcn} alt="To icn" fluid /> Race</h5>
                         </div>
                         <div className='deposit_inner_details'>
-                            {sendToken == "ETH" ? <span className='input_icn'><FaEthereum /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai /></span> : <span className='input_icn'><Usdt /></span>}  <p>You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
+                            {sendToken == "ETH" ? <span className='input_icn'> <Ethereum style={{ fontSize: '1.5rem' }}/></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }}/></span> : <span className='input_icn'> <Usdt style={{ fontSize: '1.5rem' }}/></span>}  <p> You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
                         </div>
                     </div>
                     <div className="deposit_btn_wrap">

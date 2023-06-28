@@ -62,10 +62,10 @@
                 left: 20px;
                 top: 50%;
                 color: #444971;
-                transform: translate(-50%, -50%);
+                transform: translate(-50%, -53%);
                 border-radius: 20px;
                 font-weight: 500;
-                padding: 2px 6px 0px;
+                padding: 0px 6px 0px;
                 font-size: 28px;
 
                 img {
@@ -178,6 +178,10 @@
                 color: var(--text-color);
                 font-weight: 500;
                 font-size: 16px;
+            }
+
+            .input_icn {
+                margin-right: 10px
             }
         }
     }
