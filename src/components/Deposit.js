@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import Web3 from "web3"
+import React, { useState } from 'react';
 import "../assets/style/deposit.scss";
 import { Form, Spinner, Image } from "react-bootstrap"
 import toIcn from "../assets/images/logo.png"
@@ -10,8 +9,10 @@ import { InjectedConnector } from 'wagmi/connectors/injected'
 import TabMenu from './TabMenu';
 import { HiSwitchHorizontal } from "react-icons/hi"
 import metamask from "../assets/images/metamask.svg"
+import Web3 from 'web3';
 const optimismSDK = require("@eth-optimism/sdk")
 const ethers = require("ethers")
+
 const Deposit = () => {
     const [ethValue, setEthValue] = useState("")
     const [sendToken, setSendToken] = useState("ETH")
@@ -19,7 +20,7 @@ const Deposit = () => {
     const [errorInput, setErrorInput] = useState("")
     const [loader, setLoader] = useState(false)
     const { chain, chains } = useNetwork()
-    const [checkMetaMask,setCheckMetaMask] = useState("");
+    const [checkMetaMask, setCheckMetaMask] = useState("");
     const { connect, connectors, error, isLoading, pendingConnector } = useConnect({
         connector: new InjectedConnector({ chains }), onError(error) {
             console.log('Error', error)
@@ -62,6 +63,7 @@ const Deposit = () => {
     }
 
     const handleDeposit = async () => {
+
         try {
             if (ethValue) {
                 setErrorInput("")
@@ -104,8 +106,24 @@ const Deposit = () => {
                     l2SignerOrProvider: l2Signer,
                     bedrock: true,
                 })
-                const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
-                const depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
+                if (sendToken === "ETH") {
+                    const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
+                    var depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
+                }
+                if (sendToken === "DAI") {
+                    var daiValue = Web3.utils.toWei(ethValue, "ether")
+                    var depositTxn2 = await crossChainMessenger.approveERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f","0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
+                    await depositTxn2.wait()
+                    var responseDAI = await crossChainMessenger.depositERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f","0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
+                    console.log(await responseDAI.wait());
+                }
+                if (sendToken === "USDT") {
+                    var usdtValue = parseInt(ethValue * 1000000)
+                    var depositTxn1 = await crossChainMessenger.approveERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
+                    await depositTxn1.wait()
+                    var responseUSDT = await crossChainMessenger.depositERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
+                    console.log(await responseUSDT.wait())
+                }
                 setLoader(true);
                 const receipt = await depositETHEREUM.wait()
                 console.log(receipt);
@@ -169,7 +187,7 @@ const Deposit = () => {
                         </div>
                     </div>
                     <div className="deposit_btn_wrap">
-                        {checkMetaMask === true ? <a className='btn deposit_btn' href='https://metamask.io/' target='_blank'><Image src={metamask} alt="metamask icn" fluid/> Please Install Metamask Wallet</a> : !isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L1_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><HiSwitchHorizontal />Switch to goerli</button> :
+                        {checkMetaMask === true ? <a className='btn deposit_btn' href='https://metamask.io/' target='_blank'><Image src={metamask} alt="metamask icn" fluid /> Please Install Metamask Wallet</a> : !isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L1_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><HiSwitchHorizontal />Switch to goerli</button> :
                             <button className='btn deposit_btn' onClick={handleDeposit} disabled={loader ? true : false}> {loader ? <Spinner animation="border" role="status">
                                 <span className="visually-hidden">Loading...</span>
                             </Spinner> : "Deposit"} </button>}
