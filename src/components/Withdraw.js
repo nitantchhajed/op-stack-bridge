@@ -89,8 +89,8 @@ const Withdraw = () => {
 
   const dataUSDT = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDT });
   const dataDAI = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_DAI });
-  console.log(dataUSDT, "usdt");
-  console.log(dataDAI, "dai");
+  // console.log(dataUSDT, "usdt");
+  // console.log(dataDAI, "dai");
   const handleWithdraw = async () => {
     try {
       if (!ethValue) {
@@ -171,8 +171,8 @@ const Withdraw = () => {
               var usdtValue = parseInt(ethValue * 1000000)
               setLoader(true);
               var receiptUSDT = await crossChainMessenger.withdrawERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
-              console.log(await receiptUSDT.wait())
-              if (receiptDAI) {
+              var getReceiptUSDT = await receiptUSDT.wait();
+              if (getReceiptUSDT) {
                 setLoader(false);
                 setEthValue("")
               }
