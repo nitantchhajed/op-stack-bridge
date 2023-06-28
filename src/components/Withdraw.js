@@ -84,10 +84,11 @@ const Withdraw = () => {
 
     },
   })
-  useEffect(() => {
-    // console.log("data", data);
-
-  }, [data])
+  
+  const getUSDT = useBalance({address:address,chainId: 90001,token:process.env.REACT_APP_L2_USDT});
+  const getDAI = useBalance({address:address,chainId: 90001,token:process.env.REACT_APP_L2_DAI});
+  console.log(getUSDT,"usdt");
+  console.log(getDAI,"dai");
   const handleWithdraw = async () => {
     try {
       if (!ethValue) {
@@ -153,9 +154,6 @@ const Withdraw = () => {
             setLoader(false);
             console.log({ error }, 98);
           }
-
-
-
         }
       }
 

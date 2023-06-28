@@ -5,7 +5,7 @@ import { Dai, Usdt } from 'react-web3-icons';
 import toIcn from "../assets/images/logo.png"
 import { IoMdWallet } from "react-icons/io"
 import { FaEthereum } from "react-icons/fa"
-import { useAccount, useConnect, useNetwork, useSwitchNetwork, useBalance } from 'wagmi'
+import { useAccount, useConnect, useNetwork, useSwitchNetwork, useBalance, useToken } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import TabMenu from './TabMenu';
 import { HiSwitchHorizontal } from "react-icons/hi"
@@ -17,11 +17,12 @@ const ethers = require("ethers")
 const Deposit = () => {
     const [ethValue, setEthValue] = useState("")
     const [sendToken, setSendToken] = useState("ETH")
-    const { address, isConnected } = useAccount()
+    const { data: accountData, address, isConnected } = useAccount()
     const [errorInput, setErrorInput] = useState("")
     const [loader, setLoader] = useState(false)
     const { chain, chains } = useNetwork()
     const [checkMetaMask, setCheckMetaMask] = useState("");
+    
     const { connect, connectors, error, isLoading, pendingConnector } = useConnect({
         connector: new InjectedConnector({ chains }), onError(error) {
             console.log('Error', error)
@@ -72,8 +73,8 @@ const Deposit = () => {
         switchNetwork(process.env.REACT_APP_L1_CHAIN_ID)
     }
 
-    const handleDeposit = async () => {
 
+    const handleDeposit = async () => {
         try {
             if (ethValue) {
                 setErrorInput("")
