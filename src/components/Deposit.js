@@ -77,7 +77,7 @@ const Deposit = () => {
             }
             else {
                 if (!parseFloat(ethValue) > 0) {
-                    setErrorInput("Amount Invalid!");
+                    setErrorInput("Invalid Amount Entered!");
                 } else {
 
                     const l2Url = process.env.REACT_APP_L2_RPC_URL;

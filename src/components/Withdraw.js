@@ -95,7 +95,7 @@ const Withdraw = () => {
       }
       else {
         if (!parseFloat(ethValue) > 0) {
-          setErrorInput("Amount Invalid!");
+          setErrorInput("Invalid Amount Entered!");
         } else {
           setErrorInput("");
           const l1Url = process.env.REACT_APP_L1_RPC_URL;
