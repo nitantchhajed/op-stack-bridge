@@ -120,7 +120,7 @@ const Deposit = () => {
                         bedrock: true,
                     })
                     if (sendToken === "ETH") {
-
+                        console.log(sendToken);
                         const weiValue = parseInt(ethers.utils.parseEther(ethValue)._hex, 16)
                         setLoader(true);
                         var depositETHEREUM = await crossChainMessenger.depositETH(weiValue.toString())
