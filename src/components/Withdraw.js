@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../assets/style/deposit.scss";
 import "../assets/style/withdraw.scss";
 import { Form, Image, Spinner } from "react-bootstrap";
-import { Dai, Usdt, Ethereum } from 'react-web3-icons';
+import { Dai, Usdt, Usdc, Ethereum } from 'react-web3-icons';
 import { MdOutlineSecurity } from "react-icons/md"
 import { FaEthereum } from "react-icons/fa"
 import Web3 from 'web3';
@@ -22,7 +22,6 @@ const Withdraw = () => {
   const [checkMetaMask, setCheckMetaMask] = useState("");
   const [loader, setLoader] = useState(false)
   const { address, isConnected } = useAccount()
-  const { data } = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), watch: true })
   const { chain, chains } = useNetwork()
   const { connect } = useConnect({
     connector: new InjectedConnector({ chains }), onError(error) {
@@ -86,8 +85,16 @@ const Withdraw = () => {
 
     },
   })
+  //========================================================== BALANCES =======================================================================
+
+  const { data } = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), watch: true })
   const dataUSDT = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDT, watch: true });
   const dataDAI = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_DAI, watch: true });
+  const dataUSDC = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDC, watch: true });
+
+  ////========================================================== WITHDRAW =======================================================================
+
+
   const handleWithdraw = async () => {
     try {
       if (!ethValue) {
@@ -137,6 +144,7 @@ const Withdraw = () => {
             l2SignerOrProvider: l2Signer,
             bedrock: true,
           })
+          //-------------------------------------------------------- SEND TOKEN VALUE -----------------------------------------------------------------
 
           try {
             if (sendToken == "ETH") {
@@ -171,6 +179,17 @@ const Withdraw = () => {
                 setEthValue("")
               }
             }
+            if (sendToken == "USDC") {
+              var usdcValue = parseInt(ethValue * 1000000)
+              setLoader(true);
+              var receiptUSDC = await crossChainMessenger.withdrawERC20("0x07865c6E87B9F70255377e024ace6630C1Eaa37F", "0xbFFfa9a3BD00eF826486498a014010E0f9F42E15", usdcValue)
+              var getReceiptUSDC = await receiptUSDC.wait();
+              if (getReceiptUSDC) {
+                setLoader(false);
+                setEthValue("")
+              }
+            }
+            //-------------------------------------------------------- SEND TOKEN VALUE END-----------------------------------------------------------------
 
           }
           catch (error) {
@@ -194,6 +213,8 @@ const Withdraw = () => {
       console.log(error);
     }
   }
+  ////========================================================== HANDLE CHANGE =======================================================================
+
   const handleChange = (e) => {
     if (sendToken == "ETH") {
       if (data?.formatted < e.target.value) {
@@ -214,6 +235,14 @@ const Withdraw = () => {
     if (sendToken == "USDT") {
       if (dataUSDT.data?.formatted < e.target.value) {
         setErrorInput("Insufficient DAI balance.")
+      } else {
+        setErrorInput("")
+      }
+      setEthValue(e.target.value)
+    }
+    if (sendToken == "USDC") {
+      if (dataUSDC.data?.formatted < e.target.value) {
+        setErrorInput("Insufficient USDC balance.")
       } else {
         setErrorInput("")
       }
@@ -248,15 +277,16 @@ const Withdraw = () => {
                     <option>ETH</option>
                     <option value="DAI">DAI</option>
                     <option value="USDT">USDT</option>
+                    <option value="USDC">USDC</option>
                   </Form.Select>
                 </div>
                 <div className='input_icn_wrap'>
-                  {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span>}
+                  {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : sendToken == "USDT" ? <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdc style={{ fontSize: '1.5rem' }} /></span>}
                 </div>
               </Form>
             </div>
             {errorInput && <small className='text-danger'>{errorInput}</small>}
-            {sendToken === "ETH" ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken === "DAI" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p>}
+            {sendToken === "ETH" ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken === "DAI" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : sendToken == "USDT" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : <p className='wallet_bal mt-2'>Balance: {Number(dataUSDC.data?.formatted).toFixed(5)} USDC</p>}
           </div>
           <div className='deposit_details_wrap'>
             <div className="deposit_details">
@@ -264,7 +294,7 @@ const Withdraw = () => {
               <h5><FaEthereum /> Goerli Testnet</h5>
             </div>
             <div className='withdraw_bal_sum'>
-              {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span>}
+              {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : sendToken == "USDT" ? <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdc style={{ fontSize: '1.5rem' }} /></span>}
               <p>You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
               <div></div>
               {/* <span className='input_title'>ETH</span> */}

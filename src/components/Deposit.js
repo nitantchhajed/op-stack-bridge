@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../assets/style/deposit.scss";
 import { Form, Spinner, Image } from "react-bootstrap"
-import { Dai, Usdt, Ethereum } from 'react-web3-icons';
+import { Dai, Usdt,Usdc , Ethereum } from 'react-web3-icons';
 import toIcn from "../assets/images/logo.png"
 import { IoMdWallet } from "react-icons/io"
 import { FaEthereum } from "react-icons/fa"
@@ -64,6 +64,7 @@ const Deposit = () => {
 
     const dataUSDT = useBalance({ address: address, token: process.env.REACT_APP_L1_USDT, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
     const dataDAI = useBalance({ address: address, token: process.env.REACT_APP_L1_DAI, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)  })
+    const dataUSDC = useBalance({ address: address, token: process.env.REACT_APP_L1_USDC, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)  })
 
     const handleSwitch = () => {
         switchNetwork(process.env.REACT_APP_L1_CHAIN_ID)
@@ -154,6 +155,18 @@ const Deposit = () => {
                             setEthValue("")
                         }
                     }
+                    if (sendToken === "USDC") {
+                        var usdcValue = parseInt(ethValue * 1000000)
+                        setLoader(true);
+                        var depositTxn3 = await crossChainMessenger.approveERC20("0x07865c6E87B9F70255377e024ace6630C1Eaa37F", "0xbFFfa9a3BD00eF826486498a014010E0f9F42E15", usdcValue)
+                        await depositTxn3.wait()
+                        var receiptUSDC = await crossChainMessenger.depositERC20("0x07865c6E87B9F70255377e024ace6630C1Eaa37F", "0xbFFfa9a3BD00eF826486498a014010E0f9F42E15", usdcValue)
+                        var getReceiptUSDC = await receiptUSDC.wait()
+                        if (getReceiptUSDC) {
+                            setLoader(false);
+                            setEthValue("")
+                        }
+                    }
 
 
                 }
@@ -189,6 +202,14 @@ const Deposit = () => {
             }
             setEthValue(e.target.value)
         }
+        if (sendToken == 'USDC') {
+            if (dataUSDC.data?.formatted < e.target.value) {
+                setErrorInput("Insufficient USDC balance.")
+            } else {
+                setErrorInput("")
+            }
+            setEthValue(e.target.value)
+        }
 
     }
 
@@ -209,17 +230,17 @@ const Deposit = () => {
                                     <Form.Select aria-label="Default select example" className='select_wrap' onChange={({ target }) => setSendToken(target.value)}>
                                         <option>ETH</option>
                                         <option value="DAI">DAI</option>
-                                        {/* <option value="USDC">USDC</option> */}
+                                        <option value="USDC">USDC</option>
                                         <option value="USDT">USDT</option>
                                     </Form.Select>
                                 </div>
                                 <div className='input_icn_wrap'>
-                                    {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }}/></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }}/></span> : <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }}/></span>}
+                                    {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }}/></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }}/></span> : sendToken == "USDT" ? <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }}/></span> : <span className='input_icn'><Usdc style={{ fontSize: '1.5rem' }}/></span>}
                                 </div>
                             </Form>
                         </div>
                         {errorInput && <small className='text-danger'>{errorInput}</small>}
-                        {sendToken == 'ETH' ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken == 'USDT' ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p>}
+                        {sendToken == 'ETH' ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken == 'USDT' ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : sendToken == 'DAI' ?  address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDC.data?.formatted).toFixed(5)} USDC</p>}
 
                     </div>
                     <div className='deposit_details_wrap'>
@@ -228,7 +249,7 @@ const Deposit = () => {
                             <h5><Image src={toIcn} alt="To icn" fluid /> Race</h5>
                         </div>
                         <div className='deposit_inner_details'>
-                            {sendToken == "ETH" ? <span className='input_icn'> <Ethereum style={{ fontSize: '1.5rem' }}/></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }}/></span> : <span className='input_icn'> <Usdt style={{ fontSize: '1.5rem' }}/></span>}  <p> You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
+                            {sendToken == "ETH" ? <span className='input_icn'> <Ethereum style={{ fontSize: '1.5rem' }}/></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }}/></span> : sendToken == "USDT" ? <span className='input_icn'> <Usdt style={{ fontSize: '1.5rem' }}/></span> : <span className='input_icn'> <Usdc style={{ fontSize: '1.5rem' }}/></span> }  <p> You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
                         </div>
                     </div>
                     <div className="deposit_btn_wrap">
