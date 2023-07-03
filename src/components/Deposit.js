@@ -163,6 +163,7 @@ const Deposit = () => {
             setLoader(false);
         }
     }
+    
     const handleChange = (e) => {
         if (sendToken == 'ETH') {
             if (data?.formatted < e.target.value) {
