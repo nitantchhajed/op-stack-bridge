@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
 
     steps:
     - uses: actions/checkout@v3
@@ -29,6 +29,20 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+    
     - name: SSH Remote Commands
+  # You may pin to the exact commit or the version.
+  # uses: appleboy/ssh-action@334f9259f2f8eb3376d33fa4c684fff373f2c2a6
       uses: appleboy/ssh-action@v0.1.10
-
+      with:
+    # ssh host
+        host: ${{secrets.AWS_EC2_INSTANCE_IP_ADDRESS}}
+        key:  ${{secrets.AWS_EC2_INSTANCE_SSH_KEY}}
+        username: ${{secrets.AWS_EC2_INSTANCE_USERNAME}}
+        script: |
+          cd /var/www/html
+          sudo rm -rf race-bridge/
+          sudo rm -rf bridge/
+          sudo git clone https://github.com/RACE-Community/bridge.git
+          sudo mv /var/www/html/bridge /var/www/html/race-bridge
+          sudo systemctl restart nginx
