@@ -147,4 +147,32 @@
             border-color: var(--primary-color);
         }
     }
+
+    .right_header_wrap {
+        display: flex;
+    }
+}
+
+@media screen and (max-width:991px) {
+    .app_header {
+        padding: 0px;
+    }
+
+    .app_header .header_btn_wrap .header_btn {
+        margin-bottom: 5px;
+    }
+
+    .app_header .right_header_wrap {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+
+}
+
+@media screen and (max-width:380px) {
+    .app_header .dropdown_wrap .dropdown .dropdown-menu {
+        left: -80px;
+        width: 211px;
+    }
 }
