@@ -43,6 +43,7 @@ const HeaderNew = () => {
     useEffect(() => {
         if (chain?.id == 90001 || chain?.id == 5) {
             setNetwork(chain.name)
+            console.log(chain.name);
         }
         else {
             setNetwork("Unsupported Network")
