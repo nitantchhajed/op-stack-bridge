@@ -50,7 +50,7 @@
                 font-weight: 600;
                 width: 100%;
                 padding: 10px 50px;
-                border: 1px solid var(--primary-color);
+                border: 1px solid #FBCBA7;
 
                 &:focus {
                     box-shadow: none;
@@ -100,7 +100,7 @@
 
                 .select_wrap {
                     color: var(--light-color);
-                    border: 1px solid var(--primary-color);
+                    border: 1px solid #FBCBA7;
                     padding: 15px 10px;
                     border-radius: 0px 8px 8px 0px;
                     width: 100px;
