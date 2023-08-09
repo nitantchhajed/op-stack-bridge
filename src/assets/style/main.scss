@@ -81,7 +81,7 @@ p {
 
                     &.active {
                         box-shadow: 0 0 8px rgba(20, 23, 26, 0.0784313725), 0 0 4px rgba(20, 23, 26, 0.0392156863);
-                        color: var(--primary-color);
+                        color: #FBCBA7;
                         background-color: var(--button-color);
 
                         &::after {
@@ -112,7 +112,7 @@ p {
         .page-item {
             &.active {
                 .page-link {
-                    border: 1px solid var(--primary-color);
+                    border: 1px solid #FBCBA7;
                     border-radius: 5px;
                     padding: 0px 11px;
                 }
@@ -120,7 +120,7 @@ p {
 
             .page-link {
                 background: var(--secondary-color);
-                color: var(--primary-color);
+                color: #FBCBA7;
                 border-color: var(--secondary-color);
                 padding: 1px 10px;
                 font-size: 12px;

@@ -33,7 +33,7 @@
                 width: 24px;
             }
 
-            background-color: var(--primary-color);
+            background: var(--primary-color);
             color: var(--dark-color);
             border-radius: 20px;
             font-weight: 500;
@@ -64,12 +64,12 @@
         .dropdown {
 
             .btn-success {
-                background-color: var(--primary-color);
+                background: var(--primary-color);
                 color: var(--dark-color);
                 border-radius: 20px;
                 font-weight: 500;
                 font-size: 14px;
-                border-color: var(--primary-color);
+                border-color: #FBCBA7;
 
                 &::after {
                     display: none;
@@ -139,12 +139,12 @@
         }
 
         .disconnect_btn {
-            background-color: var(--primary-color);
+            background: var(--primary-color);
             color: var(--dark-color);
             border-radius: 20px;
             font-weight: 500;
             font-size: 14px;
-            border-color: var(--primary-color);
+            border-color: #FBCBA7;
         }
     }
 

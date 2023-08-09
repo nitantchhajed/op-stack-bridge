@@ -76,7 +76,7 @@
 
                             &.active {
                                 box-shadow: 0 0 8px rgba(20, 23, 26, 0.0784313725), 0 0 4px rgba(20, 23, 26, 0.0392156863);
-                                color: var(--primary-color);
+                                color: #FBCBA7;
                                 background-color: var(--button-color);
 
                                 &::after {
@@ -118,11 +118,11 @@
 
                 //             &:hover {
                 //                 background-color: transparent;
-                //                 color: var(--primary-color);
+                //                 color: #FBCBA7;
                 //             }
 
                 //             &.active {
-                //                 color: var(--primary-color);
+                //                 color: #FBCBA7;
                 //                 border: none;
                 //                 // border-radius: 12px;
                 //                 font-weight: 500;
