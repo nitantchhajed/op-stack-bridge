@@ -159,9 +159,9 @@ const Deposit = () => {
                     if (sendToken === "wBTC") {
                         var wBTCValue = parseInt(ethValue * 1000000)
                         setLoader(true);
-                        var depositTxnBtc = await crossChainMessenger.approveERC20("", "", wBTCValue)
+                        var depositTxnBtc = await crossChainMessenger.approveERC20("0xC04B0d3107736C32e19F1c62b2aF67BE61d63a05", "0x3e7eF8f50246f725885102E8238CBba33F276747", wBTCValue)
                         await depositTxnBtc.wait()
-                        var receiptwBTC = await crossChainMessenger.depositERC20("", "", wBTCValue)
+                        var receiptwBTC = await crossChainMessenger.depositERC20("0xC04B0d3107736C32e19F1c62b2aF67BE61d63a05", "0x3e7eF8f50246f725885102E8238CBba33F276747", wBTCValue)
                         var getReceiptwBTC = await receiptwBTC.wait()
                         if (getReceiptwBTC) {
                             setLoader(false);
