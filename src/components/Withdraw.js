@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../assets/style/deposit.scss";
 import "../assets/style/withdraw.scss";
 import { Form, Image, Spinner } from "react-bootstrap";
-import { Dai, Usdt, Usdc, Ethereum } from 'react-web3-icons';
+import { Dai, Usdt, Usdc, Ethereum, Btc } from 'react-web3-icons';
 import { MdOutlineSecurity } from "react-icons/md"
 import { FaEthereum } from "react-icons/fa"
 import Web3 from 'web3';
@@ -91,6 +91,7 @@ const Withdraw = () => {
   const dataUSDT = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDT, watch: true });
   const dataDAI = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_DAI, watch: true });
   const dataUSDC = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDC, watch: true });
+  const datawBTC = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_wBTC, watch: true });
 
   ////========================================================== WITHDRAW =======================================================================
 
@@ -179,6 +180,16 @@ const Withdraw = () => {
                 setEthValue("")
               }
             }
+            if (sendToken == "wBTC") {
+              var wBTCValue = parseInt(ethValue * 1000000)
+              setLoader(true);
+              var receiptwBTC = await crossChainMessenger.withdrawERC20("0x07865c6E87B9F70255377e024ace6630C1Eaa37F", "0xbFFfa9a3BD00eF826486498a014010E0f9F42E15", wBTCValue)
+              var getReceiptwBTC = await receiptwBTC.wait();
+              if (getReceiptwBTC) {
+                setLoader(false);
+                setEthValue("")
+              }
+            }
             if (sendToken == "USDC") {
               var usdcValue = parseInt(ethValue * 1000000)
               setLoader(true);
@@ -240,6 +251,14 @@ const Withdraw = () => {
       }
       setEthValue(e.target.value)
     }
+    if (sendToken == "wBTC") {
+      if (datawBTC.data?.formatted < e.target.value) {
+        setErrorInput("Insufficient wBTC balance.")
+      } else {
+        setErrorInput("")
+      }
+      setEthValue(e.target.value)
+    }
     if (sendToken == "USDC") {
       if (dataUSDC.data?.formatted < e.target.value) {
         setErrorInput("Insufficient USDC balance.")
@@ -277,16 +296,17 @@ const Withdraw = () => {
                     <option>ETH</option>
                     <option value="DAI">DAI</option>
                     <option value="USDT">USDT</option>
+                    <option value="wBTC">wBTC</option>
                     <option value="USDC">USDC</option>
                   </Form.Select>
                 </div>
                 <div className='input_icn_wrap'>
-                  {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : sendToken == "USDT" ? <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdc style={{ fontSize: '1.5rem' }} /></span>}
+                  {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : sendToken == "USDT" ? <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span> : sendToken == "wBTC" ? <span className='input_icn'><Btc style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdc style={{ fontSize: '1.5rem' }} /></span>}
                 </div>
               </Form>
             </div>
             {errorInput && <small className='text-danger'>{errorInput}</small>}
-            {sendToken === "ETH" ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken === "DAI" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : sendToken == "USDT" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : <p className='wallet_bal mt-2'>Balance: {Number(dataUSDC.data?.formatted).toFixed(5)} USDC</p>}
+            {sendToken === "ETH" ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken === "DAI" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : sendToken == "USDT" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : sendToken === "wBTC" ? address && <p className='wallet_bal mt-2'>Balance: {Number(datawBTC.data?.formatted).toFixed(5)} wBTC</p> :<p className='wallet_bal mt-2'>Balance: {Number(dataUSDC.data?.formatted).toFixed(5)} USDC</p>}
           </div>
           <div className='deposit_details_wrap'>
             <div className="deposit_details">
@@ -294,7 +314,7 @@ const Withdraw = () => {
               <h5><FaEthereum /> Goerli Testnet</h5>
             </div>
             <div className='withdraw_bal_sum'>
-              {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : sendToken == "USDT" ? <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdc style={{ fontSize: '1.5rem' }} /></span>}
+              {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : sendToken == "USDT" ? <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span> :sendToken == "wBTC" ? <span className='input_icn'><Btc style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdc style={{ fontSize: '1.5rem' }} /></span>}
               <p>You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
               <div></div>
               {/* <span className='input_title'>ETH</span> */}
