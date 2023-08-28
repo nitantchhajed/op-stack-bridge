@@ -14,9 +14,10 @@ yarn
 
 ## Running the service
 
-Copy `.env.example` into a new file named `.env`, then set the environment variables listed there.
+- Copy `.env.example` into a new file named `.env`, then set the environment variables listed there.
 
-
+- Update the contract addresses of `USDT, DAI, USDC, wBTC` `(L1_Token_Address, L2_Token_Address)` https://github.com/nitantchhajed/op-stack-bridge/blob/be390d177cdb6bea0d1745830a2ee490b06ebe7e/src/components/Deposit.js#L138 in `src/components/Deposit.js` & `Withdraw.js` 
+  or you can remove their functionality if you don't want to bridge tokens.
 
 Once your environment variables or flags have been set, run the service via:
 
