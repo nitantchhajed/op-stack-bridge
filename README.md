@@ -12,7 +12,7 @@ git clone https://github.com/nitantchhajed/op-stack-bridge.git
 yarn 
 ```
 
-## Running the service
+## Running the application
 
 - Copy `.env.example` into a new file named `.env`, then set the environment variables listed there.
 
