@@ -24,7 +24,7 @@ export const RACE = {
     },
     rpcUrls: {
         default: {
-            http: ["https://racetestnet.io"]
+            http: [process.env.REACT_APP_L2_RPC_URL]
         },
     },
     blockExplorers: {
@@ -35,7 +35,7 @@ export const RACE = {
 }
 
 const { chains, publicClient } = configureChains(
-    [goerli, RACE],
+    [sepolia, RACE],
     [
         jsonRpcProvider({
             rpc: chain => ({ http: chain.rpcUrls.default.http[0] })
