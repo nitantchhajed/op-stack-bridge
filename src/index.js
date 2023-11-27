@@ -24,7 +24,7 @@ export const RACE = {
     },
     rpcUrls: {
         default: {
-            http: [process.env.REACT_APP_L2_RPC_URL]
+            http: ["http://178.22.68.224"]
         },
     },
     blockExplorers: {
