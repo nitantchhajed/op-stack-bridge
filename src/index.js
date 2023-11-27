@@ -1,4 +1,4 @@
-import React from 'react';
+iaimport React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import "./assets/style/main.scss"
@@ -8,7 +8,7 @@ import { store } from './store'
 import { Provider } from 'react-redux'
 import { WagmiConfig, createConfig, createStorage } from 'wagmi'
 import { configureChains } from '@wagmi/core'
-import { goerli } from '@wagmi/core/chains'
+import { sepolia } from '@wagmi/core/chains'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 export const RACE = {
