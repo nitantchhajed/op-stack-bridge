@@ -87,11 +87,11 @@ const Withdraw = () => {
   })
   //========================================================== BALANCES =======================================================================
 
-  const { data } = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), watch: true })
-  const dataUSDT = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDT, watch: true });
-  const dataDAI = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_DAI, watch: true });
-  const dataUSDC = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDC, watch: true });
-  const datawBTC = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_wBTC, watch: true });
+  const { data } = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, watch: true })
+  const dataUSDT = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token: process.env.REACT_APP_L2_USDT, watch: true });
+  const dataDAI = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token: process.env.REACT_APP_L2_DAI, watch: true });
+  const dataUSDC = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token: process.env.REACT_APP_L2_USDC, watch: true });
+  const datawBTC = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token: process.env.REACT_APP_L2_wBTC, watch: true });
 
   ////========================================================== WITHDRAW =======================================================================
 
@@ -268,6 +268,13 @@ const Withdraw = () => {
       setEthValue(e.target.value)
     }
   }
+
+  const demo = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, watch: true })
+  useEffect(() => {
+    console.log("data?.formatted", demo.data?.formatted);
+    console.log("data", data);
+    console.log("address", address, "Number(process.env.REACT_APP_L2_CHAIN_ID)", Number(process.env.REACT_APP_L2_CHAIN_ID));
+  }, [])
   return (
     <>
       <div className='bridge_wrap'>
@@ -306,7 +313,7 @@ const Withdraw = () => {
               </Form>
             </div>
             {errorInput && <small className='text-danger'>{errorInput}</small>}
-            {sendToken === "ETH" ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken === "DAI" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : sendToken == "USDT" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : sendToken === "wBTC" ? address && <p className='wallet_bal mt-2'>Balance: {Number(datawBTC.data?.formatted).toFixed(5)} wBTC</p> :<p className='wallet_bal mt-2'>Balance: {Number(dataUSDC.data?.formatted).toFixed(5)} USDC</p>}
+            {sendToken === "ETH" ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken === "DAI" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : sendToken == "USDT" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : sendToken === "wBTC" ? address && <p className='wallet_bal mt-2'>Balance: {Number(datawBTC.data?.formatted).toFixed(5)} wBTC</p> : <p className='wallet_bal mt-2'>Balance: {Number(dataUSDC.data?.formatted).toFixed(5)} USDC</p>}
           </div>
           <div className='deposit_details_wrap'>
             <div className="deposit_details">
@@ -314,7 +321,7 @@ const Withdraw = () => {
               <h5><FaEthereum /> Goerli Testnet</h5>
             </div>
             <div className='withdraw_bal_sum'>
-              {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : sendToken == "USDT" ? <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span> :sendToken == "wBTC" ? <span className='input_icn'><Btc style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdc style={{ fontSize: '1.5rem' }} /></span>}
+              {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : sendToken == "USDT" ? <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span> : sendToken == "wBTC" ? <span className='input_icn'><Btc style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdc style={{ fontSize: '1.5rem' }} /></span>}
               <p>You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
               <div></div>
               {/* <span className='input_title'>ETH</span> */}
