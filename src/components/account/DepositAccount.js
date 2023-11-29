@@ -11,8 +11,8 @@ const DepositAccount = () => {
     const { address, isConnected } = useAccount()
     const [depositDetails, setDepositDetails] = useState([])
     const getDeposit = async () => {
-        const l1Provider = new ethers.providers.JsonRpcProvider('https://eth-goerli.g.alchemy.com/v2/e0CsbXjGCT0xVVFc9MyaE7-olvSVAh4S');
-        const l2Provider = new ethers.providers.JsonRpcProvider('https://racetestnet.io');
+        const l1Provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_L1_RPC_URL);
+        const l2Provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_L2_RPC_URL);
         const l1Signer = l1Provider.getSigner()
         const l2Signer = l2Provider.getSigner()
         const zeroAddr = "0x".padEnd(42, "0");
