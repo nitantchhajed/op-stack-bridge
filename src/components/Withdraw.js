@@ -90,7 +90,7 @@ const Withdraw = () => {
 
   const { data } = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, watch: true })
   const dataUSDT = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token: process.env.REACT_APP_L2_USDT, watch: true });
-  const dataDAI = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token: process.env.REACT_APP_L2_DAI, watch: true });
+  const dataDAI =  useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token:  process.env.REACT_APP_L2_DAI, watch: true });
   const dataUSDC = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token: process.env.REACT_APP_L2_USDC, watch: true });
   const datawBTC = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token: process.env.REACT_APP_L2_wBTC, watch: true });
 
@@ -163,7 +163,7 @@ const Withdraw = () => {
             if (sendToken == "DAI") {
               var daiValue = Web3.utils.toWei(ethValue, "ether")
               setLoader(true);
-              var depositTxn2 = await crossChainMessenger.withdrawERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue);;
+              var depositTxn2 = await crossChainMessenger.withdrawERC20(process.env.REACT_APP_L1_DAI, process.env.REACT_APP_L2_DAI, daiValue);;
               var receiptDAI = await depositTxn2.wait()
               if (receiptDAI) {
                 setLoader(false);
@@ -174,7 +174,7 @@ const Withdraw = () => {
             if (sendToken == "USDT") {
               var usdtValue = parseInt(ethValue * 1000000)
               setLoader(true);
-              var receiptUSDT = await crossChainMessenger.withdrawERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
+              var receiptUSDT = await crossChainMessenger.withdrawERC20(process.env.REACT_APP_L1_USDT, process.env.REACT_APP_L2_USDT, usdtValue)
               var getReceiptUSDT = await receiptUSDT.wait();
               if (getReceiptUSDT) {
                 setLoader(false);
@@ -182,9 +182,9 @@ const Withdraw = () => {
               }
             }
             if (sendToken == "wBTC") {
-              var wBTCValue = parseInt(ethValue * 1000000)
+              var wBTCValue = parseInt(ethValue * 100000000)
               setLoader(true);
-              var receiptwBTC = await crossChainMessenger.withdrawERC20("0x07865c6E87B9F70255377e024ace6630C1Eaa37F", "0xbFFfa9a3BD00eF826486498a014010E0f9F42E15", wBTCValue)
+              var receiptwBTC = await crossChainMessenger.withdrawERC20(process.env.REACT_APP_L1_wBTC, process.env.REACT_APP_L2_wBTC, wBTCValue)
               var getReceiptwBTC = await receiptwBTC.wait();
               if (getReceiptwBTC) {
                 setLoader(false);
@@ -194,7 +194,7 @@ const Withdraw = () => {
             if (sendToken == "USDC") {
               var usdcValue = parseInt(ethValue * 1000000)
               setLoader(true);
-              var receiptUSDC = await crossChainMessenger.withdrawERC20("0x07865c6E87B9F70255377e024ace6630C1Eaa37F", "0xbFFfa9a3BD00eF826486498a014010E0f9F42E15", usdcValue)
+              var receiptUSDC = await crossChainMessenger.withdrawERC20(process.env.REACT_APP_L1_USDC, process.env.REACT_APP_L2_USDC, usdcValue)
               var getReceiptUSDC = await receiptUSDC.wait();
               if (getReceiptUSDC) {
                 setLoader(false);

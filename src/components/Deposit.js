@@ -63,7 +63,7 @@ const Deposit = () => {
 
 
     const dataUSDT = useBalance({ address: address, token: process.env.REACT_APP_L1_USDT, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
-    const dataDAI = useBalance({ address: address, token: process.env.REACT_APP_L1_DAI, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)  })
+    const dataDAI = useBalance({ address: address,  token: process.env.REACT_APP_L1_DAI, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)  })
     const dataUSDC = useBalance({ address: address, token: process.env.REACT_APP_L1_USDC, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)  })
     const datawBTC = useBalance({ address: address, token: process.env.REACT_APP_L1_wBTC, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)  })
 
@@ -135,9 +135,10 @@ const Deposit = () => {
                     if (sendToken === "DAI") {
                         var daiValue = Web3.utils.toWei(ethValue, "ether")
                         setLoader(true);
-                        var depositTxn2 = await crossChainMessenger.approveERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
+                        console.log("adddresssssssssss",process.env.REACT_APP_L1_DAI)
+                        var depositTxn2 = await crossChainMessenger.approveERC20(process.env.REACT_APP_L1_DAI, process.env.REACT_APP_L2_DAI, daiValue)
                         await depositTxn2.wait()
-                        var receiptDAI = await crossChainMessenger.depositERC20("0xb93cba7013f4557cDFB590fD152d24Ef4063485f", "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb", daiValue)
+                        var receiptDAI = await crossChainMessenger.depositERC20(process.env.REACT_APP_L1_DAI, process.env.REACT_APP_L2_DAI, daiValue)
                         var getReceiptDAI = await receiptDAI.wait()
                         if (getReceiptDAI) {
                             setLoader(false);
@@ -147,9 +148,9 @@ const Deposit = () => {
                     if (sendToken === "USDT") {
                         var usdtValue = parseInt(ethValue * 1000000)
                         setLoader(true);
-                        var depositTxn1 = await crossChainMessenger.approveERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
+                        var depositTxn1 = await crossChainMessenger.approveERC20(process.env.REACT_APP_L1_USDT, process.env.REACT_APP_L2_USDT, usdtValue)
                         await depositTxn1.wait()
-                        var receiptUSDT = await crossChainMessenger.depositERC20("0xfad6367E97217cC51b4cd838Cc086831f81d38C2", "0x4faf8Ba72fa0105c90A339453A420866388071a0", usdtValue)
+                        var receiptUSDT = await crossChainMessenger.depositERC20(process.env.REACT_APP_L1_USDT, process.env.REACT_APP_L2_USDT, usdtValue)
                         var getReceiptUSDT = await receiptUSDT.wait()
                         if (getReceiptUSDT) {
                             setLoader(false);
@@ -157,11 +158,11 @@ const Deposit = () => {
                         }
                     }
                     if (sendToken === "wBTC") {
-                        var wBTCValue = parseInt(ethValue * 1000000)
+                        var wBTCValue = parseInt(ethValue * 100000000)
                         setLoader(true);
-                        var depositTxnBtc = await crossChainMessenger.approveERC20("0xC04B0d3107736C32e19F1c62b2aF67BE61d63a05", "0x3e7eF8f50246f725885102E8238CBba33F276747", wBTCValue)
+                        var depositTxnBtc = await crossChainMessenger.approveERC20(process.env.REACT_APP_L1_wBTC,process.env.REACT_APP_L2_wBTC, wBTCValue)
                         await depositTxnBtc.wait()
-                        var receiptwBTC = await crossChainMessenger.depositERC20("0xC04B0d3107736C32e19F1c62b2aF67BE61d63a05", "0x3e7eF8f50246f725885102E8238CBba33F276747", wBTCValue)
+                        var receiptwBTC = await crossChainMessenger.depositERC20(process.env.REACT_APP_L1_wBTC,process.env.REACT_APP_L2_wBTC, wBTCValue)
                         var getReceiptwBTC = await receiptwBTC.wait()
                         if (getReceiptwBTC) {
                             setLoader(false);
@@ -171,9 +172,9 @@ const Deposit = () => {
                     if (sendToken === "USDC") {
                         var usdcValue = parseInt(ethValue * 1000000)
                         setLoader(true);
-                        var depositTxn3 = await crossChainMessenger.approveERC20("0x07865c6E87B9F70255377e024ace6630C1Eaa37F", "0xbFFfa9a3BD00eF826486498a014010E0f9F42E15", usdcValue)
+                        var depositTxn3 = await crossChainMessenger.approveERC20(process.env.REACT_APP_L1_USDC, process.env.REACT_APP_L2_USDC, usdcValue)
                         await depositTxn3.wait()
-                        var receiptUSDC = await crossChainMessenger.depositERC20("0x07865c6E87B9F70255377e024ace6630C1Eaa37F", "0xbFFfa9a3BD00eF826486498a014010E0f9F42E15", usdcValue)
+                        var receiptUSDC = await crossChainMessenger.depositERC20(process.env.REACT_APP_L1_USDC, process.env.REACT_APP_L2_USDC, usdcValue)
                         var getReceiptUSDC = await receiptUSDC.wait()
                         if (getReceiptUSDC) {
                             setLoader(false);
