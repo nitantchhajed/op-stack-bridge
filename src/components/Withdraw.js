@@ -89,13 +89,32 @@ const Withdraw = () => {
   //========================================================== BALANCES =======================================================================
 
   const { data } = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, watch: true })
-  const dataUSDT = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token: process.env.REACT_APP_L2_USDT, watch: true });
-  const dataDAI =  useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token:  process.env.REACT_APP_L2_DAI, watch: true });
-  const dataUSDC = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token: process.env.REACT_APP_L2_USDC, watch: true });
-  const datawBTC = useBalance({ address: address, chainId: process.env.REACT_APP_L2_CHAIN_ID, token: process.env.REACT_APP_L2_wBTC, watch: true });
+  const dataUSDT = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDT, watch: true });
+  const dataDAI = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_DAI, watch: true });
+  const dataUSDC = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_USDC, watch: true });
+  const datawBTC = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), token: process.env.REACT_APP_L2_wBTC, watch: true });
 
+  useEffect(() => {
+    console.log("dataUSDT", dataDAI)
+  }, [])
+  // const { data: dataUSDTs, loading, errors } = useBalance({
+  //   address: "0xEB71FA3084f1c3E2A66075760b3E3926F7843f34",
+  //   chainId: 90001,
+  //   token: "0x8315A87189C356F5e213ACBD39b74aDd45b80cd2",
+  //   watch: true,
+  // });
+
+  // if (loading) {
+  //   console.log("Loading USDT balance...")
+  // }
+
+  // if (errors) {
+  //   console.log(`Error fetching USDT balance: ${error.message}`)
+  // }
+
+  // // Now you can safely access dataUSDT
+  //  console.log(dataUSDTs)
   ////========================================================== WITHDRAW =======================================================================
-
 
   const handleWithdraw = async () => {
     try {
@@ -226,44 +245,55 @@ const Withdraw = () => {
     }
   }
   ////========================================================== HANDLE CHANGE =======================================================================
+  const [checkDisabled, setCheckDisabled] = useState(false)
 
   const handleChange = (e) => {
     if (sendToken == "ETH") {
-      if (data?.formatted < e.target.value) {
+      if (Number(data?.formatted) < e.target.value) {
+        setCheckDisabled(true)
         setErrorInput("Insufficient ETH balance.")
       } else {
+        setCheckDisabled(false)
         setErrorInput("")
       }
       setEthValue(e.target.value)
     }
     if (sendToken == "DAI") {
-      if (dataDAI.data?.formatted < e.target.value) {
+      if (Number(dataDAI.data?.formatted) < e.target.value) {
+        setCheckDisabled(true)
         setErrorInput("Insufficient DAI balance.")
       } else {
+        setCheckDisabled(false)
         setErrorInput("")
       }
       setEthValue(e.target.value)
     }
     if (sendToken == "USDT") {
-      if (dataUSDT.data?.formatted < e.target.value) {
+      if (Number(dataUSDT.data?.formatted) < e.target.value) {
+        setCheckDisabled(true)
         setErrorInput("Insufficient DAI balance.")
       } else {
+        setCheckDisabled(false)
         setErrorInput("")
       }
       setEthValue(e.target.value)
     }
     if (sendToken == "wBTC") {
-      if (datawBTC.data?.formatted < e.target.value) {
-        setErrorInput("Insufficient wBTC balance.")
+      if (Number(datawBTC.data?.formatted) < e.target.value) {
+        setCheckDisabled(true)
+        setErrorInput("Insufuficient wBTC balance.")
       } else {
+        setCheckDisabled(false)
         setErrorInput("")
       }
       setEthValue(e.target.value)
     }
     if (sendToken == "USDC") {
-      if (dataUSDC.data?.formatted < e.target.value) {
+      if (Number(dataUSDC.data?.formatted) < e.target.value) {
+        setCheckDisabled(true)
         setErrorInput("Insufficient USDC balance.")
       } else {
+        setCheckDisabled(false)
         setErrorInput("")
       }
       setEthValue(e.target.value)
@@ -289,7 +319,6 @@ const Withdraw = () => {
       method: "eth_getBalance",
       params: [address, "latest"]
     }))
-    console.log({ balance });
     setRaceBalance(balance)
   }
 
@@ -337,7 +366,7 @@ const Withdraw = () => {
               </Form>
             </div>
             {errorInput && <small className='text-danger'>{errorInput}</small>}
-            {sendToken === "ETH" ? address && <p className='wallet_bal mt-2'>Balance: {RaceBalance} ETH</p> : sendToken === "DAI" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : sendToken == "USDT" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : sendToken === "wBTC" ? address && <p className='wallet_bal mt-2'>Balance: {Number(datawBTC.data?.formatted).toFixed(5)} wBTC</p> :<p className='wallet_bal mt-2'>Balance: {Number(dataUSDC.data?.formatted).toFixed(5)} USDC</p>}
+            {sendToken === "ETH" ? address && <p className='wallet_bal mt-2'>Balance: {RaceBalance} ETH</p> : sendToken === "DAI" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : sendToken == "USDT" ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : sendToken === "wBTC" ? address && <p className='wallet_bal mt-2'>Balance: {Number(datawBTC.data?.formatted).toFixed(5)} wBTC</p> : <p className='wallet_bal mt-2'>Balance: {Number(dataUSDC.data?.formatted).toFixed(5)} USDC</p>}
           </div>
           <div className='deposit_details_wrap'>
             <div className="deposit_details">
@@ -352,9 +381,11 @@ const Withdraw = () => {
             </div>
           </div>
           <div className="deposit_btn_wrap">
-            {checkMetaMask === true ? <a className='btn deposit_btn' href='https://metamask.io/' target='_blank'><Image src={metamask} alt="metamask icn" fluid /> Please Install Metamask Wallet</a> : !isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L2_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><HiSwitchHorizontal />Switch to RACE Testnet</button> : <button className='btn deposit_btn' onClick={handleWithdraw} disabled={loader ? true : false}>{loader ? <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner> : "Withdraw"}</button>}
+            {checkMetaMask === true ? <a className='btn deposit_btn' href='https://metamask.io/' target='_blank'><Image src={metamask} alt="metamask icn" fluid /> Please Install Metamask Wallet</a> : !isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L2_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><HiSwitchHorizontal />Switch to RACE Testnet</button> :
+              checkDisabled ? <button className='btn deposit_btn' disabled={true}>Withdraw</button> :
+                <button className='btn deposit_btn' onClick={handleWithdraw} disabled={loader ? true : false}>{loader ? <Spinner animation="border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner> : "Withdraw"}</button>}
           </div>
           {metaMastError && <small className="d-block text-danger text-center mt-2">{metaMastError}</small>}
         </section>

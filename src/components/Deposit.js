@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../assets/style/deposit.scss";
 import { Form, Spinner, Image } from "react-bootstrap"
-import { Dai, Usdt,Usdc , Ethereum, Btc } from 'react-web3-icons';
+import { Dai, Usdt, Usdc, Ethereum, Btc } from 'react-web3-icons';
 import toIcn from "../assets/images/logo.png"
 import { IoMdWallet } from "react-icons/io"
 import { FaEthereum } from "react-icons/fa"
@@ -59,13 +59,13 @@ const Deposit = () => {
     })
 
 
-    const { data } = useBalance({ address: address, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)})
+    const { data } = useBalance({ address: address, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
 
 
     const dataUSDT = useBalance({ address: address, token: process.env.REACT_APP_L1_USDT, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
-    const dataDAI = useBalance({ address: address,  token: process.env.REACT_APP_L1_DAI, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)  })
-    const dataUSDC = useBalance({ address: address, token: process.env.REACT_APP_L1_USDC, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)  })
-    const datawBTC = useBalance({ address: address, token: process.env.REACT_APP_L1_wBTC, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID)  })
+    const dataDAI = useBalance({ address: address, token: process.env.REACT_APP_L1_DAI, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
+    const dataUSDC = useBalance({ address: address, token: process.env.REACT_APP_L1_USDC, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
+    const datawBTC = useBalance({ address: address, token: process.env.REACT_APP_L1_wBTC, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
 
     const handleSwitch = () => {
         switchNetwork(process.env.REACT_APP_L1_CHAIN_ID)
@@ -135,7 +135,7 @@ const Deposit = () => {
                     if (sendToken === "DAI") {
                         var daiValue = Web3.utils.toWei(ethValue, "ether")
                         setLoader(true);
-                        console.log("adddresssssssssss",process.env.REACT_APP_L1_DAI)
+                        console.log("adddresssssssssss", process.env.REACT_APP_L1_DAI)
                         var depositTxn2 = await crossChainMessenger.approveERC20(process.env.REACT_APP_L1_DAI, process.env.REACT_APP_L2_DAI, daiValue)
                         await depositTxn2.wait()
                         var receiptDAI = await crossChainMessenger.depositERC20(process.env.REACT_APP_L1_DAI, process.env.REACT_APP_L2_DAI, daiValue)
@@ -160,9 +160,9 @@ const Deposit = () => {
                     if (sendToken === "wBTC") {
                         var wBTCValue = parseInt(ethValue * 100000000)
                         setLoader(true);
-                        var depositTxnBtc = await crossChainMessenger.approveERC20(process.env.REACT_APP_L1_wBTC,process.env.REACT_APP_L2_wBTC, wBTCValue)
+                        var depositTxnBtc = await crossChainMessenger.approveERC20(process.env.REACT_APP_L1_wBTC, process.env.REACT_APP_L2_wBTC, wBTCValue)
                         await depositTxnBtc.wait()
-                        var receiptwBTC = await crossChainMessenger.depositERC20(process.env.REACT_APP_L1_wBTC,process.env.REACT_APP_L2_wBTC, wBTCValue)
+                        var receiptwBTC = await crossChainMessenger.depositERC20(process.env.REACT_APP_L1_wBTC, process.env.REACT_APP_L2_wBTC, wBTCValue)
                         var getReceiptwBTC = await receiptwBTC.wait()
                         if (getReceiptwBTC) {
                             setLoader(false);
@@ -190,45 +190,55 @@ const Deposit = () => {
             setLoader(false);
         }
     }
-    
+    const [checkDisabled, setCheckDisabled] = useState(false)
     const handleChange = (e) => {
         if (sendToken == 'ETH') {
-            if (data?.formatted < e.target.value) {
+            if (Number(data?.formatted) < e.target.value) {
                 setErrorInput("Insufficient ETH balance.")
+                setCheckDisabled(true)
             } else {
+                setCheckDisabled(false)
                 setErrorInput("")
             }
             setEthValue(e.target.value)
         }
         if (sendToken == 'DAI') {
-            if (dataDAI.data?.formatted < e.target.value) {
+            if (Number(dataDAI.data?.formatted) < e.target.value) {
                 setErrorInput("Insufficient DAI balance.")
+                setCheckDisabled(true)
             } else {
+                setCheckDisabled(false)
                 setErrorInput("")
             }
             setEthValue(e.target.value)
         }
         if (sendToken == 'USDT') {
-            if (dataUSDT.data?.formatted < e.target.value) {
+            if (Number(dataUSDT.data?.formatted) < e.target.value) {
                 setErrorInput("Insufficient USDT balance.")
+                setCheckDisabled(true)
             } else {
+                setCheckDisabled(false)
                 setErrorInput("")
             }
             setEthValue(e.target.value)
         }
         if (sendToken == 'wBTC') {
-            if (datawBTC.data?.formatted < e.target.value) {
+            if (Number(datawBTC.data?.formatted) < e.target.value) {
                 setErrorInput("Insufficient wBTC balance.")
+                setCheckDisabled(true)
             } else {
+                setCheckDisabled(false)
                 setErrorInput("")
             }
             setEthValue(e.target.value)
         }
         if (sendToken == 'USDC') {
-            if (dataUSDC.data?.formatted < e.target.value) {
+            if (Number(dataUSDC.data?.formatted) < e.target.value) {
                 setErrorInput("Insufficient USDC balance.")
+                setCheckDisabled(true)
             } else {
                 setErrorInput("")
+                setCheckDisabled(false)
             }
             setEthValue(e.target.value)
         }
@@ -258,12 +268,12 @@ const Deposit = () => {
                                     </Form.Select>
                                 </div>
                                 <div className='input_icn_wrap'>
-                                    {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }}/></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }}/></span> : sendToken == "USDT" ? <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }}/></span> : sendToken == "wBTC" ? <span className='input_icn'><Btc style={{ fontSize: '1.5rem' }}/></span> : <span className='input_icn'><Usdc style={{ fontSize: '1.5rem' }}/></span>}
+                                    {sendToken == "ETH" ? <span className='input_icn'><Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : sendToken == "USDT" ? <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span> : sendToken == "wBTC" ? <span className='input_icn'><Btc style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'><Usdc style={{ fontSize: '1.5rem' }} /></span>}
                                 </div>
                             </Form>
                         </div>
                         {errorInput && <small className='text-danger'>{errorInput}</small>}
-                        {sendToken == 'ETH' ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken == 'USDT' ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : sendToken == 'DAI' ?  address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : sendToken == 'wBTC' ?  address && <p className='wallet_bal mt-2'>Balance: {Number(datawBTC.data?.formatted).toFixed(5)} wBTC</p> : address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDC.data?.formatted).toFixed(5)} USDC</p>}
+                        {sendToken == 'ETH' ? address && <p className='wallet_bal mt-2'>Balance: {Number(data?.formatted).toFixed(5)} ETH</p> : sendToken == 'USDT' ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> : sendToken == 'DAI' ? address && <p className='wallet_bal mt-2'>Balance: {Number(dataDAI.data?.formatted).toFixed(5)} DAI</p> : sendToken == 'wBTC' ? address && <p className='wallet_bal mt-2'>Balance: {Number(datawBTC.data?.formatted).toFixed(5)} wBTC</p> : address && <p className='wallet_bal mt-2'>Balance: {Number(dataUSDC.data?.formatted).toFixed(5)} USDC</p>}
 
                     </div>
                     <div className='deposit_details_wrap'>
@@ -272,14 +282,15 @@ const Deposit = () => {
                             <h5><Image src={toIcn} alt="To icn" fluid /> Race</h5>
                         </div>
                         <div className='deposit_inner_details'>
-                            {sendToken == "ETH" ? <span className='input_icn'> <Ethereum style={{ fontSize: '1.5rem' }}/></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }}/></span> : sendToken == "USDT" ? <span className='input_icn'> <Usdt style={{ fontSize: '1.5rem' }}/></span> :sendToken == "wBTC" ? <span className='input_icn'> <Btc style={{ fontSize: '1.5rem' }}/></span> : <span className='input_icn'> <Usdc style={{ fontSize: '1.5rem' }}/></span> }  <p> You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
+                            {sendToken == "ETH" ? <span className='input_icn'> <Ethereum style={{ fontSize: '1.5rem' }} /></span> : sendToken == "DAI" ? <span className='input_icn'><Dai style={{ fontSize: '1.5rem' }} /></span> : sendToken == "USDT" ? <span className='input_icn'> <Usdt style={{ fontSize: '1.5rem' }} /></span> : sendToken == "wBTC" ? <span className='input_icn'> <Btc style={{ fontSize: '1.5rem' }} /></span> : <span className='input_icn'> <Usdc style={{ fontSize: '1.5rem' }} /></span>}  <p> You’ll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
                         </div>
                     </div>
                     <div className="deposit_btn_wrap">
                         {checkMetaMask === true ? <a className='btn deposit_btn' href='https://metamask.io/' target='_blank'><Image src={metamask} alt="metamask icn" fluid /> Please Install Metamask Wallet</a> : !isConnected ? <button className='btn deposit_btn' onClick={() => connect()}><IoMdWallet />Connect Wallet</button> : chain.id !== Number(process.env.REACT_APP_L1_CHAIN_ID) ? <button className='btn deposit_btn' onClick={handleSwitch}><HiSwitchHorizontal />Switch to Sepolia</button> :
-                            <button className='btn deposit_btn' onClick={handleDeposit} disabled={loader ? true : false}> {loader ? <Spinner animation="border" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </Spinner> : "Deposit"} </button>}
+                            checkDisabled ? <button className='btn deposit_btn' disabled={true}>Deposit</button> :
+                                <button className='btn deposit_btn' onClick={handleDeposit} disabled={loader ? true : false}> {loader ? <Spinner animation="border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </Spinner> : "Deposit"} </button>}
                     </div>
                 </section>
             </div>

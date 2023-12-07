@@ -24,7 +24,7 @@ export const RACE = {
     },
     rpcUrls: {
         default: {
-            http: ["http://178.22.68.224"]
+            http: ["https://racetestnet.io"]
         },
     },
     blockExplorers: {
