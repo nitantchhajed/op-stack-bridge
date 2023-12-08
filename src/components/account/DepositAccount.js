@@ -7,6 +7,28 @@ import Account from './Account'
 const optimismSDK = require("@eth-optimism/sdk")
 
 const DepositAccount = () => {
+    const tokenList = [
+        {
+            type: process.env.REACT_APP_L1_DAI,
+            tokenSymbol: "DAI",
+            decimalValue: 18
+        },
+        {
+            type: process.env.REACT_APP_L1_USDT,
+            tokenSymbol: "USDT",
+            decimalValue: 6
+        },
+        {
+            type: process.env.REACT_APP_L1_USDC,
+            tokenSymbol: "USDC",
+            decimalValue: 6
+        },
+        {
+            type: process.env.REACT_APP_L1_wBTC,
+            tokenSymbol: "wBTC",
+            decimalValue: 8
+        }
+    ]
 
     const { address, isConnected } = useAccount()
     const [depositDetails, setDepositDetails] = useState([])
@@ -71,9 +93,14 @@ const DepositAccount = () => {
         return time;
     }
 
-    function retrieveEthValue(amount) {
+    /*
+
+     */
+
+    function retrieveEthValue(amount, givenType) {
         const weiValue = parseInt(amount._hex, 16);
-        return weiValue / 1000000000000000000;
+        const dynamicDecimal = tokenList.filter(a => a.type === givenType)[0].decimalValue
+        return weiValue / Number("1".padEnd(dynamicDecimal+1, 0));
     }
 
     useEffect(() => {
@@ -124,14 +151,14 @@ const DepositAccount = () => {
                                     </thead>
                                     <tbody>
                                         {currentItemsCollections.map((element, index) => {
-                                            const { timestamp, transactionHash, amount } = element
+                                            const { timestamp, transactionHash, amount, l1Token } = element
                                             // console.log("amount", amount._hex);
                                             return (
                                                 <tr key={index}>
                                                     <td>{timeConverter(timestamp)}</td>
                                                     <td>Deposit</td>
-                                                    <td>{retrieveEthValue(amount)} ETH</td>
-                                                    <td>{`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</td>
+                                                    <td>{retrieveEthValue(amount, l1Token)} {tokenList.filter(a => a.type === l1Token)[0].tokenSymbol}</td>
+                                                    <td> <a href={`https://sepolia.etherscan.io/tx/${transactionHash}`} target='_blank'> {`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</a></td>
                                                     <td>Completed</td>
                                                 </tr>
                                             )

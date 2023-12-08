@@ -39,6 +39,11 @@
             tr td {
                 background-color: var(--secondary-color) !important;
                 box-shadow: none;
+
+                a{
+                    text-decoration: none;
+                    color: #fff;
+                }
             }
         }
 

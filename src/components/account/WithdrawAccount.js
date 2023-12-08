@@ -156,6 +156,34 @@ const WithdrawAccount = () => {
     const [itemOffsetCollections, setItemOffsetCollections] = useState(0);
     const itemsPerPageCollections = 10;
 
+    const tokenList = [
+        {
+            type: process.env.REACT_APP_L2_DAI,
+            tokenSymbol: "DAI",
+            decimalValue: 18
+        },
+        {
+            type: process.env.REACT_APP_L2_USDT,
+            tokenSymbol: "USDT",
+            decimalValue: 6
+        },
+        {
+            type: process.env.REACT_APP_L2_USDC,
+            tokenSymbol: "USDC",
+            decimalValue: 6
+        },
+        {
+            type: process.env.REACT_APP_L2_wBTC,
+            tokenSymbol: "wBTC",
+            decimalValue: 8
+        }
+    ]
+
+    function retrieveEthValue(amount, givenType) {
+        const weiValue = parseInt(amount._hex, 16);
+        const dynamicDecimal = tokenList.filter(a => a.type === givenType)[0].decimalValue
+        return weiValue / Number("1".padEnd(dynamicDecimal+1, 0));
+    }
 
     useEffect(() => {
         if (withdrawDetails) {
@@ -173,7 +201,7 @@ const WithdrawAccount = () => {
         setItemOffsetCollections(newOffsetCollections);
     };
     // =============all Collections pagination end===============
-
+    console.log({ currentItemsCollections });
     return (
         <>
             <div className="account_wrap">
@@ -194,13 +222,13 @@ const WithdrawAccount = () => {
                                     </thead>
                                     <tbody>
                                         {currentItemsCollections.map((element, index) => {
-                                            const { timestamp, message, transactionHash, amount, messageStatus } = element
+                                            const { timestamp, message, transactionHash, amount, messageStatus, l2Token } = element
                                             return (
                                                 <tr key={index}>
                                                     <td>{timeConverter(timestamp)}</td>
                                                     <td>Withdraw</td>
-                                                    <td>{parseInt(amount._hex, 16) / 1000000000000000000} ETH</td>
-                                                    <td>{`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</td>
+                                                    <td>{retrieveEthValue(amount, l2Token)} {tokenList.filter(a => a.type === l2Token)[0].tokenSymbol}</td>
+                                                    <td> <a href={`https://testnet.racescan.io/tx/${transactionHash}`} target='_blank'> {`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</a></td>
                                                     <td>{message} {messageStatus === 3 ? index == loader ? <button type='button' className='btn withdraw_inner_btn' >
                                                         <Spinner animation="border" role="status">
                                                             <span className="visually-hidden">Loading...</span>
