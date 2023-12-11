@@ -99,8 +99,9 @@ const DepositAccount = () => {
 
     function retrieveEthValue(amount, givenType) {
         const weiValue = parseInt(amount._hex, 16);
-        const dynamicDecimal = tokenList.filter(a => a.type === givenType)[0].decimalValue
-        return weiValue / Number("1".padEnd(dynamicDecimal+1, 0));
+        const dynamicDecimal = tokenList.filter(a => a.type === givenType)[0]?.decimalValue === undefined ? 18 : tokenList.filter(a => a.type === givenType)[0]?.decimalValue
+        console.log("dynamicDecimal", dynamicDecimal);
+        return weiValue / Number("1".padEnd(dynamicDecimal + 1, 0));
     }
 
     useEffect(() => {
@@ -152,12 +153,12 @@ const DepositAccount = () => {
                                     <tbody>
                                         {currentItemsCollections.map((element, index) => {
                                             const { timestamp, transactionHash, amount, l1Token } = element
-                                            // console.log("amount", amount._hex);
+                                            // console.log("amount", tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol);
                                             return (
                                                 <tr key={index}>
                                                     <td>{timeConverter(timestamp)}</td>
                                                     <td>Deposit</td>
-                                                    <td>{retrieveEthValue(amount, l1Token)} {tokenList.filter(a => a.type === l1Token)[0].tokenSymbol}</td>
+                                                    <td>{retrieveEthValue(amount, l1Token)} {tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol === undefined ? "ETH" : tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol}</td>
                                                     <td> <a href={`https://sepolia.etherscan.io/tx/${transactionHash}`} target='_blank'> {`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</a></td>
                                                     <td>Completed</td>
                                                 </tr>

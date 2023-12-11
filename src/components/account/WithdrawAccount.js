@@ -181,8 +181,8 @@ const WithdrawAccount = () => {
 
     function retrieveEthValue(amount, givenType) {
         const weiValue = parseInt(amount._hex, 16);
-        const dynamicDecimal = tokenList.filter(a => a.type === givenType)[0].decimalValue
-        return weiValue / Number("1".padEnd(dynamicDecimal+1, 0));
+        const dynamicDecimal = tokenList.filter(a => a.type === givenType)[0]?.decimalValue === undefined ? 18 : tokenList.filter(a => a.type === givenType)[0]?.decimalValue
+        return weiValue / Number("1".padEnd(dynamicDecimal + 1, 0));
     }
 
     useEffect(() => {
@@ -227,7 +227,7 @@ const WithdrawAccount = () => {
                                                 <tr key={index}>
                                                     <td>{timeConverter(timestamp)}</td>
                                                     <td>Withdraw</td>
-                                                    <td>{retrieveEthValue(amount, l2Token)} {tokenList.filter(a => a.type === l2Token)[0].tokenSymbol}</td>
+                                                    <td>{retrieveEthValue(amount, l2Token)} {tokenList.filter(a => a.type === l2Token)[0]?.tokenSymbol === undefined ? "ETH" : tokenList.filter(a => a.type === l2Token)[0]?.tokenSymbol}</td>
                                                     <td> <a href={`https://testnet.racescan.io/tx/${transactionHash}`} target='_blank'> {`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</a></td>
                                                     <td>{message} {messageStatus === 3 ? index == loader ? <button type='button' className='btn withdraw_inner_btn' >
                                                         <Spinner animation="border" role="status">
