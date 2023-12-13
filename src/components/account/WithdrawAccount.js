@@ -6,6 +6,7 @@ import ReactPaginate from 'react-paginate';
 import Account from './Account';
 const optimismSDK = require("@eth-optimism/sdk")
 const WithdrawAccount = () => {
+    const [transactionLoader, setTransactionLoader] = useState(false)
     const [loader, setLoader] = useState()
     const { address, isConnected } = useAccount()
     const [withdrawDetails, setWithdrawDetails] = useState([])
@@ -85,6 +86,10 @@ const WithdrawAccount = () => {
             }
         });
         setWithdrawDetails(getNewWithdrawals)
+        if (getNewWithdrawals) {
+            setTransactionLoader(true)
+        }
+        console.log(currentItemsCollections)
     }
     function timeConverter(timestamp) {
         var a = new Date(timestamp * 1000);
@@ -201,7 +206,7 @@ const WithdrawAccount = () => {
         setItemOffsetCollections(newOffsetCollections);
     };
     // =============all Collections pagination end===============
-    console.log({ currentItemsCollections });
+    // console.log("withdrawDetails", {currentItemsCollections, withdrawDetails});
     return (
         <>
             <div className="account_wrap">
@@ -209,40 +214,43 @@ const WithdrawAccount = () => {
                     <div className='account_inner_wrap'>
                         <Account />
                         <section className="account_withdraw_table">
-                            {withdrawDetails?.length <= 0 ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> :
-                                <Table responsive bordered hover variant="dark">
-                                    <thead>
-                                        <tr>
-                                            <th>Time</th>
-                                            <th>Type</th>
-                                            <th>Amount</th>
-                                            <th>Transaction</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {currentItemsCollections.map((element, index) => {
-                                            const { timestamp, message, transactionHash, amount, messageStatus, l2Token } = element
-                                            return (
-                                                <tr key={index}>
-                                                    <td>{timeConverter(timestamp)}</td>
-                                                    <td>Withdraw</td>
-                                                    <td>{retrieveEthValue(amount, l2Token)} {tokenList.filter(a => a.type === l2Token)[0]?.tokenSymbol === undefined ? "ETH" : tokenList.filter(a => a.type === l2Token)[0]?.tokenSymbol}</td>
-                                                    <td> <a href={`https://testnet.racescan.io/tx/${transactionHash}`} target='_blank'> {`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</a></td>
-                                                    <td>{message} {messageStatus === 3 ? index == loader ? <button type='button' className='btn withdraw_inner_btn' >
-                                                        <Spinner animation="border" role="status">
-                                                            <span className="visually-hidden">Loading...</span>
-                                                        </Spinner> </button> : <button type='button' className='btn withdraw_inner_btn' data-value={index} onClick={(event) => handleProve(event, transactionHash)}>
-                                                        Prove</button> : messageStatus === 5 ? index == loader ? <button type='button' className='btn withdraw_inner_btn' >
-                                                            <Spinner animation="border" role="status">
-                                                                <span className="visually-hidden">Loading...</span>
-                                                            </Spinner> </button> : <button type='button' className='btn withdraw_inner_btn' data-value={index} onClick={(event) => handleClaim(event, transactionHash)}>Claim</button> : ""} </td>
+                            {
+                                !transactionLoader ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> :
+                                    withdrawDetails?.length <= 0 ? <h4 className='text-center text-white'>No Transaction Found</h4> :
+                                        <Table responsive bordered hover variant="dark">
+                                            <thead>
+                                                <tr>
+                                                    <th>Time</th>
+                                                    <th>Type</th>
+                                                    <th>Amount</th>
+                                                    <th>Transaction</th>
+                                                    <th>Status</th>
                                                 </tr>
-                                            )
-                                        })}
+                                            </thead>
+                                            <tbody>
+                                                {currentItemsCollections.map((element, index) => {
+                                                    const { timestamp, message, transactionHash, amount, messageStatus, l2Token } = element
+                                                    console.log("message", messageStatus)
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{timeConverter(timestamp)}</td>
+                                                            <td>Withdraw</td>
+                                                            <td>{retrieveEthValue(amount, l2Token)} {tokenList.filter(a => a.type === l2Token)[0]?.tokenSymbol === undefined ? "ETH" : tokenList.filter(a => a.type === l2Token)[0]?.tokenSymbol}</td>
+                                                            <td> <a href={`https://testnet.racescan.io/tx/${transactionHash}`} target='_blank'> {`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</a></td>
+                                                            <td>{message} {messageStatus === 3 ? index == loader ? <button type='button' className='btn withdraw_inner_btn' >
+                                                                <Spinner animation="border" role="status">
+                                                                    <span className="visually-hidden">Loading...</span>
+                                                                </Spinner> </button> : <button type='button' className='btn withdraw_inner_btn' data-value={index} onClick={(event) => handleProve(event, transactionHash)}>
+                                                                Prove</button> : messageStatus === 5 ? index == loader ? <button type='button' className='btn withdraw_inner_btn' >
+                                                                    <Spinner animation="border" role="status">
+                                                                        <span className="visually-hidden">Loading...</span>
+                                                                    </Spinner> </button> : <button type='button' className='btn withdraw_inner_btn' data-value={index} onClick={(event) => handleClaim(event, transactionHash)}>Claim</button> : ""} </td>
+                                                        </tr>
+                                                    )
+                                                })}
 
-                                    </tbody>
-                                </Table>}
+                                            </tbody>
+                                        </Table>}
                             {withdrawDetails?.length > 10 ? <div className='pagination_wrap'>
                                 <ReactPaginate
                                     breakLabel="..."

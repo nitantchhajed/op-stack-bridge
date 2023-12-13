@@ -7,6 +7,7 @@ import Account from './Account'
 const optimismSDK = require("@eth-optimism/sdk")
 
 const DepositAccount = () => {
+    const [loader, setLoader] = useState(false)
     const tokenList = [
         {
             type: process.env.REACT_APP_L1_DAI,
@@ -78,7 +79,9 @@ const DepositAccount = () => {
             data[index].timestamp = timestamp
         }
         setDepositDetails(data)
-        // console.log("data", data);
+        if (data) {
+            setLoader(true)
+        }
     }
     function timeConverter(timestamp) {
         var a = new Date(timestamp * 1000);
@@ -132,6 +135,9 @@ const DepositAccount = () => {
         setItemOffsetCollections(newOffsetCollections);
     };
     // =============all Collections pagination end===============
+    useEffect(() => {
+        console.log({ depositDetails, currentItemsCollections })
+    }, [depositDetails, currentItemsCollections])
     return (
         <>
             <div className="account_wrap">
@@ -139,33 +145,34 @@ const DepositAccount = () => {
                     <div className='account_inner_wrap'>
                         <Account />
                         <section className="account_withdraw_table">
-                            {depositDetails?.length <= 0 ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> :
-                                <Table responsive bordered hover variant="dark">
-                                    <thead>
-                                        <tr>
-                                            <th>Time</th>
-                                            <th>Type</th>
-                                            <th>Amount</th>
-                                            <th>Transaction</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {currentItemsCollections.map((element, index) => {
-                                            const { timestamp, transactionHash, amount, l1Token } = element
-                                            // console.log("amount", tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol);
-                                            return (
-                                                <tr key={index}>
-                                                    <td>{timeConverter(timestamp)}</td>
-                                                    <td>Deposit</td>
-                                                    <td>{retrieveEthValue(amount, l1Token)} {tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol === undefined ? "ETH" : tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol}</td>
-                                                    <td> <a href={`https://sepolia.etherscan.io/tx/${transactionHash}`} target='_blank'> {`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</a></td>
-                                                    <td>Completed</td>
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </Table>}
+                            {
+                                !loader ? <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div> : depositDetails?.length <= 0 ? <h4 className='text-center text-white'>No Transaction Found</h4> :
+                                    <Table responsive bordered hover variant="dark">
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th>Type</th>
+                                                <th>Amount</th>
+                                                <th>Transaction</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {currentItemsCollections.map((element, index) => {
+                                                const { timestamp, transactionHash, amount, l1Token } = element
+                                                // console.log("amount", tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol);
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{timeConverter(timestamp)}</td>
+                                                        <td>Deposit</td>
+                                                        <td>{retrieveEthValue(amount, l1Token)} {tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol === undefined ? "ETH" : tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol}</td>
+                                                        <td> <a href={`https://sepolia.etherscan.io/tx/${transactionHash}`} target='_blank'> {`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</a></td>
+                                                        <td>Completed</td>
+                                                    </tr>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </Table>}
                             {depositDetails?.length > 10 ? <div className='pagination_wrap'>
                                 <ReactPaginate
                                     breakLabel="..."
