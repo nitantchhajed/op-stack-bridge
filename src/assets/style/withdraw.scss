@@ -1,0 +1,62 @@
+.withdraw_title_wrap {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #FBCBA7;
+    border-radius: 8px;
+    padding: 15px;
+
+    h3 {
+        margin: 0px;
+        margin-bottom: 5px;
+        color: var(--light-color);
+        font-weight: 500;
+        font-size: 16px;
+    }
+
+    p {
+        margin: 0px;
+        color: var(--text-color);
+        font-weight: 400;
+        font-size: 12px;
+    }
+
+    .withdraw_title_icn {
+        margin-right: 30px;
+
+        svg {
+            color: #FBCBA7;
+            font-size: 25px;
+        }
+    }
+}
+
+.withdraw_bal_sum {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--secondary-color);
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 20px;
+
+    .input_icn {
+        color: #444971;
+        font-weight: 500;
+        font-size: 28px;
+    }
+
+    p {
+        margin-bottom: 0px;
+        color: var(--text-color);
+    }
+
+    .input_title {
+        color: var(--dark-color);
+        background: var(--primary-color);
+        border-radius: 20px;
+        font-weight: 500;
+        padding: 2px 6px 0px;
+        font-size: 11px;
+    }
+}

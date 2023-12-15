@@ -1,0 +1,55 @@
+.account_withdraw_table {
+    table {
+
+        tbody,
+        td,
+        tfoot,
+        th,
+        thead,
+        tr {
+            border-style: none;
+        }
+
+        tbody {
+            tr {
+                td {
+                    font-size: 12px;
+                }
+
+                .withdraw_inner_btn {
+                    background: var(--primary-color);
+                    font-size: 12px;
+                    padding: 1px 15px;
+                    font-weight: 600;
+                    border-radius: 3px;
+                    float: right;
+                    min-width: 68px;
+
+                    .spinner-border {
+                        height: 15px;
+                        width: 15px;
+                    }
+
+                    &:hover {
+                        color: var(--dark-color);
+                    }
+                }
+            }
+
+            tr td {
+                background-color: var(--secondary-color) !important;
+                box-shadow: none;
+
+                a{
+                    text-decoration: none;
+                    color: #fff;
+                }
+            }
+        }
+
+        th {
+            background-color: var(--secondary-color);
+        }
+    }
+
+}
