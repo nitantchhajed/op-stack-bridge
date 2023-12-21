@@ -13,7 +13,7 @@ const WithdrawAccount = () => {
     const { chain } = useNetwork()
     const { switchNetwork } = useSwitchNetwork()
     const getCrossChain = async () => {
-        const l2Url = `https://racetestnet.io`
+        const l2Url = String(process.env.REACT_APP_L2_RPC_URL)
         const l1Provider = new ethers.providers.Web3Provider(window.ethereum, "any");
         const l2Provider = new ethers.providers.JsonRpcProvider(l2Url)
         const l1Signer = l1Provider.getSigner(address)
@@ -57,7 +57,7 @@ const WithdrawAccount = () => {
     }
     const getWithdraw = async () => {
         const getCrossChainMessenger = await getCrossChain();
-        const l2Url = `https://racetestnet.io`
+        const l2Url = String(process.env.REACT_APP_L2_RPC_URL)
         const l2Provider = new ethers.providers.JsonRpcProvider(l2Url)
         const data = await getCrossChainMessenger.getWithdrawalsByAddress(address)
         for (let index = 0; index < data.length; index++) {

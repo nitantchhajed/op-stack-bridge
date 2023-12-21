@@ -97,23 +97,7 @@ const Withdraw = () => {
   useEffect(() => {
     console.log("dataUSDT", data)
   }, [])
-  // const { data: dataUSDTs, loading, errors } = useBalance({
-  //   address: "0xEB71FA3084f1c3E2A66075760b3E3926F7843f34",
-  //   chainId: 90001,
-  //   token: "0x8315A87189C356F5e213ACBD39b74aDd45b80cd2",
-  //   watch: true,
-  // });
 
-  // if (loading) {
-  //   console.log("Loading USDT balance...")
-  // }
-
-  // if (errors) {
-  //   console.log(`Error fetching USDT balance: ${error.message}`)
-  // }
-
-  // // Now you can safely access dataUSDT
-  //  console.log(dataUSDTs)
   ////========================================================== WITHDRAW =======================================================================
 
   const handleWithdraw = async () => {
@@ -300,7 +284,6 @@ const Withdraw = () => {
     }
   }
 
-  // const demo = useBalance({ address: address, chainId: Number(process.env.REACT_APP_L2_CHAIN_ID), watch: true })
   // ============= For Format balance =========================
   const formatBalance = (rawBalance) => {
     const balance = (parseInt(rawBalance) / 1000000000000000000).toFixed(6)
@@ -308,13 +291,6 @@ const Withdraw = () => {
   }
   // ============= Get and update balance =========================
   const updateWallet = async () => {
-    // const l1Provider = new ethers.providers.JsonRpcProvider(l1Url, "any");
-    // const l2Provider = new ethers.providers.Web3Provider("https://racetestnet.io/");
-    // // const l1Signer = l1Provider.getSigner(address)
-    // const l2Signer = l2Provider.getSigner(address)
-    // const balance_user =  await l2Provider.getBalance(l2Signer.address)
-    // console.log({balance_user});
-    // return
     const balance = formatBalance(await window.ethereum.request({
       method: "eth_getBalance",
       params: [address, "latest"]
@@ -324,9 +300,7 @@ const Withdraw = () => {
 
   useEffect(() => {
     updateWallet()
-    // console.log("data?.formatted", demo.data?.formatted);
-    // console.log("data", data);
-    // console.log("address", address, "Number(process.env.REACT_APP_L2_CHAIN_ID)", Number(process.env.REACT_APP_L2_CHAIN_ID));
+   
   }, [data])
   return (
     <>
