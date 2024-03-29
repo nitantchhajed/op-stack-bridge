@@ -42,7 +42,7 @@ The Deposit process is an easy one step process which Bridges the Assets from L1
 Withdrawal is an three step process
 
   1. Initiate withdrawal on L2
-  2. Prove withdrawal on L1 (availale after state root is published, usually takes 25-50 mins to change the status)
+  2. Prove withdrawal on L1 (available after state root is published, usually takes 25-50 mins to change the status)
   3. Caim the Withdrawal on L1 (available after challenge period is over)
 
 --------------------------------------------------------------------------------------------------
