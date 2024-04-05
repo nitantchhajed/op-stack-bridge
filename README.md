@@ -26,7 +26,7 @@ yarn start
 
 ## What this service does
 
-The `op-bridge` uses the @eth-optimism/sdk https://sdk.optimism.io/ to provide the bridgining functionality by using CrossChainMessenger. It provides the Deposit and withdraw functionality.
+The `op-bridge` uses the @eth-optimism/sdk https://sdk.optimism.io/ to provide the bridging functionality by using CrossChainMessenger. It provides the Deposit and withdraw functionality.
 
 ## Tutorial
 
@@ -39,7 +39,7 @@ The Deposit process is an easy one step process which Bridges the Assets from L1
 
 ### Withdrawal
 
-Withdrawal is an three step process
+Withdrawal is a three step process
 
   1. Initiate withdrawal on L2
   2. Prove withdrawal on L1 (available after state root is published, usually takes 25-50 mins to change the status)
@@ -57,7 +57,7 @@ Withdrawal is an three step process
  ![image](https://github.com/nitantchhajed/op-stack-bridge/assets/96972634/7b0d1c73-4636-4c7f-8c27-e92b503a3e7a)
 
 
-- You will see that your withdrwal status is `Waiting for Confirmation` which means your state root is not published yet
+- You will see that your withdrawal status is `Waiting for Confirmation` which means your state root is not published yet
 
 ![image](https://github.com/nitantchhajed/op-stack-bridge/assets/96972634/8688f68b-a005-4177-acf3-8e5bbd78acf4)
 
