@@ -265,7 +265,7 @@ const Withdraw = () => {
     if (sendToken == "wBTC") {
       if (Number(datawBTC.data?.formatted) < e.target.value) {
         setCheckDisabled(true)
-        setErrorInput("Insufuficient wBTC balance.")
+        setErrorInput("Insufficient wBTC balance.")
       } else {
         setCheckDisabled(false)
         setErrorInput("")
