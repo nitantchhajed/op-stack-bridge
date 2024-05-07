@@ -62,7 +62,7 @@ Withdrawal is a three step process
 ![image](https://github.com/nitantchhajed/op-stack-bridge/assets/96972634/8688f68b-a005-4177-acf3-8e5bbd78acf4)
 
 
-- After your state root is published you can see the status change to `Prove` Buttom
+- After your state root is published you can see the status change to `Prove` Button
 
 - After proving your Transaction on L1 by clicking on prove button the status will change to `In challenge Period`
 
