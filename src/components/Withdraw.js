@@ -59,7 +59,7 @@ const Withdraw = () => {
         window.ethereum.request({
           method: "wallet_addEthereumChain",
           params: [{
-            chainId: process.env.REACT_APP_L2_CHAIN_ID_WITH_HEX,
+            chainId: (function(dec) { return `0x${parseInt(dec, 10).toString(16)}`; })(process.env.REACT_APP_L2_CHAIN_ID),
             rpcUrls: [process.env.REACT_APP_L2_RPC_URL],
             chainName: process.env.REACT_APP_L2_NETWORK_NAME,
             nativeCurrency: {
@@ -120,11 +120,11 @@ const Withdraw = () => {
             StateCommitmentChain: zeroAddr,
             CanonicalTransactionChain: zeroAddr,
             BondManager: zeroAddr,
-            AddressManager: process.env.REACT_APP_LIB_ADDRESSMANAGER,
-            L1CrossDomainMessenger: process.env.REACT_APP_PROXY_OVM_L1CROSSDOMAINMESSENGER,
-            L1StandardBridge: process.env.REACT_APP_PROXY_OVM_L1STANDARDBRIDGE,
+            AddressManager: process.env.REACT_APP_ADDRESS_MANAGER,
+            L1CrossDomainMessenger: process.env.REACT_APP_L1_CROSS_DOMAIN_MESSANGER_PROXY,
+            L1StandardBridge: process.env.REACT_APP_L1_STANDARD_BRIDGE_PROXY,
             OptimismPortal: process.env.REACT_APP_OPTIMISM_PORTAL_PROXY,
-            L2OutputOracle: process.env.REACT_APP_L2_OUTPUTORACLE_PROXY,
+            L2OutputOracle: process.env.REACT_APP_L2_OUTPUT_ORACLE_PROXY,
           }
           const bridges = {
             Standard: {
