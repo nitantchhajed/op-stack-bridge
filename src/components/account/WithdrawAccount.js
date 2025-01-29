@@ -104,47 +104,47 @@ const WithdrawAccount = () => {
         return time;
     }
 
-    const handleProve = async (event, transactionHash) => {
-        try {
-            const index = event.target.getAttribute('data-value')
-            setLoader(index)
-            const getCrossChainMessenger = await getCrossChain();
-            const response = await getCrossChainMessenger.proveMessage(transactionHash)
-            const logs = await response.wait()
-            if (logs.status === 1) {
-                getWithdraw()
-                setLoader(NaN)
-            }
-        } catch (error) {
-            if (error.code === "ACTION_REJECTED") {
-                setLoader(NaN)
-            }
-        }
+    // const handleProve = async (event, transactionHash) => {
+    //     try {
+    //         const index = event.target.getAttribute('data-value')
+    //         setLoader(index)
+    //         const getCrossChainMessenger = await getCrossChain();
+    //         const response = await getCrossChainMessenger.proveMessage(transactionHash)
+    //         const logs = await response.wait()
+    //         if (logs.status === 1) {
+    //             getWithdraw()
+    //             setLoader(NaN)
+    //         }
+    //     } catch (error) {
+    //         if (error.code === "ACTION_REJECTED") {
+    //             setLoader(NaN)
+    //         }
+    //     }
 
-    }
+    // }
 
-    const handleClaim = async (event, transactionHash) => {
-        try {
-            const index = event.target.getAttribute('data-value')
-            setLoader(index)
-            const getCrossChainMessenger = await getCrossChain();
-            const response = await getCrossChainMessenger.finalizeMessage(transactionHash)
-            const logs = await response.wait()
-            if (logs.status === 1) {
-                getWithdraw()
-                setLoader(NaN)
-            }
-        } catch (error) {
-            // if(error.code === -32603){
-            //     console.log("Already claim");
-            // }
-            if (error.code === "ACTION_REJECTED") {
-                setLoader(NaN)
-            }
-        }
+    // const handleClaim = async (event, transactionHash) => {
+    //     try {
+    //         const index = event.target.getAttribute('data-value')
+    //         setLoader(index)
+    //         const getCrossChainMessenger = await getCrossChain();
+    //         const response = await getCrossChainMessenger.finalizeMessage(transactionHash)
+    //         const logs = await response.wait()
+    //         if (logs.status === 1) {
+    //             getWithdraw()
+    //             setLoader(NaN)
+    //         }
+    //     } catch (error) {
+    //         // if(error.code === -32603){
+    //         //     console.log("Already claim");
+    //         // }
+    //         if (error.code === "ACTION_REJECTED") {
+    //             setLoader(NaN)
+    //         }
+    //     }
 
 
-    }
+    // }
 
     useEffect(() => {
         if (isConnected) {
@@ -163,9 +163,9 @@ const WithdrawAccount = () => {
 
     const tokenList = [
         {
-            type: process.env.REACT_APP_L2_DAI,
-            tokenSymbol: "DAI",
-            decimalValue: 18
+            type: process.env.REACT_APP_SOL_l2,
+            tokenSymbol: "SOL",
+            decimalValue: 9
         },
         {
             type: process.env.REACT_APP_L2_USDT,
@@ -173,14 +173,24 @@ const WithdrawAccount = () => {
             decimalValue: 6
         },
         {
-            type: process.env.REACT_APP_L2_USDC,
-            tokenSymbol: "USDC",
-            decimalValue: 6
-        },
-        {
             type: process.env.REACT_APP_L2_wBTC,
             tokenSymbol: "wBTC",
             decimalValue: 8
+        },
+        {
+            type: process.env.REACT_APP_L2_BNB,
+            tokenSymbol: "BNB",
+            decimalValue: 18
+        },
+        {
+            type: process.env.REACT_APP_L2_XRP,
+            tokenSymbol: "XRP",
+            decimalValue: 6
+        },
+        {
+            type: process.env.REACT_APP_L2_ADA,
+            tokenSymbol: "ADA",
+            decimalValue: 18
         }
     ]
 
@@ -236,15 +246,15 @@ const WithdrawAccount = () => {
                                                             <td>{timeConverter(timestamp)}</td>
                                                             <td>Withdraw</td>
                                                             <td>{retrieveEthValue(amount, l2Token)} {tokenList.filter(a => a.type === l2Token)[0]?.tokenSymbol === undefined ? "ETH" : tokenList.filter(a => a.type === l2Token)[0]?.tokenSymbol}</td>
-                                                            <td> <a href={`https://testnet.racescan.io/tx/${transactionHash}`} target='_blank'> {`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</a></td>
+                                                            <td> <a href={`https://testnet.styleoscan.com/tx/${transactionHash}`} target='_blank'> {`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</a></td>
                                                             <td>{message} {messageStatus === 3 ? index == loader ? <button type='button' className='btn withdraw_inner_btn' >
                                                                 <Spinner animation="border" role="status">
                                                                     <span className="visually-hidden">Loading...</span>
-                                                                </Spinner> </button> : <button type='button' className='btn withdraw_inner_btn' data-value={index} onClick={(event) => handleProve(event, transactionHash)}>
+                                                                </Spinner> </button> : <button type='button' className='btn withdraw_inner_btn' data-value={index} onClick={() => window.open('https://testnet.styleoswap.com/prove-and-finalize', '_blank')}>
                                                                 Prove</button> : messageStatus === 5 ? index == loader ? <button type='button' className='btn withdraw_inner_btn' >
                                                                     <Spinner animation="border" role="status">
                                                                         <span className="visually-hidden">Loading...</span>
-                                                                    </Spinner> </button> : <button type='button' className='btn withdraw_inner_btn' data-value={index} onClick={(event) => handleClaim(event, transactionHash)}>Claim</button> : ""} </td>
+                                                                    </Spinner> </button> : <button type='button' className='btn withdraw_inner_btn' data-value={index} onClick={() => window.open('https://testnet.styleoswap.com/prove-and-finalize', '_blank')}>Claim</button> : ""} </td>
                                                         </tr>
                                                     )
                                                 })}

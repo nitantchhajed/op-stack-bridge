@@ -41,7 +41,7 @@ const HeaderNew = () => {
         await disconnect()
     }
     useEffect(() => {
-        if (chain?.id == 90001 || chain?.id == 11155111) {
+        if (chain?.id == 4267 || chain?.id == 11155111) {
             setNetwork(chain.name)
             console.log(chain.name);
         }
@@ -83,16 +83,7 @@ const HeaderNew = () => {
                                         isConnected ? <button className='btn disconnect_btn header_btn me-2'>{getNetwork}</button> : ""
                                     }
 
-                                    {/* {
-                                    getNetwork !== "Unsupported Network" ? <button className='btn disconnect_btn header_btn me-2'><FaEthereum /> {getNetwork}</button> : <button className='btn disconnect_btn header_btn me-2'><BiInfoCircle /> {getNetwork} </button>
-                                } */}
                                 </div>
-                                {/* <div className='header_btn_wrap'>
-
-{address ? <button className='btn disconnect_btn header_btn' onClick={() => handleDisconnect()}>
-                                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAsElEQVRYR2PslBX+z4AHHLiVgiLroDYHn3IGUtUzjjpg0IUAehyiRzipaYCQfow0MOoAuoeA5/dylHIAPY7RHWSt9Q5vOXD0mhDecgPdPMZRBwx4CJBaEOFNAFgkCZUbJNcFow4YDYHREBjwEKC0LkD3AMnlwKgDqB4CLYqpKO0BQvX5b5YgvOmQ9c86FHlC7QnGUQcMeAigN0jQIxg90aGnEUrVY7QJKTWQVAePOgAAXAoAZIiZ6M4AAAAASUVORK5CYII=" alt="Profile Icon" />
-                                    {address.slice(0, 5)}...{address.slice(-5)}</button> : <button onClick={() => connect()} className='btn disconnect_btn header_btn'>Connect Wallet</button>}
-                            </div> */}
 
                                 <div className='dropdown_wrap'>
                                     {checkMetaMask === true ? <a className='btn disconnect_btn header_btn' href='https://metamask.io/' target='_blank'><Image src={metamask} alt="metamask icn" fluid /> Please Install Metamask Wallet</a> : address ? <Dropdown>
@@ -115,8 +106,9 @@ const HeaderNew = () => {
                                                     </OverlayTrigger>
                                                 </h4>
                                             </div>
-                                            <Dropdown.Item as={Link} to="/account/deposit"><AiOutlineDownload /> View Deposit</Dropdown.Item>
-                                            <Dropdown.Item as={Link} to="/account/withdraw"><AiOutlineUpload /> View Withdrawals</Dropdown.Item>
+                                            <Dropdown.Item as={Link} to="/account/deposit"><AiOutlineDownload /> View Token Deposit</Dropdown.Item>
+                                            <Dropdown.Item as={Link} to="/account/withdraw"><AiOutlineUpload /> View Token Withdrawals</Dropdown.Item>
+                                            <Dropdown.Item as="a" href="https://testnet.styleoswap.com/prove-and-finalize" target="_blank" rel="noopener noreferrer"><AiOutlineUpload />Claim Withdrawals</Dropdown.Item>
                                             <Dropdown.Item onClick={() => handleDisconnect()}><BiPowerOff /> Disconnect</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown> : <button onClick={() => connect()} className='btn disconnect_btn header_btn'>Connect Wallet</button>}

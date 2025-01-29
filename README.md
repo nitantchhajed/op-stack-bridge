@@ -80,3 +80,6 @@ Withdrawal is a three step process
 Thank you !!!
 
 
+l2CustomERC20Factory = await ethers.getContractFactory("L2CustomERC20")  
+l2CustomERC20 = await l2CustomERC20Factory.deploy("0x4200000000000000000000000000000000000010","0x6c9c32eFC89eA9Dc88f79859A4BE6A46Ef2368e0")
+hre.run("verify:verify", {address: "0x53442574de62ef047410e94D1B0674Ec4e6C02f7",constructorArguments: ["0x4200000000000000000000000000000000000010","0x6c9c32eFC89eA9Dc88f79859A4BE6A46Ef2368e0"]})

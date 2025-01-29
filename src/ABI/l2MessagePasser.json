@@ -1,0 +1,25 @@
+[
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_target",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_gasLimit",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bytes",
+                "name": "_data",
+                "type": "bytes"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function",
+        "name": "initiateWithdrawal",
+        "outputs": []
+    }
+]

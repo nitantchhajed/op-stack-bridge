@@ -10,8 +10,8 @@ const DepositAccount = () => {
     const [loader, setLoader] = useState(false)
     const tokenList = [
         {
-            type: process.env.REACT_APP_L1_DAI,
-            tokenSymbol: "DAI",
+            type: process.env.REACT_APP_SOL_L1,
+            tokenSymbol: "SOL",
             decimalValue: 18
         },
         {
@@ -20,8 +20,18 @@ const DepositAccount = () => {
             decimalValue: 6
         },
         {
-            type: process.env.REACT_APP_L1_USDC,
-            tokenSymbol: "USDC",
+            type: process.env.REACT_APP_L1_ADA,
+            tokenSymbol: "ADA",
+            decimalValue: 18
+        },
+        {
+            type: process.env.REACT_APP_L1_BNB,
+            tokenSymbol: "BNB",
+            decimalValue: 18
+        },
+        {
+            type: process.env.REACT_APP_L1_XRP,
+            tokenSymbol: "XRP",
             decimalValue: 6
         },
         {
@@ -165,7 +175,7 @@ const DepositAccount = () => {
                                                     <tr key={index}>
                                                         <td>{timeConverter(timestamp)}</td>
                                                         <td>Deposit</td>
-                                                        <td>{retrieveEthValue(amount, l1Token)} {tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol === undefined ? "ETH" : tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol}</td>
+                                                        <td>{retrieveEthValue(amount, l1Token)} {tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol === undefined ? "Token" : tokenList.filter(a => a.type === l1Token)[0]?.tokenSymbol}</td>
                                                         <td> <a href={`https://sepolia.etherscan.io/tx/${transactionHash}`} target='_blank'> {`${transactionHash.slice(0, 8)}...${transactionHash.slice(-8)}`}</a></td>
                                                         <td>Completed</td>
                                                     </tr>

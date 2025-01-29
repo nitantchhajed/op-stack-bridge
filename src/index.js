@@ -13,14 +13,14 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 export const RACE = {
     id: Number(process.env.REACT_APP_L2_CHAIN_ID),
-    name: "RACE Testnet",
-    network: "RACE",
+    name: "Styleo Testnet",
+    network: "Styleo",
     iconUrl: "https://i.imgur.com/Q3oIdip.png",
     iconBackground: "#000000",
     nativeCurrency: {
         decimals: 18,
-        name: 'ETHEREUM',
-        symbol: 'ETH'
+        name: 'Styleo Coin',
+        symbol: 'STC'
     },
     rpcUrls: {
         default: {
@@ -28,18 +28,24 @@ export const RACE = {
         },
     },
     blockExplorers: {
-        default: { name: "RACE Testnet Explorer", url: process.env.REACT_APP_L2_EXPLORER_URL }
+        default: { name: "Styleo Testnet Explorer", url: process.env.REACT_APP_L2_EXPLORER_URL }
     },
     testnet: true
 
 }
+const sepoliaRpcUrl = process.env.REACT_APP_L1_RPC_URL || 'https://rpc.sepolia.org'; // Fallback to default if not provided
 
 const { chains, publicClient } = configureChains(
     [sepolia, RACE],
     [
         jsonRpcProvider({
-            rpc: chain => ({ http: chain.rpcUrls.default.http[0] })
-
+            rpc: (chain) => {
+                // Return the custom RPC URL for Sepolia if defined, otherwise use the default one
+                if (chain.id === sepolia.id) {
+                    return { http: sepoliaRpcUrl };
+                }
+                return { http: chain.rpcUrls.default.http[0] };
+            },
         })
     ])
 

@@ -1,0 +1,35 @@
+[
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_localToken",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_remoteToken",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint32",
+                "name": "_minGasLimit",
+                "type": "uint32"
+            },
+            {
+                "internalType": "bytes",
+                "name": "_extraData",
+                "type": "bytes"
+            }
+        ],
+        "name": "bridgeERC20",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]
