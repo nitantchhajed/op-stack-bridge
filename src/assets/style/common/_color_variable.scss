@@ -1,10 +1,18 @@
 :root {
-    // --primary-color: #EDE4C5;
-    --primary-color: linear-gradient(90deg, #FFD700 0%, #FFB800 50%, #B8860B 100%);
-    --secondary-color: #0F2027;
-    --button-color: #0c0b04;
-    --light-color: #b5b82a;
-    --dark-color: #000000;
-    --text-color: #e9c601;
-    --card-color: #1A2A37;
+    // Wibe Chain Color Theme
+    --primary-color: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #A855F7 100%);
+    --primary-solid: #6366F1;
+    --secondary-color: #0F172A;
+    --button-color: #1E293B;
+    --light-color: #E2E8F0;
+    --dark-color: #020617;
+    --text-color: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --card-color: #1E293B;
+    --accent-color: #8B5CF6;
+    --success-color: #10B981;
+    --warning-color: #F59E0B;
+    --error-color: #EF4444;
+    --border-color: #334155;
+    --hover-color: #334155;
 }

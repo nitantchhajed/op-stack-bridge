@@ -2,7 +2,7 @@
     margin-top: 20px;
     padding: 15px;
     background-color: var(--secondary-color);
-    border: 1px solid #FBCBA7;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -17,29 +17,32 @@
     }
   
     a {
-      color: #ff9800;
+      color: var(--primary-solid);
       text-decoration: none;
       word-break: break-all;
       font-size: 14px;
   
       &:hover {
         text-decoration: underline;
+        color: var(--accent-color);
       }
     }
   
     .copy_button {
       margin-top: 10px;
       padding: 6px 12px;
-      background-color: #ff9800;
-      color: #fff;
+      background: var(--primary-color);
+      color: var(--text-color);
       border: none;
       border-radius: 5px;
       font-size: 14px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
   
       &:hover {
-        background-color: #e68a00;
+        opacity: 0.9;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
       }
     }
   }
@@ -47,7 +50,7 @@
     margin-top: 30px;
     display: flex;
     align-items: center;
-    border: 1px solid #FBCBA7;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 15px;
 
@@ -71,7 +74,7 @@
         margin-right: 30px;
 
         svg {
-            color: #FBCBA7;
+            color: var(--border-color);
             font-size: 25px;
         }
     }

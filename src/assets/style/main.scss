@@ -76,12 +76,12 @@ p {
                     transition: all 0.5s ease;
 
                     &:hover {
-                        background-color: #07487038;
+                        background-color: var(--hover-color);
                     }
 
                     &.active {
-                        box-shadow: 0 0 8px rgba(20, 23, 26, 0.0784313725), 0 0 4px rgba(20, 23, 26, 0.0392156863);
-                        color: #FBCBA7;
+                        box-shadow: 0 0 8px rgba(99, 102, 241, 0.2), 0 0 4px rgba(99, 102, 241, 0.1);
+                        color: var(--text-color);
                         background-color: var(--button-color);
 
                         &::after {
@@ -112,16 +112,18 @@ p {
         .page-item {
             &.active {
                 .page-link {
-                    border: 1px solid #FBCBA7;
+                    border: 1px solid var(--primary-solid);
                     border-radius: 5px;
                     padding: 0px 11px;
+                    background: var(--primary-solid);
+                    color: var(--text-color);
                 }
             }
 
             .page-link {
                 background: var(--secondary-color);
-                color: #FBCBA7;
-                border-color: var(--secondary-color);
+                color: var(--text-secondary);
+                border-color: var(--border-color);
                 padding: 1px 10px;
                 font-size: 12px;
 
@@ -192,7 +194,7 @@ input[type=number] {
     width: 13px;
     height: 13px;
     border-radius: 50%;
-    background: #fff;
+    background: var(--primary-solid);
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 

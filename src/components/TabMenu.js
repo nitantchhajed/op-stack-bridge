@@ -6,7 +6,7 @@ const TabMenu = () => {
         <>
             <ul>
                 <li><Link to="/deposit" className={`${location.pathname == "/" ? "active" : location.pathname == "/deposit" ? "active" : ""}`}>Deposit</Link></li>
-                <li><Link to="/withdraw" className={`${location.pathname == "/withdraw" ? "active" : ""}`}>Withdraw</Link></li>
+                {/* <li><Link to="/withdraw" className={`${location.pathname == "/withdraw" ? "active" : ""}`}>Withdraw</Link></li> */}
             </ul>
         </>
     )

@@ -42,7 +42,11 @@
 
                 a{
                     text-decoration: none;
-                    color: #fff;
+                    color: var(--primary-solid);
+                    
+                    &:hover {
+                        color: var(--accent-color);
+                    }
                 }
             }
         }

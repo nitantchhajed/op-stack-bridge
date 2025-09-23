@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "../../assets/style/common/header.scss"
 import { Navbar, Container, Nav, Image, Dropdown, OverlayTrigger, Tooltip } from "react-bootstrap";
-import logo from "../../assets/images/logo.png";
+import logo from "../../assets/images/wibe.png";
 import { Link } from 'react-router-dom';
 import { useAccount, useConnect, useNetwork } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
@@ -41,7 +41,7 @@ const HeaderNew = () => {
         await disconnect()
     }
     useEffect(() => {
-        if (chain?.id == 4267 || chain?.id == 11155111) {
+        if (chain?.id == process.env.REACT_APP_L1_CHAIN_ID || chain?.id == process.env.REACT_APP_L2_CHAIN_ID) {
             setNetwork(chain.name)
             console.log(chain.name);
         }
@@ -107,8 +107,8 @@ const HeaderNew = () => {
                                                 </h4>
                                             </div>
                                             <Dropdown.Item as={Link} to="/account/deposit"><AiOutlineDownload /> View Token Deposit</Dropdown.Item>
-                                            <Dropdown.Item as={Link} to="/account/withdraw"><AiOutlineUpload /> View Token Withdrawals</Dropdown.Item>
-                                            <Dropdown.Item as="a" href="https://testnet.styleoswap.com/prove-and-finalize" target="_blank" rel="noopener noreferrer"><AiOutlineUpload />Claim Withdrawals</Dropdown.Item>
+                                            {/* <Dropdown.Item as={Link} to="/account/withdraw"><AiOutlineUpload /> View Token Withdrawals</Dropdown.Item> */}
+                                            <Dropdown.Item as="a" href="https://testnet.wibeswap.com/prove-and-finalize" target="_blank" rel="noopener noreferrer"><AiOutlineUpload />Claim Withdrawals</Dropdown.Item>
                                             <Dropdown.Item onClick={() => handleDisconnect()}><BiPowerOff /> Disconnect</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown> : <button onClick={() => connect()} className='btn disconnect_btn header_btn'>Connect Wallet</button>}

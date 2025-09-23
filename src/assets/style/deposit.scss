@@ -24,7 +24,7 @@
                 font-weight: 400;
 
                 svg {
-                    color: #616ed6;
+                    color: var(--primary-solid);
                     font-size: 18px;
                 }
 
@@ -100,7 +100,7 @@
 
                 .select_wrap {
                     color: var(--light-color);
-                    border: 1px solid #FBCBA7;
+                    border: 1px solid var(--border-color);
                     padding: 15px 10px;
                     border-radius: 0px 8px 8px 0px;
                     width: 100px;
@@ -149,7 +149,7 @@
                 font-weight: 400;
 
                 svg {
-                    color: #616ed6;
+                    color: var(--primary-solid);
                     font-size: 18px;
                 }
 
@@ -190,12 +190,14 @@
         margin-top: 10px;
 
         .deposit_btn {
-            background-color: var(--button-color);
-            color: var(--light-color);
+            background: var(--primary-color);
+            color: var(--text-color);
             font-size: 14px;
             font-weight: 500;
             width: 100%;
             padding: 15px;
+            border: none;
+            border-radius: 8px;
 
             img {
                 width: 20px;
@@ -210,13 +212,16 @@
 
             &:hover {
                 opacity: 0.9;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
             }
 
             &:focus {
-                border-color: var(--button-color);
+                border-color: var(--primary-solid);
                 opacity: 0.9;
-                background-color: var(--button-color);
-                color: var(--light-color);
+                background: var(--primary-color);
+                color: var(--text-color);
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
             }
         }
     }

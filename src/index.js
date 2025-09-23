@@ -13,14 +13,14 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 export const RACE = {
     id: Number(process.env.REACT_APP_L2_CHAIN_ID),
-    name: "Styleo Testnet",
-    network: "Styleo",
-    iconUrl: "https://i.imgur.com/Q3oIdip.png",
+    name: "Wibe Testnet",
+    network: "Wibe",
+    iconUrl: "https://via.placeholder.com/32x32/000000/FFFFFF?text=W",
     iconBackground: "#000000",
     nativeCurrency: {
         decimals: 18,
-        name: 'Styleo Coin',
-        symbol: 'STC'
+        name: 'Wibe Coin',
+        symbol: 'WIBE'
     },
     rpcUrls: {
         default: {
@@ -28,7 +28,7 @@ export const RACE = {
         },
     },
     blockExplorers: {
-        default: { name: "Styleo Testnet Explorer", url: process.env.REACT_APP_L2_EXPLORER_URL }
+        default: { name: "Wibe Testnet Explorer", url: process.env.REACT_APP_L2_EXPLORER_URL }
     },
     testnet: true
 
