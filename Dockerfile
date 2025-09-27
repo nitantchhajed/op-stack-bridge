@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./
-RUN npm i
+RUN npm i --force
 
 # Copy source (including .env for CRA build-time)
 COPY . .
