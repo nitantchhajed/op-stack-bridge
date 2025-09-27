@@ -1,0 +1,23 @@
+# Dependencies
+node_modules
+
+# Local build artifacts (we will build inside Docker)
+build
+coverage
+
+# VCS and editor files
+.git
+.gitignore
+.DS_Store
+.vscode
+.idea
+
+# Docker files themselves are small, but ignoring keeps context tidy
+Dockerfile
+docker-compose.yml
+
+# Ensure the app .env is INCLUDED for CRA build-time variables
+# (do NOT ignore .env)
+!.env
+
+
