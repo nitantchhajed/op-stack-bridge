@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../assets/style/deposit.scss";
 import { Form, Spinner, Image } from "react-bootstrap"
-import { Ethereum } from 'react-web3-icons';
+import { Ethereum, Usdt, Btc, Solana } from 'react-web3-icons';
 import toIcn from "../assets/images/wibe.png"
 import { IoMdWallet } from "react-icons/io"
 import { FaEthereum } from "react-icons/fa"
@@ -63,6 +63,9 @@ const Deposit = () => {
     })
 
     const dataWIBE = useBalance({ address: address, token: process.env.REACT_APP_CGT_ADDRESS, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
+    const dataUSDT = useBalance({ address: address, token: process.env.REACT_APP_L1_USDT, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
+    const dataWBTC = useBalance({ address: address, token: process.env.REACT_APP_L1_wBTC, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
+    const dataWSOL = useBalance({ address: address, token: process.env.REACT_APP_SOL_L1, watch: true, chainId: Number(process.env.REACT_APP_L1_CHAIN_ID) })
 
     const portal = new web3.eth.Contract(portalProxyABI, process.env.REACT_APP_OPTIMISM_PORTAL_PROXY)
     const wibe = new web3.eth.Contract(wibeABI, process.env.REACT_APP_CGT_ADDRESS)
@@ -137,6 +140,48 @@ const Deposit = () => {
                         }
                     }
 
+                    // USDT via Standard Bridge
+                    else if (sendToken === "USDT") {
+                        const usdtValue = parseInt(Number(ethValue) * 1000000);
+                        setLoader(true);
+                        const approveTx = await crossChainMessenger.approveERC20(process.env.REACT_APP_L1_USDT, process.env.REACT_APP_L2_USDT, usdtValue);
+                        await approveTx.wait();
+                        const depositTx = await crossChainMessenger.depositERC20(process.env.REACT_APP_L1_USDT, process.env.REACT_APP_L2_USDT, usdtValue);
+                        const receipt = await depositTx.wait();
+                        if (receipt) {
+                            setLoader(false);
+                            setEthValue("");
+                        }
+                    }
+
+                    // wBTC via Standard Bridge
+                    else if (sendToken === "wBTC") {
+                        const wbtcValue = parseInt(Number(ethValue) * 100000000);
+                        setLoader(true);
+                        const approveTx = await crossChainMessenger.approveERC20(process.env.REACT_APP_L1_wBTC, process.env.REACT_APP_L2_wBTC, wbtcValue);
+                        await approveTx.wait();
+                        const depositTx = await crossChainMessenger.depositERC20(process.env.REACT_APP_L1_wBTC, process.env.REACT_APP_L2_wBTC, wbtcValue);
+                        const receipt = await depositTx.wait();
+                        if (receipt) {
+                            setLoader(false);
+                            setEthValue("");
+                        }
+                    }
+
+                    // wSOL via Standard Bridge (envs: REACT_APP_SOL_L1 / REACT_APP_SOL_l2)
+                    else if (sendToken === "wSOL") {
+                        const wsolValue = parseInt(Number(ethValue) * 1000000000);
+                        setLoader(true);
+                        const approveTx = await crossChainMessenger.approveERC20(process.env.REACT_APP_SOL_L1, process.env.REACT_APP_SOL_l2, wsolValue);
+                        await approveTx.wait();
+                        const depositTx = await crossChainMessenger.depositERC20(process.env.REACT_APP_SOL_L1, process.env.REACT_APP_SOL_l2, wsolValue);
+                        const receipt = await depositTx.wait();
+                        if (receipt) {
+                            setLoader(false);
+                            setEthValue("");
+                        }
+                    }
+
                 }
             }
         } catch (error) {
@@ -150,16 +195,41 @@ const Deposit = () => {
     };
     const [checkDisabled, setCheckDisabled] = useState(false)
     const handleChange = (e) => {
-        if (sendToken == 'WIBE') {
-            if (Number(dataWIBE.data?.formatted) < e.target.value) {
+        const value = e.target.value
+        if (sendToken === 'WIBE') {
+            if (Number(dataWIBE.data?.formatted) < value) {
                 setErrorInput("Insufficient WIBE balance.")
                 setCheckDisabled(true)
             } else {
                 setCheckDisabled(false)
                 setErrorInput("")
             }
-            setEthValue(e.target.value)
+        } else if (sendToken === 'USDT') {
+            if (Number(dataUSDT.data?.formatted) < value) {
+                setErrorInput("Insufficient USDT balance.")
+                setCheckDisabled(true)
+            } else {
+                setCheckDisabled(false)
+                setErrorInput("")
+            }
+        } else if (sendToken === 'wBTC') {
+            if (Number(dataWBTC.data?.formatted) < value) {
+                setErrorInput("Insufficient wBTC balance.")
+                setCheckDisabled(true)
+            } else {
+                setCheckDisabled(false)
+                setErrorInput("")
+            }
+        } else if (sendToken === 'wSOL') {
+            if (Number(dataWSOL.data?.formatted) < value) {
+                setErrorInput("Insufficient wSOL balance.")
+                setCheckDisabled(true)
+            } else {
+                setCheckDisabled(false)
+                setErrorInput("")
+            }
         }
+        setEthValue(value)
     }
 
     return (
@@ -176,17 +246,33 @@ const Deposit = () => {
                             <Form>
                                 <div className='deposit_inner_input'>
                                     <Form.Control type='number' value={ethValue} onChange={handleChange} placeholder="0" min="0" step="any" />
-                                    <div className='select_wrap'>
-                                        <span>WIBE</span>
-                                    </div>
+                                    <Form.Select aria-label="Select token" className='select_wrap' value={sendToken} onChange={({ target }) => setSendToken(target.value)}>
+                                        <option value="WIBE">WIBE</option>
+                                        <option value="USDT">USDT</option>
+                                        <option value="wBTC">wBTC</option>
+                                        <option value="wSOL">wSOL</option>
+                                    </Form.Select>
                                 </div>
                                 <div className='input_icn_wrap'>
-                                    <span className='input_icn'><img src={require("../assets/images/wibe.png")} alt="WIBE Logo" style={{ width: '24px', height: '24px' }} /></span>
+                                    {sendToken === 'WIBE' ? (
+                                        <span className='input_icn'><img src={require("../assets/images/wibe.png")} alt="WIBE Logo" style={{ width: '24px', height: '24px' }} /></span>
+                                    ) : sendToken === 'USDT' ? (
+                                        <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span>
+                                    ) : sendToken === 'wBTC' ? (
+                                        <span className='input_icn'><Btc style={{ fontSize: '1.5rem' }} /></span>
+                                    ) : (
+                                        <span className='input_icn'><Solana style={{ fontSize: '1.5rem' }} /></span>
+                                    )}
                                 </div>
                             </Form>
                         </div>
                         {errorInput && <small className='text-danger'>{errorInput}</small>}
-                        {address && <p className='wallet_bal mt-2'>Balance: {Number(dataWIBE.data?.formatted).toFixed(5)} WIBE</p>}
+                        {address && (
+                            sendToken === 'WIBE' ? <p className='wallet_bal mt-2'>Balance: {Number(dataWIBE.data?.formatted).toFixed(5)} WIBE</p> :
+                            sendToken === 'USDT' ? <p className='wallet_bal mt-2'>Balance: {Number(dataUSDT.data?.formatted).toFixed(5)} USDT</p> :
+                            sendToken === 'wBTC' ? <p className='wallet_bal mt-2'>Balance: {Number(dataWBTC.data?.formatted).toFixed(5)} wBTC</p> :
+                            <p className='wallet_bal mt-2'>Balance: {Number(dataWSOL.data?.formatted).toFixed(5)} wSOL</p>
+                        )}
                     </div>
                     <div className='deposit_details_wrap'>
                         <div className="deposit_details">
@@ -194,7 +280,16 @@ const Deposit = () => {
                             <h5> <img src={require("../assets/images/wibe.png")} alt="WIBE Logo" style={{ width: '24px', height: '24px' }} />Wibe Testnet</h5>
                         </div>
                         <div className='deposit_inner_details'>
-                            <span className='input_icn'><img src={require("../assets/images/wibe.png")} alt="WIBE Logo" style={{ width: '24px', height: '24px' }} /></span>  <p> You'll receive: {ethValue ? ethValue : "0"} WIBE</p>
+                            {sendToken === 'WIBE' ? (
+                                <span className='input_icn'><img src={require("../assets/images/wibe.png")} alt="WIBE Logo" style={{ width: '24px', height: '24px' }} /></span>
+                            ) : sendToken === 'USDT' ? (
+                                <span className='input_icn'><Usdt style={{ fontSize: '1.5rem' }} /></span>
+                            ) : sendToken === 'wBTC' ? (
+                                <span className='input_icn'><Btc style={{ fontSize: '1.5rem' }} /></span>
+                            ) : (
+                                <span className='input_icn'><Solana style={{ fontSize: '1.5rem' }} /></span>
+                            )}
+                            <p> You'll receive: {ethValue ? ethValue : "0"} {sendToken}</p>
                         </div>
                     </div>
                     <div className="deposit_btn_wrap">
